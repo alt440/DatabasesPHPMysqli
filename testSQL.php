@@ -7,8 +7,14 @@
 	$mysqli->query($sql);
 	//select database just created
 	$mysqli->select_db("comp353");
+
+	//dropping tables to avoid adding duplicate data and using clean tables everytime program runs
+	$mysqli->query("DROP TABLE people");
+	$mysqli->query("DROP TABLE event");
+	$mysqli->query("DROP TABLE role_of_people_in_the_event");
+
 	//query the database with the command in (). Creates table 'people'
-  $mysqli->query("CREATE TABLE people (id smallint unsigned not null auto_increment, lastname varchar(20) not null, firstname varchar(20) not null, middle_name varchar(20), userID int not null, password int not null, constraint pk_people primary key (id) );");
+  	$mysqli->query("CREATE TABLE people (id smallint unsigned not null auto_increment, lastname varchar(20) not null, firstname varchar(20) not null, middle_name varchar(20), userID int not null, password int not null, constraint pk_people primary key (id) );");
 
 	//query the database with the command in (). Creates table 'event'
 	$mysqli->query("CREATE TABLE event (id smallint unsigned not null auto_increment, Event varchar(20), EventID int, start_date varchar(20), end_date varchar(20), AdminUserID int, constraint pk_event primary key (id));");
@@ -25,6 +31,9 @@
 	//get to the first line of data to put in our database
 	$result = fgets($fn);
 
+	//printing a title
+	$header = "Printing all data being added into the 'people' table";
+	echo '<h4>'.$header.'</h4>';
 	//checks if the substring from index 0-1 is a + (indicates end of table)
 	while(substr($result, 0, 1) !== '+'){
 		//separate the line of data using the pipe |
@@ -34,11 +43,9 @@
 			echo '<p>'.$mysqli->error.'</p>';
 		}
 		//print the data being put in the table people.
-		echo '<p>'.$results[0].' '.$results[1].' '.$results[2].' '.$results[3].'</p>';
-		echo '<p>'.$results[4].' '.$results[5].'</p>';
+		echo '<p>'.$results[0].' '.$results[1].' '.$results[2].' '.$results[3].' '.$results[4].' '.$results[5].'</p>';
 		//go to the next line of data.
 		$result = fgets($fn);
-
 	}
 
 	//pass through next lines -- the + and the column title lines
@@ -73,8 +80,78 @@
 		//go to the next line.
 		$result = fgets($fn);
 	}
+	echo '</br>';
+
+	$title1 = "Fetching all data";
+	$empty = "No results";
+
+	echo '<h2>'.$title1.'</h2>';
+	
+	$peopleHeader = "People";
+	echo '<h3>'.$peopleHeader.'</h3>';
+	//printing the table of people, ordered by ID in ascending order
+	echo '<table border="1" width="50%">';
+	//printing the table header
+	echo '<tr><th>ID</th><th>Last name</th><th>First name</th><th>Middle name</th><th>User ID</th><th>Password</th></tr>';
+	//selecting data from the table
+	$queryPeople = "SELECT * FROM people ORDER BY id ASC";
+	$resultPeople = $mysqli->query($queryPeople);
+	//checking if the results from the query return any rows
+	if ($resultPeople->num_rows > 0) {
+		while ($rowPeople = $resultPeople->fetch_assoc()) {
+			//printing the table row with the data of each entry in the table 'people'
+			echo '<tr><td>'.$rowPeople['id'].'</td><td>'.$rowPeople['lastname'].'</td><td>'.$rowPeople['firstname'].'</td><td>'.$rowPeople['middle_name'].'</td><td>'.$rowPeople['userID'].'</td><td>'.$rowPeople['password'].'</td></tr>';
+		}
+	} else {
+		//print that there were no results if there are 0 resulting rows
+		echo '<tr><td>'.$empty.'</td></tr>';
+	}
+	echo '</table>';
+	echo '</br>';
+
+	$eventHeader = "Event";
+	echo '<h3>'.$eventHeader.'</h3>';
+	//printing the table of people, ordered by ID in ascending order
+	echo '<table border="1" width="50%">';
+	//printing the table header
+	echo '<tr><th>ID</th><th>Event</th><th>Event ID</th><th>Start date</th><th>End date</th><th>Admin user ID</th></tr>';
+	//selecting data from the table
+	$queryEvent = "SELECT * FROM event ORDER BY id ASC";
+	$resultEvent = $mysqli->query($queryEvent);
+	//checking if the results from the query return any rows
+	if ($resultEvent->num_rows > 0) {
+		while ($rowEvent = $resultEvent->fetch_assoc()) {
+			//printing the table row with the data of each entry in the table 'people'
+			echo '<tr><td>'.$rowEvent['id'].'</td><td>'.$rowEvent['Event'].'</td><td>'.$rowEvent['EventID'].'</td><td>'.$rowEvent['start_date'].'</td><td>'.$rowEvent['end_date'].'</td><td>'.$rowEvent['AdminUserID'].'</td></tr>';
+		}
+	} else {
+		//print that there were no results if there are 0 resulting rows
+		echo '<tr><td>'.$empty.'</td></tr>';
+	}
+	echo '</table>';
+	echo '</br>';
+
+	$role_of_people_in_the_eventHeader = "Role of people in the event";
+	echo '<h3>'.$role_of_people_in_the_eventHeader.'</h3>';
+	//printing the table of role of people in the event, ordered by ID in ascending order
+	echo '<table border="1" width="50%">';
+	//printing the table header
+	echo '<tr><th>ID</th><th>User ID</th><th>Event ID</th></tr>';
+	//selecting data from the table
+	$queryRole = "SELECT * FROM role_of_people_in_the_event ORDER BY id ASC";
+	$resultRole = $mysqli->query($queryRole);
+	//checking if the results from the query return any rows
+	if ($resultRole->num_rows > 0) {
+		while ($rowRole= $resultRole->fetch_assoc()) {
+			//printing the table row with the data of each entry in the table 'Role'
+			echo '<tr><td>'.$rowRole['id'].'</td><td>'.$rowRole['userid'].'</td><td>'.$rowRole['EventID'].'</td></tr>';}
+	} else {
+		//print that there were no results if there are 0 resulting rows
+		echo '<tr><td>'.$empty.'</td></tr>';
+	}
+	echo '</table>';
+	echo '</br>';
 
 	//close the connection.
 	$mysqli->close();
-
 ?>
