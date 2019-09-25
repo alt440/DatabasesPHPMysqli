@@ -4,11 +4,12 @@ Dr. Desai
 
 PROJECT 1
 
-Mair ELBAZ, 40004558
-Daniel VIGNY-PAU, 40034769
-Francois DAVID, 40046319
-Alexandre THERRIEN, 40057134
-Charles-Antoine GUITE, 40063098
+MEMBERS:
+- Mair ELBAZ, 40004558
+- Daniel VIGNY-PAU, 40034769
+- Francois DAVID, 40046319
+- Alexandre THERRIEN, 40057134
+- Charles-Antoine GUITE, 40063098
 
 To run the project:
 
