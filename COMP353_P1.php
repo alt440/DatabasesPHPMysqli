@@ -1,3 +1,16 @@
+<!--
+COMP 353 - F / FALL 2019
+Dr. Desai
+
+PROJECT 1
+
+Mair ELBAZ, 40004558
+Daniel VIGNY-PAU, 40034769
+Francois DAVID, 40046319
+Alexandre THERRIEN, 40057134
+Charles-Antoine GUITE, 40063098
+-->
+
 <?php
 	//connect with the database
 	$mysqli = new mysqli("localhost", "root", "");
