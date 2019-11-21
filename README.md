@@ -33,5 +33,5 @@ SSH Into Concordia:
 4) Enter the password `AqtjPG`
 
 - To see tables type `show tables;`.
-- To see the contents of a table type `SELECT * FROM TABLENAME` (replace TABLENAME with name of desired table)
+- To see the contents of a table type `SELECT * FROM TABLENAME;` (replace TABLENAME with name of desired table)
 
