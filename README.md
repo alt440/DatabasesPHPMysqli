@@ -23,3 +23,15 @@ Files in directory:
 - COMP353_P1.php: the code for the project
 - COMP353_project_1_code_documentation: documentation of the code, in both pdf and docx formats
 - db19s-P1.csv: the data being used for the project, as provided by the professor (note, a typo with three consecutive '|' symbols has been removed)
+
+STEPS TO SSH INTO ENCS SERVER USING CMD/TERMINAL:
+
+SSH Into Concordia:
+Type `ssh ENCSUSERNAME@login.encs.concordia.` (replace ENCSUSERNAME with your ENCS User name)
+Enter your ENCS password
+Type `mysql -h urc353.encs.concordia.ca -u urc353_2 -p urc353_2`
+Enter the password `AqtjPG`
+
+To see tables type `show tables;`.
+To see the contents of a table type `SELECT * FROM TABLENAME` (replace TABLENAME with name of desired table)
+
