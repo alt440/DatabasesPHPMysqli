@@ -35,3 +35,20 @@ SSH Into Concordia:
 - To see tables type `show tables;`.
 - To see the contents of a table type `SELECT * FROM TABLENAME;` (replace TABLENAME with name of desired table)
 
+
+NETBEANS PROJECT PHP INTO CONCORDIA SERVER MADE FOR PROJECT:
+
+1) Open Netbeans.
+2) Create a new project. PHP application with remote server.
+3) Project URL: 'https://urc353.encs.concordia.ca/'
+4) Create a remote connection as a SFTP.
+5) Host name: 'login.encs.concordia.ca'
+6) Username: your ENCS username
+7) Password: your ENCS password
+8) Initial directory: '/www/groups/u/ur_comp353_2'
+9) Test the connection and create new files.
+10) Once a file is created, right click and upload.
+
+
+
+
