@@ -27,7 +27,7 @@ Files in directory:
 STEPS TO SSH INTO ENCS SERVER USING CMD/TERMINAL:
 
 SSH Into Concordia:
-1) Type `ssh ENCSUSERNAME@login.encs.concordia.` (replace ENCSUSERNAME with your ENCS User name)
+1) Type `ssh ENCSUSERNAME@login.encs.concordia.ca` (replace ENCSUSERNAME with your ENCS User name)
 2) Enter your ENCS password (same as computer lab)
 3) Type `mysql -h urc353.encs.concordia.ca -u urc353_2 -p urc353_2`
 4) Enter the password `AqtjPG`
