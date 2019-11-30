@@ -2,13 +2,18 @@
 Use the script 'createTablesRevised.php' to create all the different tables 
 required by the project.
 
-The file 'test_database_layer.php' gives you some examples on how to use the
-different methods. More will be added.
-
 The file 'database_layer.php' contains some methods to access the database. It
 is a work in progress. Right now it only contains the methods necessary to 
 add content to the database (and not much about the test cases covered... will
 be done soon).
+
+The file 'database_layer_use_cases.php' covers some scenarios that were covered
+over the test cases.
+
+# Test cases that were made for you to better understand
+The folder 'Examples' currently contains two test cases to understand how to 
+work with the methods I have made. There is also the file 'test_database_layer.php'
+that you can also refer to, which contains a lot of documentation.
 
 # database_layer.php limitations
 Uploading images does not currently work. If someone has time, the method
