@@ -46,7 +46,7 @@
 	echo $mysqli->error;
 
 	//emails of a user.
-	$mysqli->query("CREATE TABLE Emails (EID int unsigned not null auto_increment, TimeStamp int(11) not null, SourceUser int unsigned not null, TargetUser int unsigned not null, Content varchar(1000) not null, foreign key (SourceUser) references User_(UID) on delete cascade, foreign key (TargetUser) references User_(UID) on delete cascade, primary key(EID));");
+	$mysqli->query("CREATE TABLE Emails (EID int unsigned not null auto_increment, TimeStamp int(11) not null, SourceUser int unsigned not null, TargetUser int unsigned not null, Content varchar(1000) not null, TitleEmail varchar(30) not null, foreign key (SourceUser) references User_(UID) on delete cascade, foreign key (TargetUser) references User_(UID) on delete cascade, primary key(EID));");
 	echo $mysqli->error;
 
 	//this table determines which participant belongs to which event. hasSeenLastMessage has been added

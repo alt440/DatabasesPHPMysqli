@@ -1,6 +1,10 @@
 <?php
 
   /*
+  This file applies modifications to the database.
+  */
+
+  /*
   To create a new comment (from post in Event)
   $mysqli: Connection to the DB object
   $replyString: If the comment contains any text to be displayed (string) - can be empty
@@ -126,9 +130,31 @@
 
   /*
   To create a new email message
+  $mysqli: Connection to the DB object
+  $sourceUsername: Username of the sender of the email (string) - User must exist
+  $targetUsername: Username of the target of the email (string) - User must exist
+  $titleEmail: Title of the email being sent
+  $replyString: Content of the email (string)
   */
-  function createEmail(){
+  function sendEmail($mysqli, $sourceUsername, $targetUsername, $titleEmail, $replyString){
+    //find source user and target user
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$sourceUsername."';");
+    $first_row = mysqli_fetch_row($result);
+    if(is_bool($first_row[0])){
+      return 'Source username does not exist';
+    }
 
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$targetUsername."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+    if(is_bool($first_row_2[0])){
+      return 'Target username does not exist';
+    }
+
+    $timestamp = time();
+
+    //now add to email list
+    $mysqli->query("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (".$timestamp.",".$first_row[0].",".$first_row_2[0].",'".$titleEmail."','".$replyString."');");
+    return $mysqli->error;
   }
 
   /*
@@ -138,12 +164,11 @@
   $title: Name of the event
   $expiryDate: date object of format 'YYYY-MM-DD'
   $eventType: type of the event
-
+  $usernameCreator: The username of the person that created the event, so he can be set as admin.
   Status object being sent as 1 tells us that the event is pending for approval.
   */
-  function createEvent($mysqli, $date, $title, $expiryDate, $eventType){
-    if(strcmp($eventType,'family')!=0 && strcmp($eventType, 'community')!=0 &&
-      strcmp($eventType,'non-profit')!=0 && strcmp($eventType, 'profit')!=0){
+  function createEvent($mysqli, $date, $title, $expiryDate, $eventType, $usernameCreator){
+    if(doesEventTypeExist($eventType)){
         return 'Was this event type added to the event types table?';
       }
 
@@ -155,8 +180,28 @@
     }
     //make sure expiryDate > date! Otherwise event will be archived
 
+    //make sure the creator actually exists, and make him the admin of the event.
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'The username provided does not correspond to any user';
+    }
+
     $mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."');");
-    return $mysqli->error;
+    $error = $mysqli->error;
+
+    //get the event id just created
+    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Date='".$date."' AND Title='".$title."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    //no need to verify if insertion worked; I just added the event
+
+    //now add the user to the event
+    //this tells that the user is the admin and that he has seen the latest message (event not created, nothing in it)
+    $mysqli->query("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage) VALUES (".$first_row_2[0].",".$first_row[0].",'admin',1)");
+
+    return $error;
   }
 
   /*
@@ -175,15 +220,56 @@
   $mysqli: Connection to the DB object
   $eventTitle: Title of the event the group belongs to (string) - Must exist
   $groupName: Name of the new group (string)
+  $usernameCreator: Username of the user that created the group - Must exist
   */
-  function createGroup($mysqli, $eventTitle, $groupName){
+  function createGroup($mysqli, $eventTitle, $groupName, $usernameCreator){
     //first search for event
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     $first_row = mysqli_fetch_row($result);
 
-    //then add group
+    if(is_bool($first_row[0])){
+      return 'Event with title '.$eventTitle.' does not exist';
+    }
+
+    //then search for user creator. Need to verify the user is already a member of the event!
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'User with username '.$usernameCreator.' does not exist';
+    }
+
+    //because only a user in the event can create a group...
+    $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$first_row[0].";");
+    $hasFoundUser = 0;
+    echo "Searching for user in event...";
+    while($row = mysqli_fetch_row($findUserInEvent)){
+      echo $row[0].' '.$row[1]."<br>";
+      //if the user belongs in the event and is actually a member (and not a pending request)
+      if($row[0] == $first_row_2[0] && strcmp($row[1],'pending')!=0){
+        //then break because its OK for him/her to create the event.
+        $hasFoundUser = 1;
+        echo 'done'."<br>";
+        break;
+      }
+    }
+
+    if($hasFoundUser == 0){
+      return 'User with username '.$usernameCreator.' cannot create a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
+    }
+
+    //then add group with privacy 0 (group is private, so no showing)
     $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',0);");
-    return $mysqli->error;
+    $error=$mysqli->error;
+
+    //find our new group ID
+    $result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $first_row_3 = mysqli_fetch_row($result3);
+
+    //then add user as admin of group. hasSeenLastMessage=0 means he has seen the last message of the group (since there is nothing...).
+    $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage) VALUES (".$first_row_3[0].",".$first_row_2[0].",'admin',1)");
+
+    return $error;
   }
 
   /*
@@ -192,7 +278,7 @@
   $username: Username of the user being added to the event (string) - Must exist
   $eventTitle: Title of the event the user is being added to (string) - Must exist
   */
-  function addMemberToEvent($mysqli, $username, $eventTitle){
+  function addUserToEvent($mysqli, $username, $eventTitle){
     //find member with that username
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
@@ -208,12 +294,33 @@
   To add a member to a group
   $mysqli: Connection to the DB object
   $groupName: Name of the group (string) - Must exist
-  $username: Username of the user (string) - Must exist
+  $usernameCreator: Username of the user (string) - Must exist
+  $eventTitle: Title of the event in which the group belongs in - Must exist
   */
-  function addMemberToGroup($mysqli, $username, $groupName){
+  function addUserToGroup($mysqli, $usernameCreator, $groupName, $eventTitle){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
     $first_row = mysqli_fetch_row($result);
+
+    $result3 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row_3 = mysqli_fetch_row($result3);
+
+    //because only a user in the event can create a group...
+    $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$first_row_3[0].";");
+    $hasFoundUser = 0;
+    while($row = mysqli_fetch_row($findUserInEvent)){
+      //if the user belongs in the event and is actually a member (and not a pending request)
+      if($row[0] == $first_row[0] && strcmp($row[1],'pending')!=0){
+        //then break because its OK for him/her to create the event.
+        $hasFoundUser = 1;
+        break;
+      }
+    }
+
+    if($hasFoundUser == 0){
+      return 'User with username '.$usernameCreator.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
+    }
+
     //find event with that title
     $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     $first_row_2 = mysqli_fetch_row($result2);
@@ -233,8 +340,7 @@
   */
   function addRates($mysqli, $numberEvents, $storageGB, $bandwidthGB, $eventType,
     $price){
-    if(strcmp($eventType,'family')!=0 && strcmp($eventType, 'community')!=0 &&
-      strcmp($eventType,'non-profit')!=0 && strcmp($eventType, 'profit')!=0){
+    if(doesEventTypeExist($eventType)){
         return 'Was this event type added to the event types table?';
       }
 
@@ -269,4 +375,14 @@
     return $mysqli->error;
   }
 
+  /*
+  This is the boolean condition to evaluate if an event type is in the DB
+  $eventType: The event type (string)
+
+  Outputs bool
+  */
+  function doesEventTypeExist($eventType){
+    return strcmp($eventType,'family')!=0 && strcmp($eventType, 'community')!=0 &&
+      strcmp($eventType,'non-profit')!=0 && strcmp($eventType, 'profit')!=0;
+  }
 ?>
