@@ -2,6 +2,7 @@
 
   require "../database_layer.php";
   require "../database_layer_use_cases.php";
+  require "../database_layer_get.php";
 
   //log in to the database
   $mysqli = new mysqli("localhost", "root", "");
@@ -35,8 +36,27 @@
   $return_val=addUserToEvent($mysqli, 'bbb', 'Some_Event');
   echo $return_val."<br>";
 
+  //show pending users and members of the group
+  echo 'Members of the event Some_Event (1):'."<br>";
+  $results = getEventMembers($mysqli, 'Some_Event');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
+
+  echo 'Pending members of the event Some_Event (1):'."<br>";
+  $results = getEventPendingUsers($mysqli, 'Some_Event');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
+
   //since the request to add bbb is pending, we have to make him a member of the
   //group. Either bbb or event manager will have to approve this.
   $return_val=setMemberToEvent($mysqli, 'bbb', 'Some_Event');
   echo $return_val."<br>";
+
+  echo 'Members of the event Some_Event (2):'."<br>";
+  $results = getEventMembers($mysqli, 'Some_Event');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
 ?>

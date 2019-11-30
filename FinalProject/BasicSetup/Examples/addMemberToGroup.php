@@ -8,6 +8,8 @@
   */
   require "../database_layer.php";
   require "../database_layer_use_cases.php";
+  //this displays our data.
+  require "../database_layer_get.php";
 
   //log in to the database
   $mysqli = new mysqli("localhost", "root", "");
@@ -49,7 +51,28 @@
   $return_val=addUserToGroup($mysqli, 'ccc', 'Org', 'Some_Event');
   echo $return_val."<br>";
 
-  //make ccc a member of the group.
+  //show pending users and members of the group
+  echo 'Members of the group Org (1):'."<br>";
+  $results = getGroupMembers($mysqli, 'Org');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
+
+  echo 'Pending members of the group Org (1):'."<br>";
+  $results = getGroupPendingUsers($mysqli, 'Org');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
+
+  //make ccc a member of the group. ccc will get added to the list.
   $return_val=setMemberToGroup($mysqli, 'ccc', 'Org');
   echo $return_val."<br>";
+
+  //show members of the group
+  echo 'Members of the group Org (2):'."<br>";
+  //this returns me the UID of all members
+  $results = getGroupMembers($mysqli, 'Org');
+  while($row = mysqli_fetch_row($results)){
+    echo getUsername($mysqli, $row[0])."<br>";
+  }
 ?>
