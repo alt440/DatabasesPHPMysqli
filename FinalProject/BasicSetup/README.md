@@ -1,0 +1,26 @@
+# How to setup your environment
+Use the script 'createTablesRevised.php' to create all the different tables 
+required by the project.
+
+The file 'test_database_layer.php' gives you some examples on how to use the
+different methods. More will be added.
+
+The file 'database_layer.php' contains some methods to access the database. It
+is a work in progress. Right now it only contains the methods necessary to 
+add content to the database (and not much about the test cases covered... will
+be done soon).
+
+# database_layer.php limitations
+Uploading images does not currently work. If someone has time, the method
+addContent would need to be modified to be able to work with images.
+
+Also, the addComment method tries to find its Content ID (CID) using its reply
+string. This approach is limited, because two contents' replyString could be 
+the same. I have not thought enough about it enough to give the best solution. 
+know what is the best method to get the CID.
+
+# Updated ER
+I have included the file FinalER.drawio, which is the final ER diagram I came
+up with to design the whole database.
+
+You can go on draw.io and upload this file to see the FinalER.
