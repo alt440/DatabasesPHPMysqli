@@ -132,4 +132,35 @@
     return $first_row[0];
   }
 
+  /*
+  Get all content for a certain event
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event
+
+  Returns the Content ID (CID) and the replyString of the post.
+  */
+  function getContentEvent($mysqli, $eventTitle){
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'Event with title '.$eventTitle.' does not exist';
+    }
+
+    $result2 = $mysqli->query("SELECT Content.CID, Content.replyString, Post.UID FROM Content INNER JOIN Post ON Content.CID=Post.CID WHERE EventID=".$first_row[0]." AND GroupID IS NULL ORDER BY TimeStamp DESC;");
+    return $result2;
+  }
+
+  /*
+  Get all comments for a certain content post
+  $mysqli: Connection to the DB object
+  $CID: Content ID
+
+  Returns only the strings representing the comments.
+  */
+  function getCommentsContent($mysqli, $CID){
+    $result = $mysqli->query("SELECT Comment.replyString, Post_Comment.UID FROM Comment INNER JOIN Post_Comment ON Comment.CoID=Post_Comment.CoID WHERE CID=".$CID." ORDER BY TimeStamp ASC;");
+    return $result;
+  }
+
 ?>
