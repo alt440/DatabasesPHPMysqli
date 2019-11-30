@@ -242,14 +242,12 @@
     //because only a user in the event can create a group...
     $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$first_row[0].";");
     $hasFoundUser = 0;
-    echo "Searching for user in event...";
+
     while($row = mysqli_fetch_row($findUserInEvent)){
-      echo $row[0].' '.$row[1]."<br>";
       //if the user belongs in the event and is actually a member (and not a pending request)
       if($row[0] == $first_row_2[0] && strcmp($row[1],'pending')!=0){
         //then break because its OK for him/her to create the event.
         $hasFoundUser = 1;
-        echo 'done'."<br>";
         break;
       }
     }
@@ -294,12 +292,12 @@
   To add a member to a group. ONLY FOR GROUP MANAGER!
   $mysqli: Connection to the DB object
   $groupName: Name of the group (string) - Must exist
-  $usernameCreator: Username of the user (string) - Must exist
+  $username: Username of the user (string) - Must exist
   $eventTitle: Title of the event in which the group belongs in - Must exist
   */
-  function addUserToGroup($mysqli, $usernameCreator, $groupName, $eventTitle){
+  function addUserToGroup($mysqli, $username, $groupName, $eventTitle){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
 
     $result3 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
@@ -318,7 +316,7 @@
     }
 
     if($hasFoundUser == 0){
-      return 'User with username '.$usernameCreator.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
+      return 'User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
 
     //find event with that title

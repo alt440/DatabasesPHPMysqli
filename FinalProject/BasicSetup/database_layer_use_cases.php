@@ -46,13 +46,35 @@
     }
 
     $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
+    return $mysqli->error;
   }
 
   /*
   This function sets a user as a member of the group, from its pending state.
+  ONLY AVAILABLE TO GROUP ADMIN(s)
+  $mysqli: Connection to the DB object
+  $username: Username of the user that we want to join the group.
+  $groupName: Name of the group that the user is going to join
   */
-  function setMemberToGroup(){
+  function setMemberToGroup($mysqli, $username, $groupName){
+    //find userID
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
 
+    if(is_bool($first_row[0])){
+      return 'User with username '.$username.' does not exist';
+    }
+
+    //find GroupID
+    $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'Group with group name '.$groupName.' does not exist.';
+    }
+
+    $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$first_row_2[0].";");
+    return $mysqli->error;
   }
 
 ?>

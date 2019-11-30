@@ -1,7 +1,7 @@
 <?php
 
-  require "database_layer.php";
-  require "database_layer_use_cases.php";
+  require "../database_layer.php";
+  require "../database_layer_use_cases.php";
 
   //log in to the database
   $mysqli = new mysqli("localhost", "root", "");
@@ -25,17 +25,18 @@
   echo $return_val."<br>";
 
   //once the event is created, admin can see that the event is in list. Validate
-  //event creation. Sets status to '' (0)
+  //event creation. Sets status to '' (0) ONLY FOR ADMIN.
   $return_val=confirmCreationEvent($mysqli, 'Some_Event');
   echo $return_val."<br>";
 
   //then, event is public!
   //now, people can be added to the event. Add bbb to Some_Event (the event just created)
+  //this can be a request from bbb to event manager, or event manager to bbb.
   $return_val=addUserToEvent($mysqli, 'bbb', 'Some_Event');
   echo $return_val."<br>";
 
   //since the request to add bbb is pending, we have to make him a member of the
-  //group.
+  //group. Either bbb or event manager will have to approve this.
   $return_val=setMemberToEvent($mysqli, 'bbb', 'Some_Event');
   echo $return_val."<br>";
 ?>
