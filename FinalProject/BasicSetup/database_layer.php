@@ -273,7 +273,7 @@
   }
 
   /*
-  To add a member to an event
+  To add a member to an event. ONLY FOR EVENT MANAGER!
   $mysqli: Connection to the DB object
   $username: Username of the user being added to the event (string) - Must exist
   $eventTitle: Title of the event the user is being added to (string) - Must exist
@@ -291,7 +291,7 @@
   }
 
   /*
-  To add a member to a group
+  To add a member to a group. ONLY FOR GROUP MANAGER!
   $mysqli: Connection to the DB object
   $groupName: Name of the group (string) - Must exist
   $usernameCreator: Username of the user (string) - Must exist
@@ -330,7 +330,7 @@
   }
 
   /*
-  To add some new rates
+  To add some new rates. ONLY FOR CONTROLLER!
   $mysqli: Connection to the DB object
   $numberEvents: Positive integer that tells how many events for a price (int)
   $storageGB: Storage that the event takes in gigabytes (int)
