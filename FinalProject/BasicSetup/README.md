@@ -15,6 +15,8 @@ The folder 'Examples' currently contains two test cases to understand how to
 work with the methods I have made. There is also the file 'test_database_layer.php'
 that you can also refer to, which contains a lot of documentation.
 
+**Note that the test cases do not cover the case where nothing was covered from the DB. In that case, the results will return false. You have to verify that there is something returned from each queries you receive back.**
+
 # database_layer.php limitations
 Uploading images does not currently work. If someone has time, the method
 addContent would need to be modified to be able to work with images.
