@@ -29,3 +29,15 @@ I have included the file FinalER.drawio, which is the final ER diagram I came
 up with to design the whole database.
 
 You can go on draw.io and upload this file to see the FinalER.
+
+# Missing functionalities
+- Cannot reply with images
+- Limiting functionality to the comment (compares content's string to know CID, weak way of doing it)
+- Admin should be able to assign an event manager to an event
+- Extend time period event (extra charge)
+- Table for overflowing over bandwidth/ storage limits
+- Delete the event after has been archived for 7 years
+- General deletion methods (for admin: delete groups, remove members from event,...) (for event manager: remove members from event) (delete user)
+- Debit details/ address/ phone number info for event manager
+- Get events of a user/ Get groups of a user
+- Edit (user details, group, event)
