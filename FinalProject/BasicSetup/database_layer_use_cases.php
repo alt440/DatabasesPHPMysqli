@@ -77,4 +77,45 @@
     return $mysqli->error;
   }
 
+  /*
+  Converts a date stamp to a timestamp: 'YYYY-MM-DD' to a long
+  $dateStamp: Date in format 'YYYY-MM-DD'
+  Returns long
+  */
+  function convertDateStampToTimeStamp($dateStamp){
+    $a = strptime($dateStamp, '%Y-%m-%d');
+    return mktime(0, 0, 0, $a['tm_mon']+1, $a['tm_mday'], $a['tm_year']+1900);
+  }
+
+  /*
+  Converts a timestamp to a date stamp: long to a 'YYYY-MM-DD'
+  $timestamp: Long representing the time in seconds since 1970
+  Returns 'YYYY-MM-DD'
+  */
+  function convertTimeStampToDateStamp($timestamp){
+    return date('Y-m-d', $timestamp);
+  }
+
+  /*
+  Verify validity of the event (if it is archived)
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event - Must exist
+  */
+  function isEventArchived($mysqli, $eventTitle){
+    $result = $mysqli->query("SELECT ExpiryDate FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'Event with title '.$eventTitle.' was not found.';
+    }
+
+    //current time
+    $timestamp = time();
+
+    //convert string to timestamp
+    $event_timestamp = convertDateStampToTimeStamp($first_row[0]);
+
+    return $event_timestamp < $timestamp;
+  }
+
 ?>

@@ -7,30 +7,42 @@
 
   /*
   Shows emails destinated for the user
-  */
-  function showEmailsReceived(){
+  $mysqli: Connection to the DB object
+  $username: Username of the user
 
+  Returns list of emails that were targeted to the user
+  */
+  function showEmailsReceived($mysqli, $username){
+    //find if the user really exists
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'User with username '.$username.' does not exist';
+    }
+
+    $result2 = $mysqli->query("SELECT SourceUser, TitleEmail, Content FROM Emails WHERE TargetUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
+    return $result2;
   }
 
   /*
   Shows emails sent by the user
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+
+  Returns list of emails that were sent by the user
   */
-  function showEmailsSent(){
+  function showEmailsSent($mysqli, $username){
+    //find if the user really exists
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
 
-  }
+    if(is_bool($first_row[0])){
+      return 'User with username '.$username.' does not exist';
+    }
 
-  /*
-  Shows group conversation
-  */
-  function showGroupConversation(){
-
-  }
-
-  /*
-  Shows event conversation (also applies to comments)
-  */
-  function showEventConversation(){
-
+    $result2 = $mysqli->query("SELECT TargetUser, TitleEmail, Content FROM Emails WHERE SourceUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
+    return $result2;
   }
 
   /*
@@ -137,7 +149,8 @@
   $mysqli: Connection to the DB object
   $eventTitle: Title of the event
 
-  Returns the Content ID (CID) and the replyString of the post.
+  Returns the Content ID (CID) and the replyString of the post, along with the UID
+  (User ID) of the person that did the post.
   */
   function getContentEvent($mysqli, $eventTitle){
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
@@ -152,15 +165,36 @@
   }
 
   /*
-  Get all comments for a certain content post
+  Get all comments for a certain content post. Only for posts in Events.
   $mysqli: Connection to the DB object
   $CID: Content ID
 
-  Returns only the strings representing the comments.
+  Returns the string and the UID (ID of user that did the post) of the post.
   */
   function getCommentsContent($mysqli, $CID){
     $result = $mysqli->query("SELECT Comment.replyString, Post_Comment.UID FROM Comment INNER JOIN Post_Comment ON Comment.CoID=Post_Comment.CoID WHERE CID=".$CID." ORDER BY TimeStamp ASC;");
     return $result;
+  }
+
+  /*
+  Get all content for a certain group (already ordered correctly)
+  $mysqli: Connection to the DB object
+  $groupName: Name of the event
+
+  Returns the strings and the UID (ID of user posting content)
+  */
+  function getContentGroup($mysqli, $groupName){
+    //find the group
+    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'Group with name '.$groupName.' could not be found';
+    }
+
+    //now look through DB.
+    $result2 = $mysqli->query("SELECT Content.replyString, Post.UID FROM Content INNER JOIN Post ON Content.CID=Post.CID WHERE GroupID=".$first_row[0]." ORDER BY TimeStamp ASC;");
+    return $result2;
   }
 
 ?>
