@@ -41,3 +41,4 @@ You can go on draw.io and upload this file to see the FinalER.
 - Debit details/ address/ phone number info for event manager
 - Get events of a user/ Get groups of a user
 - Edit (user details, group, event)
+- Add debit info to an event manager
