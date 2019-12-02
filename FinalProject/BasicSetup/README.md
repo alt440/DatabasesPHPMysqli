@@ -38,9 +38,9 @@ You can go on draw.io and upload this file to see the FinalER.
 - Admin should be able to assign an event manager to an event
 - Extend time period event (extra charge)
 - Table for overflowing over bandwidth/ storage limits
-- Delete the event after has been archived for 7 years
+- ~~Delete the event after has been archived for 7 years~~
 - General deletion methods (for admin: delete groups, remove members from event,...) (for event manager: remove members from event) (delete user)
 - Debit details/ address/ phone number info for event manager
-- Get events of a user/ Get groups of a user
-- Edit (user details, group, event)
+- ~~Get events of a user/ Get groups of a user~~
+- Edit (~~user details~~, group, event)
 - Add debit info to an event manager
