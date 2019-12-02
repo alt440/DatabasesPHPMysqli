@@ -20,7 +20,7 @@
   function confirmCreationEvent($mysqli, $eventTitle){
     //set status to 0 to put the event active.
     $mysqli->query("UPDATE Event_ SET Status=0 WHERE Title='".$eventTitle."';");
-    return $mysqli->error;
+    return 'confirmCreationEvent: '.$mysqli->error;
   }
 
   /*
@@ -35,18 +35,18 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' does not exist';
+      return 'setMemberToEvent: User with username '.$username.' does not exist';
     }
 
     $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     $first_row_2 = mysqli_fetch_row($result2);
 
     if(is_bool($first_row_2[0])){
-      return 'Event with event title '.$eventTitle.' does not exist.';
+      return 'setMemberToEvent: Event with event title '.$eventTitle.' does not exist.';
     }
 
     $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
-    return $mysqli->error;
+    return 'setMemberToEvent: '.$mysqli->error;
   }
 
   /*
@@ -62,7 +62,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' does not exist';
+      return 'setMemberToGroup: User with username '.$username.' does not exist';
     }
 
     //find GroupID
@@ -70,11 +70,11 @@
     $first_row_2 = mysqli_fetch_row($result2);
 
     if(is_bool($first_row_2[0])){
-      return 'Group with group name '.$groupName.' does not exist.';
+      return 'setMemberToGroup: Group with group name '.$groupName.' does not exist.';
     }
 
     $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$first_row_2[0].";");
-    return $mysqli->error;
+    return 'setMemberToGroup: '.$mysqli->error;
   }
 
   /*
@@ -106,7 +106,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Event with title '.$eventTitle.' was not found.';
+      return 'isEventArchived: Event with title '.$eventTitle.' was not found.';
     }
 
     //current time
@@ -128,7 +128,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Event with title '.$eventTitle.' was not found.';
+      return 'shouldEventBeDeleted: Event with title '.$eventTitle.' was not found.';
     }
 
     //increase by 7 the year on the expiry date
@@ -156,11 +156,11 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserEmail: User with username '.$username.' was not found.';
     }
 
     $mysqli->query("UPDATE User_ SET Email='".$email."' WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserEmail: '.$mysqli->error;
   }
 
   /*
@@ -175,15 +175,15 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserPassword: User with username '.$username.' was not found.';
     }
 
     if(strcmp($password, $first_row[1])!=0){
-      return 'Wrong credentials!';
+      return 'updateUserPassword: Wrong credentials!';
     }
 
     $mysqli->query("UPDATE User_ SET Password='".$new_password."' WHERE UID=".$first_row[0].";");
-    return $mysqli->error;
+    return 'updateUserPassword: '.$mysqli->error;
   }
 
   /*
@@ -197,10 +197,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUser_Name: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET Name='".$name."' WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUser_Name: '.$mysqli->error;
   }
 
   /*
@@ -214,10 +214,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserBankName: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET BankName='".$bank_name."' WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserBankName: '.$mysqli->error;
   }
 
   /*
@@ -231,10 +231,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserCreditCardNumber: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET CreditCardNumber=".$credit_card_number." WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserCreditCardNumber: '.$mysqli->error;
   }
 
   /*
@@ -248,10 +248,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserAccountNumber: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET AccountNumber=".$account_number." WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserAccountNumber: '.$mysqli->error;
   }
 
   /*
@@ -265,10 +265,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserPhoneNumber: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET PhoneNumber='".$phone_number."' WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserPhoneNumber: '.$mysqli->error;
   }
 
   /*
@@ -282,10 +282,10 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'updateUserAddress: User with username '.$username.' was not found.';
     }
     $mysqli->query("UPDATE User_ SET Address='".$address."' WHERE Username='".$username."';");
-    return $mysqli->error;
+    return 'updateUserAddress: '.$mysqli->error;
   }
 
 ?>

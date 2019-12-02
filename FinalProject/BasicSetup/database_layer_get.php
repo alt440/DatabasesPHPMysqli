@@ -18,7 +18,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' does not exist';
+      return 'showEmailsReceived: User with username '.$username.' does not exist';
     }
 
     $result2 = $mysqli->query("SELECT SourceUser, TitleEmail, Content FROM Emails WHERE TargetUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
@@ -38,7 +38,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' does not exist';
+      return 'showEmailsSent: User with username '.$username.' does not exist';
     }
 
     $result2 = $mysqli->query("SELECT TargetUser, TitleEmail, Content FROM Emails WHERE SourceUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
@@ -58,7 +58,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Event with title '.$eventTitle.' does not exist.';
+      return 'getEventMembers: Event with title '.$eventTitle.' does not exist.';
     }
 
     //get UIDs of the people that belong to the event
@@ -80,7 +80,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Event with title '.$eventTitle.' does not exist.';
+      return 'getEventPendingUsers: Event with title '.$eventTitle.' does not exist.';
     }
 
     //get UIDs of the people that belong to the event
@@ -101,7 +101,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Group with group name '.$groupName.' does not exist.';
+      return 'getGroupMembers: Group with group name '.$groupName.' does not exist.';
     }
 
     //get UIDs of the people that belong to the group.
@@ -123,7 +123,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Group with group name '.$groupName.' does not exist.';
+      return 'getGroupPendingUsers: Group with group name '.$groupName.' does not exist.';
     }
 
     //get UIDs of the people that belong to the group.
@@ -157,7 +157,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Event with title '.$eventTitle.' does not exist';
+      return 'getContentEvent: Event with title '.$eventTitle.' does not exist';
     }
 
     $result2 = $mysqli->query("SELECT Content.CID, Content.replyString, Post.UID FROM Content INNER JOIN Post ON Content.CID=Post.CID WHERE EventID=".$first_row[0]." AND GroupID IS NULL ORDER BY TimeStamp DESC;");
@@ -189,7 +189,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'Group with name '.$groupName.' could not be found';
+      return 'getContentGroup: Group with name '.$groupName.' could not be found';
     }
 
     //now look through DB.
@@ -210,7 +210,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'getEventsOfUser: User with username '.$username.' was not found.';
     }
 
     //get all the titles of the events the user belongs to and the EventID of those
@@ -240,7 +240,7 @@
     $first_row = mysqli_fetch_row($result);
 
     if(is_bool($first_row[0])){
-      return 'User with username '.$username.' was not found.';
+      return 'getGroupsOfUser: User with username '.$username.' was not found.';
     }
 
     $result2 = $mysqli->query("SELECT Group_.GroupID, Group_.GroupName FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Is_Member_Group.UID=".$first_row[0].";");
@@ -272,5 +272,25 @@
     return $first_row;
   }
 
+  /*
+  Gets all the groups that belong to an event
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event
+
+  Return all the group names that belong to the event.
+  */
+  function getGroupsInEvent($mysqli, $eventTitle){
+    //first find event
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'getGroupsInEvent: Event with title '.$eventTitle.' was not found.';
+    }
+
+    //now find all groups
+    $result2 = $mysqli->query("SELECT GroupName FROM Group_ WHERE MainEventID=".$first_row[0].";");
+    return $result2;
+  }
 
 ?>
