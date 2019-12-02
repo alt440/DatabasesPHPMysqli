@@ -62,5 +62,10 @@
     echo getUsername($mysqli, $row[1]).' '.$row[0]."<br>";
   }
 
+  //add aaa for the getHomePageUser.php script
+  $return_val=addUserToGroup($mysqli, 'aaa', 'Org', 'Some_Event');
+  echo $return_val."<br>";
+  $return_val=setMemberToGroup($mysqli, 'aaa', 'Org');
+  echo $return_val."<br>";
 
 ?>

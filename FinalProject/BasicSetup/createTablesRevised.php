@@ -74,8 +74,8 @@ foreign key (CoID) references Comment(CoID) on delete cascade, foreign key (UID)
 	echo $mysqli->error;
 
 	//add the following rows to Event_Type (as the types of events should be constant)
-	$mysqli->query("INSERT INTO Event_Type values ('family', 0);");
-	$mysqli->query("INSERT INTO Event_Type values ('community', 0);");
+	$mysqli->query("INSERT INTO Event_Type values ('family', 1);");
+	$mysqli->query("INSERT INTO Event_Type values ('community', 1);");
 	$mysqli->query("INSERT INTO Event_Type values ('non-profit', 0);");
 	$mysqli->query("INSERT INTO Event_Type values ('profit', 1);");
 	//close the connection.

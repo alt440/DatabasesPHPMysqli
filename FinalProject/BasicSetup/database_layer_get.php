@@ -197,4 +197,80 @@
     return $result2;
   }
 
+  /*
+  Get all the events a user belongs to.
+  $mysqli: Connection to the DB object
+  $username: Username of the user - User must exist!
+
+  Returns table of events user belongs to
+  */
+  function getEventsOfUser($mysqli, $username){
+    //find userID (UID)
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'User with username '.$username.' was not found.';
+    }
+
+    //get all the titles of the events the user belongs to and the EventID of those
+    $result2 = $mysqli->query("SELECT Event_.EventID, Event_.Title FROM Event_ INNER JOIN Is_Member_Event ON Is_Member_Event.EventID=Event_.EventID WHERE Is_Member_Event.UID=".$first_row[0].";");
+    return $result2;
+  }
+
+  /*
+  Get the latest post of the event
+  $mysqli: Connection to the DB object
+  $eventID: ID of the event
+  */
+  function getLatestPostEvent($mysqli, $eventID){
+    $result = $mysqli->query("SELECT replyString, MAX(TimeStamp) FROM Content WHERE EventID=".$eventID." AND GroupID IS NULL GROUP BY replyString;");
+    return $result;
+  }
+
+  /*
+  Get all the groups the user belongs to
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+
+  Returns the GroupIDs and the GroupNames of the groups the user belongs to.
+  */
+  function getGroupsOfUser($mysqli, $username){
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'User with username '.$username.' was not found.';
+    }
+
+    $result2 = $mysqli->query("SELECT Group_.GroupID, Group_.GroupName FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Is_Member_Group.UID=".$first_row[0].";");
+    return $result2;
+  }
+
+  /*
+  Get the latest post of the group
+  $mysqli: Connection to the DB object
+  $groupID: ID of the group
+
+  Returns the replyString that has the greatest timestamp value (most recent post)
+  */
+  function getLatestPostGroup($mysqli, $groupID){
+    $result = $mysqli->query("SELECT replyString, MAX(TimeStamp) FROM Content WHERE GroupID=".$groupID." GROUP BY replyString;");
+    return $result;
+  }
+
+  /*
+  Get all user info based on username
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  Returns all the user info in a 1D array (can refer as $first_row[0],... look
+  in DB for order of variables)
+  */
+  function getUser($mysqli, $username){
+    $result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+    return $first_row;
+  }
+
+
 ?>

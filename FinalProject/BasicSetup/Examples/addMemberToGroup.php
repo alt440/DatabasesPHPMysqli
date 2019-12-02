@@ -64,7 +64,8 @@
     echo getUsername($mysqli, $row[0])."<br>";
   }
 
-  //make ccc a member of the group. ccc will get added to the list.
+  //make ccc a member of the group. ccc will get added to the list. This should
+  //only be allowed by the group admin.
   $return_val=setMemberToGroup($mysqli, 'ccc', 'Org');
   echo $return_val."<br>";
 
@@ -75,4 +76,5 @@
   while($row = mysqli_fetch_row($results)){
     echo getUsername($mysqli, $row[0])."<br>";
   }
+
 ?>
