@@ -1,0 +1,79 @@
+html, body{
+  width: 100%;
+  z-index: 0;
+}
+
+.table{
+  border: 1px solid black;
+  padding: 20px;
+  text-align: center;
+}
+
+#groupListing, #contentTable, #searchStuff, #adminContent{
+  margin: 0 auto;
+}
+
+#groupListing{
+  position: relative;
+  top: -20px;
+}
+
+#seeMembers, #joinEvent{
+  margin: 0 auto;
+  display: block;
+}
+
+h1,h3, #archivedInfo{
+  text-align: center;
+}
+
+#wholeContent{
+  position: relative;
+  top: 150px;
+}
+#contentTable{
+  padding-top: 100px;
+}
+
+#seeMembersPopup{
+  position: absolute;
+  left: 40%;
+  z-index: 1;
+}
+#seeMembersPopup{
+  background-color: white;
+  width: 600px;
+  height: 600px;
+  border: 1px solid black;
+  display: none;
+}
+
+.innerTableMembersUsername, .innerTableMembersStatus, .innerTableMembersButtons{
+  display: inline-block;
+  width: 50px;
+  height: 3px;
+}
+
+.innerTableMembersButtons{
+  margin-left: 30px;
+  margin-bottom: 7px;
+  width: 150px;
+  height: 20px;
+}
+/*.innerTableMembersUsername{
+  margin-right: 100px;
+}*/
+
+/*.innerTableMembersStatus{
+  position: relative;
+
+}*/
+
+#headerUsername, #headerStatus{
+  display:inline;
+}
+
+#table-scroll{
+  overflow: auto;
+  position: relative;
+}

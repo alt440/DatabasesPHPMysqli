@@ -26,7 +26,7 @@
 	$mysqli->query("CREATE TABLE Event_Type (EventType varchar(20) not null, isProfitable boolean not null, primary key(EventType))");
 	echo $mysqli->error;
 
-	$mysqli->query("CREATE TABLE Event_ (EventID int unsigned not null auto_increment, Status boolean not null, Date varchar(20) not null, Title varchar(20) unique not null, ExpiryDate varchar(20) not null, EventType varchar(20) not null, foreign key (EventType) references Event_Type(EventType) on delete cascade, primary key (EventID));");
+	$mysqli->query("CREATE TABLE Event_ (EventID int unsigned not null auto_increment, Status boolean not null, Date varchar(20) not null, Title varchar(20) unique not null, ExpiryDate varchar(20) not null, EventType varchar(20) not null, TemplateSelection int not null, foreign key (EventType) references Event_Type(EventType) on delete cascade, primary key (EventID));");
 	echo $mysqli->error;
 
   $mysqli->query("CREATE TABLE Group_ (GroupID int unsigned not null auto_increment, MainEventID int unsigned not null, GroupName varchar(20) unique not null, Privacy boolean not null, foreign key (MainEventID) references Event_(EventID) on delete cascade, primary key (GroupID));");
@@ -42,7 +42,7 @@
 
 	//this table determines which participant belongs to which group. hasSeenLastMessage has been added
 	//to know if the members have seen the last message. If not a member, set to false or 0.
-	$mysqli->query("CREATE TABLE Is_Member_Group (GroupID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, primary key (GroupID, UID), foreign key (GroupID) references Group_(GroupID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
+	$mysqli->query("CREATE TABLE Is_Member_Group (GroupID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode int, primary key (GroupID, UID), foreign key (GroupID) references Group_(GroupID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
 	echo $mysqli->error;
 
 	//emails of a user.
@@ -51,7 +51,7 @@
 
 	//this table determines which participant belongs to which event. hasSeenLastMessage has been added
 	//to know if the members have seen the last message. If not a member, set to false or 0.
-	$mysqli->query("CREATE TABLE Is_Member_Event (EventID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, primary key (EventID, UID), foreign key (EventID) references Event_(EventID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
+	$mysqli->query("CREATE TABLE Is_Member_Event (EventID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode int, primary key (EventID, UID), foreign key (EventID) references Event_(EventID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
 	echo $mysqli->error;
 
 	//this table determines who posted a certain content. Since there is always only one person that

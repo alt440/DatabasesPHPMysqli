@@ -51,6 +51,52 @@
   }
 
   /*
+  To create a new comment (from post in Event)
+  $mysqli: Connection to the DB object
+  $replyString: If the comment contains any text to be displayed (string) - can be empty
+  $CID: ID of the content we are commenting on.
+  $username: Username of the user that published the comment. (string)
+  */
+  function addCommentCID($mysqli, $replyString, $CID, $username){
+    //search for the content made with timestamp timestampCID
+    $result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE CID='".$CID."';");
+    $first_row = mysqli_fetch_row($result);
+    if(is_bool($first_row[0])){
+      return 'addComment: There is no such content which has this CID: '.$CID;
+    }
+
+    //get user and see if exists
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+    if(is_bool($first_row_2[0])){
+      return 'addComment: There is no such user that has this username: '.$username;
+    }
+
+    if($first_row[2]!=''){
+      return 'addComment: Content comes from a group. Cannot comment on some content from a group.';
+    }
+
+    if($first_row[1]==0){
+      return 'addComment: Content cannot be commented due to privilege level';
+    }
+
+    if($first_row[1]==1){
+      //only comment is accepted. No links!
+      if(strpos($replyString, "www.") !== false){
+        return 'addComment: There is a link inside the comment; according to the privilege level, cannot be sent.';
+      }
+    }
+    $timestamp = time();
+    $mysqli->query("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (".$first_row[0].",'".$replyString."',".$timestamp.");");
+    //find CoID of just added entity
+    $result3 = $mysqli->query("SELECT CoID FROM Comment WHERE TimeStamp=".$timestamp.";");
+    $first_row_3 = mysqli_fetch_row($result3);
+    $mysqli->query("INSERT INTO Post_Comment (CoID, UID) VALUES (".$first_row_3[0].",".$first_row_2[0].");");
+    return 'addComment: '.$mysqli->error;
+
+  }
+
+  /*
   To create some new content (reply in Group, post in Event)
   $mysqli: Connection to the DB object
   $permissionType: 0 for no comments, 1 for comments, 2 for comments and links (not valid for group content. See notes below)
@@ -165,9 +211,10 @@
   $expiryDate: date object of format 'YYYY-MM-DD'
   $eventType: type of the event
   $usernameCreator: The username of the person that created the event, so he can be set as admin.
+  $templateSelection: Int representing the template selected.
   Status object being sent as 1 tells us that the event is pending for approval.
   */
-  function createEvent($mysqli, $date, $title, $expiryDate, $eventType, $usernameCreator){
+  function createEvent($mysqli, $date, $title, $expiryDate, $eventType, $usernameCreator, $templateSelection){
     if(doesEventTypeExist($eventType)){
         return 'createEvent: Was this event type added to the event types table?';
       }
@@ -180,6 +227,10 @@
     }
     //make sure expiryDate > date! Otherwise event will be archived
 
+    if($templateSelection<=0 || $templateSelection>2){
+      return 'createEvent: Wrong template selection value.';
+    }
+
     //make sure the creator actually exists, and make him the admin of the event.
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
     $first_row = mysqli_fetch_row($result);
@@ -188,7 +239,7 @@
       return 'createEvent: The username provided does not correspond to any user';
     }
 
-    $mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."');");
+    $mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType, TemplateSelection) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."',".$templateSelection.");");
     $error = $mysqli->error;
 
     //get the event id just created
