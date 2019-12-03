@@ -10,6 +10,10 @@ be done soon).
 The file 'database_layer_use_cases.php' covers some scenarios that were covered
 over the test cases.
 
+To run the project, launch your XAMPP server, and go over the files that are found
+directly under the html/ folder. The requests/ folder is used for requests to the 
+backend, and therefore does not compose the GUI.
+
 # Test cases that were made for you to better understand
 The folder 'Examples' currently contains two test cases to understand how to 
 work with the methods I have made. There is also the file 'test_database_layer.php'
