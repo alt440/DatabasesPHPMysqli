@@ -14,7 +14,7 @@
     // This variable is set only when the username is the same as the search user value
     $showEmails = 1;
     $username = $_SESSION["username"];
-    if(isset($_SESSION['searchUser'])){
+    if(isset($_SESSION['searchUser']) && $_SESSION['searchUser']!=''){
       if(strcmp($username, $_SESSION['searchUser']) != 0){
         $username = $_SESSION['searchUser'];
         $showEmails = 0;
@@ -67,7 +67,7 @@ and open the template in the editor.
             <tr><td><b>Email: </b></td><td> <?php echo $result[3];?></td> </tr>
             <tr><td><b>Date Of Birth: </b></td><td> <?php echo $result[5];?></td> </tr>
             <?php if($showEmails == 1){ ?>
-            <tr><td colspan="2"><a href="editInfo.html">Edit information </a> </td></tr>
+            <tr><td colspan="2"><a href="editUserInfo.php">Edit information </a> </td></tr>
             <?php }?>
         </table>
         <?php if($showEmails == 1){?>

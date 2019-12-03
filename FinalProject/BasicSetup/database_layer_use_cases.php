@@ -188,11 +188,12 @@
     }
 
     if(strcmp($password, $first_row[1])!=0){
-      return 'updateUserPassword: Wrong credentials!';
+      return 'Wrong credentials!';
     }
 
     $mysqli->query("UPDATE User_ SET Password='".$new_password."' WHERE UID=".$first_row[0].";");
-    return 'updateUserPassword: '.$mysqli->error;
+    //return 'updateUserPassword: '.$mysqli->error;
+    return 1;
   }
 
   /*

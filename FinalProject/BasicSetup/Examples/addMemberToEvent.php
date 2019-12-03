@@ -22,7 +22,7 @@
   echo $return_val."<br>";
 
   //let aaa create an event... sets status to 'pending' (1)
-  $return_val=createEvent($mysqli, '1999-01-11','Some_Event','2009-01-22','family','aaa');
+  $return_val=createEvent($mysqli, '1999-01-11','Some_Event','2009-01-22','family','aaa', 1);
   echo $return_val."<br>";
 
   //once the event is created, admin can see that the event is in list. Validate
