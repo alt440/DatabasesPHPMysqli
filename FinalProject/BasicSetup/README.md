@@ -19,6 +19,10 @@ The folder 'Examples' currently contains two test cases to understand how to
 work with the methods I have made. There is also the file 'test_database_layer.php'
 that you can also refer to, which contains a lot of documentation.
 
+The 'requests' folder contains as well different implementations on how I manipulate the
+DB. These files are because of the fact that to communicate with the backend, I am required
+to make AJAX calls.
+
 **Note that the test cases do not cover the case where nothing was covered from the DB. In that case, the results will return false. You have to verify that there is something returned from each queries you receive back.**
 
 # database_layer.php limitations
