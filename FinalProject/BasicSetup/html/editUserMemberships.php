@@ -1,3 +1,7 @@
+<!--
+  authors: Alexandre Therrien, Daniel Vigny-Pau
+-->
+
 <?php
   session_start();
   require "../database_layer_get.php";
@@ -22,12 +26,13 @@
 <head>
   <meta charset="utf-8">
   <title>Edit Group/Event Details</title>
+  <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-
+  <div class="smallBox">
   <h2>Edit Group/Event Details</h2>
-  <table id="userMemberships">
+  <table class="centeredTable" id="userMemberships">
     <tr>
       <th>Events</th>
     </tr>
@@ -55,6 +60,9 @@
         }
       }
     }?>
+    <tr>
+      <td><br/></td>
+    </tr>
     <tr>
       <th>Groups</th>
     </tr>
@@ -85,11 +93,12 @@
     </table>
 
     <h2>Add an Event</h2>
-    <table id="addEventTable">
+    <table class="centeredTable" id="addEventTable">
       <tr>
-        <td>Event Name: <input type="text" id="addEventTxt" placeholder="Event Name...">
-          <form>
-            Event Type:
+        <td>Event Name <input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
+    <br/> <br/>
+        <form>
+            Event Type
             <select id="eventTypesSelection">
               <?php
                 $eventTypes = getEventTypes($mysqli);
@@ -102,12 +111,12 @@
                 ?>
             </select>
           </form>
-          Event Template: <input type="text" id="addEventTemplate" placeholder="Template Selection (1 or 2)...">
-          <br><input type="button" value="Add an Event" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
+          Event Template <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
+          <br><input type="button" class="centeredButton" value="Add an Event" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
       </tr>
     </table>
 
-    <input type="button" value="Return to home page" id="returnToHomePage" onclick="returnToHomePage()">
+    <input type="button" value="Return to home page" class="returnButton" id="returnToHomePage" onclick="returnToHomePage()">
 
     <script>
     function returnToHomePage(){
@@ -183,5 +192,6 @@
       });
     }
     </script>
+    </div>
 </body>
 </html>
