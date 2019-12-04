@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Event Requests</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css1.css"/>
+    </head>
+    <body>
+        <div style = ""><h1><center>Event  Planner<br></center></h1></div>
+		
+		<div style = "width : 50%; height:100%;">
+		<p style = "text-align: center"> <h3>Requests to join</h3></p>
+		<table class="blueTable">
+			<thead>
+			<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>Accept/Deny</th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+
+			</tr>
+			</tfoot>
+			<tbody>
+			<tr>
+			<td>1</td>
+			<td>Mair</td>
+			<td>Elbaz</td>
+			<td>123@gmail.com</td>
+			<td><button type="button">Accept </button> <button type="button" style = "float:right">Deny</button></td>
+			</tr>
+			<tr>
+			<td>2</td>
+			<td>Daniel</td>
+			<td>vigny</td>
+			<td>456@gmail.com</td>
+			<td><button type="button">Accept </button> <button type="button" style = "float:right">Deny</button></td>
+			</tr>
+			</tbody>
+			</table>
+		</div>
+		<br></br>
+            <div style = "width : 280px; height:100%;">
+			<form action="requests.php" method="POST" name="request">
+				<h3> Add a Member</h3>
+					<p>Participant ID: <input style = "float:right;" name="PID" type="text"/></p>
+					<p>Name: <input style = "float:right;" name="Name" type="text"/></p>
+					<p>Email: <input style = "float:right;" name="PID" type="text"/></p>
+					<input id="Add" name="submit" type="submit" value="Add">
+			</form>
+			</div>
+			<br></br>
+            <div style = "width : 280px; height:100%;">
+			<form action="requests.php" method="POST" name="request">
+				<h3> Remove a Member</h3>
+					<p>Name: <input style = "float:right;" name="Name" type="text"/></p>
+					<p>Email: <input style = "float:right;" name="PID" type="text"/></p>
+					<input id="delete" name="submit" type="submit" value="Delete">
+			</form>
+			</div>
+			
+			<div style = "width : 280px; height:100%;">
+			<form action="requests.php" method="POST" name="request">
+				<h3> Promote Member</h3>
+					<p>Name: <input style = "float:right;" name="Name" type="text"/></p>
+					<input id="promote" name="submit" type="submit" value="promote">
+			</form>
+			</div>
+        <br></br>
+    </body>
+</html>
