@@ -1,0 +1,74 @@
+/*
+    author: Daniel Vigny-Pau 40034769
+*/
+
+body {
+    max-width: 800px;
+    margin: auto;
+	background-color: #deeaee;
+}
+
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+td {
+    font-size: 14px;
+    font-family: Arial;
+}
+
+tr {
+    margin: 16px;
+}
+
+.sub {
+    color: #404040;
+    font-size: 12px;   
+}
+
+.newButton {
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.returnButton {
+    width: 250px;
+    background-color:  #78a9ba;
+    color: white;
+    padding: 8px;
+    margin-top: 28px;
+    border-radius: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newText {
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.bigBox {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    border: solid 2px #737373;
+    background-color: white;
+    padding-top: 14px;
+    padding-bottom: 28px;
+    padding-left: 32px;
+    padding-right: 32px;
+    box-shadow: 5px 5px #457687;
+}
+
+.currentInfo {
+    font-weight: bold;
+    color: #404040;
+    padding-top: 16px;
+}
