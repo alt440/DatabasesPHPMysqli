@@ -1,4 +1,4 @@
-//author: Charles-Antoine Guité 40063098
+/*author: Charles-Antoine Guité 40063098*/
 
 <!DOCTYPE html>
 <html>
