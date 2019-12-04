@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+.header {
+  background-color: #0000cc;
+  color: #ffffff;
+  padding: 15px;
+}
+/* Create two equal columns that floats next to each other */
+.menu {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  height: 600px; /* Should be removed. Only for demonstration */
+}
+.convos {
+  float: left;
+  width: 80%;
+  padding: 10px;
+  height: 600px;
+  overflow-y: scroll
+}
+
+ /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding: 8px;
+  margin-bottom: 7px;
+  background-color: #99b5e5;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.menu li:hover {
+  background-color: #0099cc;
+}
+.convos ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.convos li {
+  margin-bottom: 7px;
+  background-color: #FEFDFD;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.convos li:hover {
+ 
+}
+.Group {
+    display: block
+}
+img {
+  width: 100%;
+  float: left;
+  width:40px;
+  height:40px; 
+  color: #010000;
+}
+.text {
+  padding: 10px;
+  color: #010000;
+ }
+.picPerso {
+  width: 100%;
+  float: right;
+  width:40px;
+  height:40px; 
+}
+.textPerso {
+  float: right;
+  color: #010000;
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 75%;
+    height: 20%;
+}
+#footer {
+    background: #0000cc;
+    line-height: 2;
+    text-align: center;
+    color: #042E64;
+    text-shadow: 0 1px 0 #84BAFF;
+    box-shadow: 0 0 15px #00214B
+}
+#optionsBar {
+ background: #0086FF;
+ height: 25px;
+ width: 100%;
+}
+#MembersButton {
+float: right;
+}
+#OptionsButton {
+float: right;
+}
+#SendButton{
+float: right;
+}
+#FilesButton{
+float: right;
+}
+
+
+#TextArea {
+height: 60%;
+width: 90%;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Group Conversations</h1>
+</div>
+
+<div class="row">
+  <div class="menu" style="background-color:#aaa;">
+     <ul>
+      <li>
+        <a Class="Group" href="Index.php">Group Name</a>
+    </li>
+        <li>
+        <a Class="Group" href="Index.php">Group Name</a>
+    </li>
+    <li>
+        <a Class="Group" href="Index.php">Group Name</a>
+    </li>
+    </ul>
+  </div>
+  <div class="convos" id="convos" style="background-color:#bbb;">
+    <ul style="list-style-type:none;">
+      <li>
+          <img class="profilePicture"src="img_girl.jpg" alt="Prof. pic."> 
+          <p class="text">Here is a text message blablabla</p>
+        </li>
+        <li>
+           <img src="img_girl.jpg" alt="Profile picture"> 
+           <p class="text">Here is a text message blablabla</p>
+        </li>
+        <li>
+           <img class="picPerso" src="img_girl.jpg" alt="Prof. pic."> 
+           <p class="textPerso">Here is a text message blablabla</p>
+            <br><br>
+        </li>
+        <li>
+           <img src="img_girl.jpg" alt="Profile picture"> 
+           <p class="text">Here is a text message blablabla</p>
+        </li>
+    </ul>
+  	<div id="footer">
+      <div id="optionsBar">
+      	  <button id="OptionsButton" type="button">Options</button>       
+		  <button id="MembersButton" type="button">Members</button>       
+      </div>
+        <textarea id = "TextArea"
+                  rows = "3"
+                  cols = "80"></textarea>
+     
+       <div>
+      	  <button id="SendButton" type="button">Send</button>     
+		  <button id="FilesButton" type="button">Files</button>       
+      </div>
+  	</div>
+  </div>
+</div>
+
+</body>
+</html>
