@@ -212,7 +212,7 @@
 
 
     //get all the titles of the events the user belongs to and the EventID of those
-    $result2 = $mysqli->query("SELECT Event_.EventID, Event_.Title FROM Event_ INNER JOIN Is_Member_Event ON Is_Member_Event.EventID=Event_.EventID WHERE Is_Member_Event.UID=".$first_row[0].";");
+    $result2 = $mysqli->query("SELECT Event_.EventID, Event_.Title, Is_Member_Event.requestStatus FROM Event_ INNER JOIN Is_Member_Event ON Is_Member_Event.EventID=Event_.EventID WHERE Is_Member_Event.UID=".$first_row[0]." AND (Is_Member_Event.requestStatus='member' OR Is_Member_Event.requestStatus='admin');");
     return $result2;
   }
 
@@ -246,7 +246,7 @@
 
 
 
-    $result2 = $mysqli->query("SELECT Group_.GroupID, Group_.GroupName, Group_.MainEventID FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Is_Member_Group.UID=".$first_row[0].";");
+    $result2 = $mysqli->query("SELECT Group_.GroupID, Group_.GroupName, Group_.MainEventID, Is_Member_Group.requestStatus FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Is_Member_Group.UID=".$first_row[0]." AND (Is_Member_Group.requestStatus='member' OR Is_Member_Group.requestStatus='admin');");
     return $result2;
   }
 
@@ -299,7 +299,7 @@
     $first_row = mysqli_fetch_row($result);
 
     //now find all groups
-    $result2 = $mysqli->query("SELECT GroupName, GroupID FROM Group_ WHERE MainEventID=".$first_row[0].";");
+    $result2 = $mysqli->query("SELECT Group_.GroupName, Group_.GroupID, Is_Member_Group.UID FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Group_.MainEventID=".$first_row[0]." AND Is_Member_Group.requestStatus='admin' AND Group_.Privacy = 0;");
     return $result2;
   }
 
@@ -337,6 +337,25 @@
   }
 
   /*
+  Basic getter that gets all the user info of the group admin
+  $mysqli: Connection to the DB object
+  $groupName: Name of the group
+  */
+  function getGroupAdmin($mysqli, $groupName){
+    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    if(is_bool($result)){
+      return 'getGroupAdmin: Event with title '.$eventTitle.' was not found.';
+    }
+    $first_row = mysqli_fetch_row($result);
+    //find admin from Is_Member_Event
+    $result2 = $mysqli->query("SELECT User_.Email, User_.Name, User_.Address, User_.PhoneNumber FROM User_ INNER JOIN Is_Member_Group ON User_.UID=Is_Member_Group.UID WHERE Is_Member_Group.requestStatus='admin' AND GroupID=".$first_row[0].";");
+    if(is_bool($result2)){
+      return 'getGroupAdmin: Oops! Something went wrong.';
+    }
+    return mysqli_fetch_row($result2);
+  }
+
+  /*
   Basic getter that returns all the groups the user belongs in from the event
   $mysqli: Connection to the DB object
   $groupID: ID of the group
@@ -355,5 +374,14 @@
       return 0;
     }
     return 1;
+  }
+
+  /*
+  To get the event types
+  $mysqli: Connection to the DB object
+  Returns the results
+  */
+  function getEventTypes($mysqli){
+    return $mysqli->query("SELECT EventType FROM Event_Type");
   }
 ?>

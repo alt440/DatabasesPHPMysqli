@@ -1,8 +1,8 @@
 <?php
   session_start();
-  //how would I pass the event name?
+
   $eventTitle = $_SESSION['Event'];
-  $username = 'ppp';
+  $username = $_SESSION['username'];
 
   if(isset($_SESSION['Event']) && $_SESSION['Event']!=''){
     require "../database_layer_get.php";
@@ -19,6 +19,7 @@
     $archived = isEventArchived($mysqli, $eventTitle);
     //is user member of event?
     $isMember = isUserMemberOfEvent($mysqli, $username, $eventTitle);
+    echo $mysqli->error;
     //get event admin info
     $eventAdmin = getEventAdmin($mysqli, $eventTitle);
     //get all the members of the event
@@ -92,6 +93,11 @@
   if($isMember){?>
   <h3 id="groupsTitle">Groups</h3>
   <table id="groupListing">
+    <tr>
+      <th class="table">Group Name</th>
+      <th class="table">Group Admin</th>
+      <th class="table">Action</th>
+    </tr>
   <?php
     if(is_bool($result) && $isMember){ ?>
       <tr class="table">
@@ -105,10 +111,13 @@
         ?>
         <tr class="table">
           <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
+          <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
           <td class="table"><input type="button" id="seeContent<?php echo $groupButton?>" name="seeContent<?php echo $groupButton;?>" value="See Group Content" onclick="seeGroupContent()"></td>
+        </tr>
         <?php } else{ ?>
        <tr class="table">
          <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
+         <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
          <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)"><input type="button" id="verifyOneTimeCode<?php echo $groupButton;?>" name="verifyOneTimeCode<?php echo $groupButton;?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this)"></td>
        </tr>
        <?php
@@ -127,7 +136,7 @@
 }
 
 //see event content
-if($isMember){
+if($isMember && $eventInfo[1] == 0){
   ?>
   <div id="wholeContent">
   <h3 id="contentTitle">Content</h3>
@@ -203,9 +212,9 @@ if($isMember){
           while($row = mysqli_fetch_row($eventMembers)){
             ?>
             <div class="rowsMembers">
-              <div class="innerTableMembersUsername" id="username<?php echo $userNb;?>"><?php echo getUsername($mysqli, $row[0]);?></div>
-              <div class="innerTableMembersStatus" id="status<?php echo $userNb;?>"><?php echo $row[1];?></div>
-              <div class="innerTableMembersButtons" id="buttons<?php echo $userNb;?>"><input type="button" value="Send Message" onclick="sendMessage(this)"><input type="button" value="View Home Page" onclick="showHome(this)"></div>
+              <div class="innerTableMembersUsername" id="username<?php echo $row[0];?>"><?php echo getUsername($mysqli, $row[0]);?></div>
+              <div class="innerTableMembersStatus" id="status<?php echo $row[0];?>"><?php echo $row[1];?></div>
+              <div class="innerTableMembersButtons" id="buttons<?php echo $row[0];?>"><input type="button" value="Send Message" id="sendMessage<?php echo $row[0];?>" onclick="sendMessage(this,'<?php echo $username;?>','<?php echo $eventTitle;?>')"><input type="button" value="View Home Page" id="viewHomePage<?php echo $row[0];?>" onclick="showHome(this)"></div>
             </div>
             <?php
           }
@@ -281,12 +290,28 @@ if($isMember){
 
     }
 
-    function sendMessage(element){
-
+    function sendMessage(element, username, eventTitle){
+      //get UID
+      var UID = (element.id).match(/\d+/)[0];
+      $.ajax({
+        type: "GET",
+        url: "requests/createPrivateGroup.php?UID="+UID+"&username="+username+"&eventTitle="+eventTitle,
+        success: function (response){
+          window.location.href="groupConversations.php";
+        }
+      });
     }
 
     function showHome(element){
-
+      //get UID
+      var UID = (element.id).match(/\d+/)[0];
+      $.ajax({
+        type: "GET",
+        url: "requests/changeHomePageDestination.php?UID="+UID,
+        success: function (response){
+          window.location.href="homePage.php";
+        }
+      });
     }
 
   </script>

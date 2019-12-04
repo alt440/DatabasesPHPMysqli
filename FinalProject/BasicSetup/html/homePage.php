@@ -67,7 +67,8 @@ and open the template in the editor.
             <tr><td><b>Email: </b></td><td> <?php echo $result[3];?></td> </tr>
             <tr><td><b>Date Of Birth: </b></td><td> <?php echo $result[5];?></td> </tr>
             <?php if($showEmails == 1){ ?>
-            <tr><td colspan="2"><a href="editUserInfo.php">Edit information </a> </td></tr>
+            <tr><td colspan="2"><a href="editUserInfo.php">Edit user information </a> </td></tr>
+            <tr><td colspan="2"><a href="editUserMemberships.php">Edit group/event details</a></td></tr>
             <?php }?>
         </table>
         <?php if($showEmails == 1){?>
@@ -139,8 +140,12 @@ and open the template in the editor.
         <?php
          // Query the database to display the upcomming events.
             $result = getEventsOfUser($mysqli, $username);
-
-            if ($result->num_rows > 0) {
+            if(is_bool($result)){
+              ?>
+              <tr><td colspan='6'>You presently have no upcoming events.</td></tr>
+              <?php
+            }
+            else if ($result->num_rows > 0) {
                     while ($rowEvent = mysqli_fetch_row($result)) {
                       $rowResult = getLatestPostEvent($mysqli, $rowEvent[0]);
                         ?>

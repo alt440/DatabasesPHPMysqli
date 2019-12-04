@@ -61,11 +61,28 @@
       <td>Current Phone Number: <?php echo $userInfo[11];?></td>
     </tr><tr>
       <td>Change Phone Number to: <input type="text" id="changePhoneNumberTxt" placeholder="New phone number..."><input type="button" value="Change Phone Number" id="changePhoneNumber" onclick="changePhoneNumber('<?php echo $userInfo[1];?>')"></td>
+    </tr><tr>
+      <td>Delete User Account: <input type="button" value="Delete User Account" id="deleteAllUser" onclick="deleteUser('<?php echo $userInfo[1];?>')"></td>
     </tr>
   </table>
   <input type="button" value="Return to home page" id="returnToHomePage" onclick="returnToHomePage()">
 
   <script>
+
+    function deleteUser(username){
+      if(window.confirm("Are you sure you want to delete your account with username "+username+"? You will be logged out after this change.")){
+        $.ajax({
+          type: "POST",
+          url: "requests/deleteUser.php",
+          data: {
+            'json': JSON.stringify({"username":username})
+          },
+          success: function(response){
+            window.location.href = "index.html";
+          }
+        })
+      }
+    }
 
     function changeEmail(username){
       var new_email = {

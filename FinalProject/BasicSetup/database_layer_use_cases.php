@@ -5,8 +5,8 @@
   */
 
   /*
-  Privacy is 0 when group is private (no showing)
-  Privacy is 1 when group is public (can show) - happens when a request is
+  Privacy is 0 when group is public (showing)
+  Privacy is 1 when group is private (no show) - happens when a request is
   sent to the admin of the event and he/she approves creation of group.
   */
 
@@ -326,6 +326,38 @@
     $first_row_3 = mysqli_fetch_row($result3);
     if(strcmp($first_row_3[1],'pending')==0){
       return 0;
+    }
+
+    return 1;
+  }
+
+  /*
+  This function verifies if all the user parameters are set to create an event.
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  */
+  function verifyUserDetails($mysqli, $username){
+    //get the user first
+    $result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
+    if(is_bool($result)){
+      return 'User with username '.$username.' was not found.';
+    }
+
+    $first_row = mysqli_fetch_row($result);
+
+    $array_vals = array(
+      7 => "Bank Number",
+      8 => "Account Number",
+      9 => "Credit Card Number",
+      10 => "Address",
+      11 => "Phone Number"
+    );
+
+    //now verify that all values are set
+    for($i=7;$i<sizeof($first_row);$i++){
+      if($first_row[$i]==null){
+        return 'Parameter '.$array_vals[$i].' is not set.';
+      }
     }
 
     return 1;

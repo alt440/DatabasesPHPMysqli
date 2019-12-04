@@ -35,6 +35,11 @@ h1,h3, #archivedInfo{
   padding-top: 100px;
 }
 
+#contentTitle{
+  position: relative;
+  top: 80px;
+}
+
 #seeMembersPopup{
   position: absolute;
   left: 40%;

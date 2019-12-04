@@ -298,8 +298,54 @@
       return 'createGroup: User with username '.$usernameCreator.' cannot create a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
 
-    //then add group with privacy 0 (group is private, so no showing)
+    //then add group with privacy 0 (group is not private, so showing)
     $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',0);");
+    $error=$mysqli->error;
+
+    //find our new group ID
+    $result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $first_row_3 = mysqli_fetch_row($result3);
+
+    //then add user as admin of group. hasSeenLastMessage=0 means he has seen the last message of the group (since there is nothing...).
+    $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage) VALUES (".$first_row_3[0].",".$first_row_2[0].",'admin',1)");
+
+    return 'createGroup: '.$error;
+  }
+
+  /*
+  To create a new group
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event the group belongs to (string) - Must exist
+  $groupName: Name of the new group (string)
+  $usernameCreator: Username of the user that created the group - Must exist
+  */
+  function createGroupPrivate($mysqli, $eventTitle, $groupName, $usernameCreator){
+    //first search for event
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'createGroup: Event with title '.$eventTitle.' does not exist';
+    }
+
+    //then search for user creator. Need to verify the user is already a member of the event!
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'createGroup: User with username '.$usernameCreator.' does not exist';
+    }
+
+    //because only a user in the event can create a group...
+    $findUserInEvent = $mysqli->query("SELECT requestStatus FROM Is_Member_Event WHERE EventID=".$first_row[0]." AND UID=".$first_row_2[0].";");
+    $first_row_3 = mysqli_fetch_row($findUserInEvent);
+
+    if(is_bool($first_row_3[0])){
+      return 'createGroup: User with username '.$usernameCreator.' cannot create a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
+    }
+
+    //then add group with privacy 1 (group is private, so not showing)
+    $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',1);");
     $error=$mysqli->error;
 
     //find our new group ID

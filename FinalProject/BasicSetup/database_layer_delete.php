@@ -39,6 +39,35 @@
   }
 
   /*
+  Removes a user from an event (for admin, event manager)
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  $eventID: Id of the event
+  */
+  function removeUserFromEventID($mysqli, $username, $eventID){
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'removeUserFromEvent: User with username '.$username.' was not found.';
+    }
+
+    //now remove the user with Is_Member_Event table
+    $mysqli->query("DELETE FROM Is_Member_Event WHERE UID=".$first_row[0]." AND EventID=".$eventID.";");
+    //also remove all groups that the user belongs to in this event...
+    $result3 = $mysqli->query("SELECT Group_.GroupID, Is_Member_Group.requestStatus FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Group_.MainEventID=".$eventID.";");
+    //now for all of them, remove the user's membership to the group
+    while($row=mysqli_fetch_row($result3)){
+      if($row[1]!='admin')
+        $mysqli->query("DELETE FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$row[0].";");
+      else
+        removeGroupID($mysqli, $row[0]);
+    }
+    return 'removeUserFromEvent: '.$mysqli->error;
+
+  }
+
+  /*
   Removes a user from a group (for admin, group manager)
   $mysqli: Connection to the DB object
   $username: Username of the user
@@ -60,6 +89,24 @@
     }
 
     $mysqli->query("DELETE FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$first_row_2[0].";");
+    return 'removeUserFromGroup: '.$mysqli->error;
+  }
+
+  /*
+  Removes a user from a group (for admin, group manager)
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  $groupID: ID of the group
+  */
+  function removeUserFromGroupID($mysqli, $username, $groupID){
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'removeUserFromGroup: User with username '.$username.' was not found.';
+    }
+
+    $mysqli->query("DELETE FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     return 'removeUserFromGroup: '.$mysqli->error;
   }
 
@@ -141,6 +188,29 @@
   }
 
   /*
+  Remove a group and all its users
+  $mysqli: Connection to the DB object
+  $groupID: Group ID
+  */
+  function removeGroupID($mysqli, $groupID){
+    //must remove all content from group, all membership to group, and the group itself.
+
+    //find all posts belonging to the group
+    $result2 = $mysqli->query("SELECT CID FROM Content WHERE GroupID=".$groupID.";");
+    //now delete all
+    while($row=mysqli_fetch_row($result2)){
+      $mysqli->query("DELETE FROM Post WHERE CID=".$row[0].";");
+      $mysqli->query("DELETE FROM Content WHERE CID=".$row[0].";");
+    }
+
+    //then remove all membership
+    $mysqli->query("DELETE FROM Is_Member_Group WHERE GroupID=".$groupID.";");
+    //then remove group
+    $mysqli->query("DELETE FROM Group_ WHERE GroupID=".$groupID.";");
+    return 'removeGroup: '.$mysqli->error;
+  }
+
+  /*
   Remove an event and all its users
   $mysqli: Connection to the DB object
   $eventTitle: Title of the event
@@ -191,6 +261,55 @@
     $mysqli->query("DELETE FROM Is_Member_Event WHERE EventID=".$first_row[0].";");
     //then remove the event
     $mysqli->query("DELETE FROM Event_ WHERE EventID=".$first_row[0].";");
+    return 'removeEvent: '.$mysqli->error;
+  }
+
+  /*
+  Remove an event and all its users
+  $mysqli: Connection to the DB object
+  $eventID: ID of the event
+  */
+  function removeEventID($mysqli, $eventID){
+
+    $result_main = $mysqli->query("SELECT GroupID FROM Group_ WHERE MainEventID=".$eventID.";");
+    if(!is_bool($result_main)){
+      while($row_main = mysqli_fetch_row($result_main)){
+        //find all posts belonging to the group
+        $result2 = $mysqli->query("SELECT CID FROM Content WHERE GroupID=".$row_main[0].";");
+        //now delete all
+        while($row=mysqli_fetch_row($result2)){
+          $mysqli->query("DELETE FROM Post WHERE CID=".$row[0].";");
+          $mysqli->query("DELETE FROM Content WHERE CID=".$row[0].";");
+        }
+
+        //then remove all membership
+        $mysqli->query("DELETE FROM Is_Member_Group WHERE GroupID=".$row_main[0].";");
+        //then remove group
+        $mysqli->query("DELETE FROM Group_ WHERE GroupID=".$row_main[0].";");
+      }
+    }
+
+
+    //now all groups are deleted. Only posts and comments from the event left.
+    $result3 = $mysqli->query("SELECT CID FROM Content WHERE EventID=".$eventID.";");
+    $result4 = $mysqli->query("SELECT CoID FROM Comment WHERE CID=ANY(SELECT CID FROM Content WHERE EventID=".$eventID.");");
+
+    //remove all comments before
+    while($row = mysqli_fetch_row($result4)){
+      $mysqli->query("DELETE FROM Post_Comment WHERE CoID=".$row[0].";");
+      $mysqli->query("DELETE FROM Comment WHERE CoID=".$row[0].";");
+    }
+
+    //then all content
+    while($row = mysqli_fetch_row($result3)){
+      $mysqli->query("DELETE FROM Post WHERE CID=".$row[0].";");
+      $mysqli->query("DELETE FROM Content WHERE CID=".$row[0].";");
+    }
+
+    //then remove all membership to group
+    $mysqli->query("DELETE FROM Is_Member_Event WHERE EventID=".$eventID.";");
+    //then remove the event
+    $mysqli->query("DELETE FROM Event_ WHERE EventID=".$eventID.";");
     return 'removeEvent: '.$mysqli->error;
   }
 
