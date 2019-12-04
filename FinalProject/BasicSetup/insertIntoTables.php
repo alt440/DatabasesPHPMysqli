@@ -81,7 +81,7 @@ if ($handle = fopen("{$filename}","r")){
          else if ($whatTable == "sendEmail"){
             sendEmail($mysqli, $data[0], $data[1], $data[2], $data[3]);
         }
-          echo "<p>".$whatTable. "</p>";
+         
         
     }
     // Display  that the table were Populated.
