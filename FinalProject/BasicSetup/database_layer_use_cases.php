@@ -50,6 +50,25 @@
   }
 
   /*
+  This function sets a user as a member of the event, from its pending state.
+  $mysqli: Connection to the DB object
+  $username: Username of the user that we want to join the event.
+  $eventTitle: Title of the event we want to set the user a member to.
+  */
+  function setMemberToEventID($mysqli, $UID, $eventTitle){
+
+    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'setMemberToEvent: Event with event title '.$eventTitle.' does not exist.';
+    }
+
+    $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$UID." AND EventID=".$first_row_2[0].";");
+    return 'setMemberToEvent: '.$mysqli->error;
+  }
+
+  /*
   This function sets a user as a member of the group, from its pending state.
   ONLY AVAILABLE TO GROUP ADMIN(s)
   $mysqli: Connection to the DB object
@@ -329,6 +348,39 @@
     }
 
     return 1;
+  }
+
+  /*
+  Get user as a member of the event
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  $eventTitle: Title of the event
+
+  Returns UID, requestStatus
+  */
+  function getUserMemberOfEvent($mysqli, $username, $eventTitle){
+    //find EventID and UID
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    if(is_bool($result)){
+      return 'Event with title '.$eventTitle.' could not be found.';
+    }
+    $first_row = mysqli_fetch_row($result);
+
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    if(is_bool($result2)){
+      return 'User with username '.$username.' could not be found.';
+    }
+    $first_row_2 = mysqli_fetch_row($result2);
+    $result3 = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE UID=".$first_row_2[0]." AND EventID=".$first_row[0].";");
+    if(is_bool($result3) || mysqli_num_rows($result3)==0){
+      return 0;
+    }
+    $first_row_3 = mysqli_fetch_row($result3);
+    if(strcmp($first_row_3[1],'pending')==0){
+      return 0;
+    }
+
+    return $first_row_3;
   }
 
   /*

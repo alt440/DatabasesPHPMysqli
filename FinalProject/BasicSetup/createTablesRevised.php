@@ -46,12 +46,12 @@
 	echo $mysqli->error;
 
 	//emails of a user.
-	$mysqli->query("CREATE TABLE Emails (EID int unsigned not null auto_increment, TimeStamp int(11) not null, SourceUser int unsigned not null, TargetUser int unsigned not null, Content varchar(1000) not null, TitleEmail varchar(30) not null, foreign key (SourceUser) references User_(UID) on delete cascade, foreign key (TargetUser) references User_(UID) on delete cascade, primary key(EID));");
+	$mysqli->query("CREATE TABLE Emails (EID int unsigned not null auto_increment, TimeStamp int(11) not null, SourceUser int unsigned not null, TargetUser int unsigned not null, Content varchar(1000) not null, TitleEmail varchar(100) not null, foreign key (SourceUser) references User_(UID) on delete cascade, foreign key (TargetUser) references User_(UID) on delete cascade, primary key(EID));");
 	echo $mysqli->error;
 
 	//this table determines which participant belongs to which event. hasSeenLastMessage has been added
 	//to know if the members have seen the last message. If not a member, set to false or 0.
-	$mysqli->query("CREATE TABLE Is_Member_Event (EventID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode int, primary key (EventID, UID), foreign key (EventID) references Event_(EventID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
+	$mysqli->query("CREATE TABLE Is_Member_Event (EventID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode bigint, primary key (EventID, UID), foreign key (EventID) references Event_(EventID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
 	echo $mysqli->error;
 
 	//this table determines who posted a certain content. Since there is always only one person that

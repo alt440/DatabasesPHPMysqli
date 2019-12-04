@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+}
+
+.whiteBackground{
+  width: 100%;
+  height: 25px;
+  box-shadow: 1px 1px;
+  background-color: white;
+  float: right;
+}
+
+.header {
+  background-color: #0000cc;
+  color: #ffffff;
+  padding: 15px;
+}
+/* Create two equal columns that floats next to each other */
+.menu {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  height: 600px; /* Should be removed. Only for demonstration */
+}
+.convos {
+  float: left;
+  width: 80%;
+  padding: 10px;
+  height: 600px;
+  overflow-y: scroll
+}
+ /* Should be removed. Only for demonstration */
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.menu li {
+  padding: 8px;
+  margin-bottom: 7px;
+  background-color: #99b5e5;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.menu li:hover {
+  background-color: #0099cc;
+}
+.convos ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.convos li {
+  margin-bottom: 7px;
+  background-color: #FEFDFD;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.convos li:hover {
+
+}
+.Group {
+    display: block
+}
+img {
+  width: 100%;
+  float: left;
+  width:40px;
+  height:40px;
+  color: #010000;
+}
+.text {
+  padding: 10px;
+  color: #010000;
+ }
+.picPerso {
+  width: 100%;
+  float: right;
+  width:40px;
+  height:40px;
+}
+.textPerso {
+  float: right;
+  text-align: right;
+  color: #010000;
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 75%;
+    height: 20%;
+}
+#footer {
+    background: #0000cc;
+    line-height: 2;
+    text-align: center;
+    color: #042E64;
+    text-shadow: 0 1px 0 #84BAFF;
+    box-shadow: 0 0 15px #00214B
+}
+#optionsBar {
+ background: #0086FF;
+ height: 25px;
+ width: 100%;
+}
+#MembersButton {
+float: right;
+}
+#OptionsButton {
+float: right;
+}
+#SendButton{
+float: right;
+}
+#FilesButton{
+float: right;
+}
+#TextArea {
+height: 60%;
+width: 90%;
+font-size: 20px;
+}
+#table-scroll{
+  overflow: auto;
+  position: relative;
+}

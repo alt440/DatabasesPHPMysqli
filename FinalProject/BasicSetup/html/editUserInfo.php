@@ -36,7 +36,7 @@
     </tr><tr>
       <td>Password cannot be seen for security reasons</td>
     </tr><tr>
-      <td>Change Password to: <input type="text" id="changePasswordTxt" placeholder="New password..."><input type="text" id="oldPassword" placeholder="Old password..."><input type="button" value="Change Password" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
+      <td>Change Password to: <input type="password" id="changePasswordTxt" placeholder="New password..."><input type="password" id="oldPassword" placeholder="Old password..."><input type="button" value="Change Password" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
       <td>Current Name: <?php echo $userInfo[4];?></td>
     </tr><tr>
