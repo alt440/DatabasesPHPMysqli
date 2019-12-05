@@ -43,7 +43,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Event Page</title>
+  <title>Event Page - Share, Contribute & Comment System</title>
   <link rel="stylesheet" type="text/css" href="../css/eventPage.css">
   <script src="../js/searchBar.js"></script>
   <script src="../js/jquery-3.4.1.min.js"></script>

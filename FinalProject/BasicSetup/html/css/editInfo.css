@@ -7,10 +7,22 @@ body {
 	background-color: #deeaee;
 }
 
-
-h2 {
+h1{
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+}
+
+
+h2{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin-bottom:4px;
+}
+
+h3{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #404040;
+
 }
 
 td {
@@ -31,6 +43,14 @@ tr {
     font-size: 12px;   
 }
 
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 4px;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 4px;
+}
+
 .newButton {
     background-color:  #78a9ba;
     border-color: #78a9ba;
@@ -38,11 +58,33 @@ tr {
     padding: 8px;
     border-radius: 4px;
     width: 200px;
+    font-size: 12px;
+}
+
+.newButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.newSmallButton{
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newSmallButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
 }
 
 .centeredButton{
     width: 250px;
     background-color:  #78a9ba;
+    border-color: #78a9ba;
     color: white;
     padding: 8px;
     border-radius: 4px;
@@ -50,11 +92,18 @@ tr {
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
+    font-size: 12px;
+}
+
+.centeredButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
 }
 
 .returnButton {
     width: 250px;
     background-color:  #78a9ba;
+    border-color: #78a9ba;
     color: white;
     padding: 8px;
     margin-top: 28px;
@@ -63,12 +112,41 @@ tr {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 14px;
+    font-size: 12px;
+}
+
+.returnButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.deleteButton{
+    background-color:  #bf4040;
+    border-color: #bf4040;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 12px;
+}
+
+.deleteButton:hover{
+background-color: #cc6666;
+border-color: #cc6666;
 }
 
 .newText {
     padding: 8px;
     border-radius: 4px;
     margin-right: 8px;
+    width: 200px;
+}
+
+
+.centeredNewText {
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
 }
 
 .bigBox {
@@ -97,15 +175,61 @@ tr {
     padding-left: 32px;
     padding-right: 32px;
     box-shadow: 5px 5px #457687;
+    font-family: Arial;
 }
 
 .currentInfo {
-    font-weight: bold;
     color: #404040;
     padding-top: 16px;
 }
 
+.loginBox {
+    margin: auto;
+    max-width: 400px;
+    text-align: center;
+    font-family: Arial;
+}
+
+.loginP {
+    font-family: Arial;
+    color: #404040;
+    font-size: 12px;
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.links{
+    text-decoration: none;
+    text-align: center;
+    font-size: 12px;
+    color: #457687;
+    font-family: Arial;
+}
+
+.links:hover{
+    color: #abc9d4;
+}
+
+.centeredRow {
+    margin: auto;
+    border: none;
+}
+
+.centered{
+    text-align: center;
+    margin: auto;
+}
+
 .centeredTable {
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
+    text-align: right;
+}
+
+.homeTable{
+    margin: auto;
+    width: 600px;
+    border: solid 2px #404040;
+    border-collapse: collapse;
 }
