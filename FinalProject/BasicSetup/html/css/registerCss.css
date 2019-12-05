@@ -1,0 +1,141 @@
+#signup {
+    width: 550px;
+    height: 650px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    position: relative;
+    box-shadow: 5px 5px #457687;
+	background-color: white;
+	border: solid 1px;
+    border-radius: 1px;  
+}
+
+.header
+{
+	width : 100%;
+	text-align: center;
+}
+
+body
+{
+	background-color: #deeaee;
+}
+
+#signup::before, 
+#signup::after {
+    content: "";
+    position: absolute;
+    background-color: white;
+    background: #fff;   
+	border: solid 1px;    
+}
+
+#signup::after {
+    left: 4px;
+    right: 4px;
+    bottom: -5px;
+	background-color: white;
+    z-index: -2;
+	border: solid 1px;
+}
+
+#signup h1 {
+    position: relative;
+    font: italic 1em/4.5em 'trebuchet MS',Arial, Helvetica;
+    color: #999;
+    text-align: center;
+    margin: 0 0 20px;
+	font-size: 30px;
+	color: black;
+}
+
+#signup h1::before,
+#signup h1::after{
+    content:'';
+    position: absolute;
+    border: 1px solid rgba(0,0,0,.15);
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+}
+
+#signup h1::after{
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+}
+
+::-webkit-input-placeholder {
+   color: #bbb;
+}
+
+:-moz-placeholder {
+   color: #bbb;
+}                       
+
+.placeholder{
+    color: #bbb; /* polyfill */
+}
+
+.links{
+    text-decoration: none;
+    text-align: center;
+    font-size: 20px;
+    color: #457687;
+}
+
+.links:hover{
+    color: #abc9d4;
+} 
+
+#links{
+	text-align:center;
+}	
+
+#signup input{
+    margin: 5px 0;
+    padding: 15px;
+    width: 100%;  
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 1px; 
+}
+
+#signup input:focus{
+        outline: 0;
+        border-color: #aaa;
+		box-shadow: 0 0px 1px rgba(0, 0, 0, .3) inset;
+}       
+
+#signup button{
+    margin: 20px 0 0 0;
+    padding: 15px 8px;          
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid #2493FF;
+    overflow: visible;
+    font: bold 1.4em arial, helvetica;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.4);         
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    background-image: linear-gradient(top, rgba(255,255,255,.5), rgba(255,255,255,0)); 
+    transition: background-color .2s ease-out;
+    border-radius: 3px;
+    box-shadow: 0 2px 1px rgba(0, 0, 0, .3),
+                0 1px 0 rgba(255, 255, 255, .5) inset;                               
+}
+
+#signup button:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+#signup button:active{
+    position: relative;
+    top: 3px;
+    text-shadow: none;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .3) inset;
+}
