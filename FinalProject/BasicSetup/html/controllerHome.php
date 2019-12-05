@@ -1,4 +1,9 @@
+<!-- 
+  authors: Alexandre Therrien, Daniel Vigny-Pau
+ -->
+
 <?php
+
 
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
@@ -15,10 +20,13 @@
   <meta charset="utf-8">
   <title>Controller Home</title>
   <script src="../js/jquery-3.4.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
 </head>
 <body>
+  <div class="bigBox">
   <div id="showRates">
-    <h3>Current Rates</h3>
+    <h2>Current Rates</h2>
+    <br/>
     <table id="showRatesTable">
       <tr>
         <th>Rates ID</th>
@@ -48,11 +56,11 @@
       }
       ?>
     </table>
-  </div>
+  </div></br></br>
   <div id="addNewRatesForm">
-    <h3>Add Rates</h3>
-    <label id="nbEventsTitle">Number of Events User Created: </label><input type="text" placeholder="Number of Events..." id="nbEventsTxt"><br>
-    <label id="eventTypeTitle">Event Type: </label><select id="eventTypeSelection">
+    <p class="subtitle">ADD RATES</p><br/>
+    <label id="nbEventsTitle"><p class="subtitle">Number of Events User Created: </label><input type="text" class="newText" placeholder="Number of Events" id="nbEventsTxt"></p><br>
+    <label id="eventTypeTitle"><p class="subtitle">Event Type: </label><select id="eventTypeSelection"></p>
       <?php
         $eventTypes = getEventTypes($mysqli);
 
@@ -62,18 +70,19 @@
           <?php
         }
         ?>
-    </select><br>
-    <label id="storageGBTitle">Storage in GB Offered: </label><input type="text" placeholder="Storage in GB..." id="storageGBTxt"><br>
-    <label id="bandwidthGBTitle">Bandwidth in GB Offered: </label><input type="text" placeholder="Bandwidth in GB..." id="bandwidthGBTxt"><br>
-    <label id="priceTitle">Price: </label><input type="text" placeholder="Price in $..." id="priceTxt"><br>
-    <label id="overflowBandwidthGBTitle">Price per GB for Overflowing Bandwidth: </label><input type="text" placeholder="Overflow Bandwidth Fee for each GB..." id="overflowBandwidthGBTxt"><br>
-    <label id="overflowStorageGBTitle">Price per GB for Overflowing Storage: </label><input type="text" placeholder="Overflow Storage Fee for each GB..." id="overflowStorageGBTxt"><br>
-  <input type="button" value="Set New Rates" id="addRates" onclick="addRates()">
+    </select><br/><br/>
+    <label id="storageGBTitle"><p class="subtitle">Storage in GB Offered: </label><input type="text" class="newText" placeholder="Storage in GB" id="storageGBTxt"></p><br>
+    <label id="bandwidthGBTitle"><p class="subtitle">Bandwidth in GB Offered: </label><input type="text" class="newText" placeholder="Bandwidth in GB" id="bandwidthGBTxt"></p><br>
+    <label id="priceTitle"><p class="subtitle">Price: </label><input type="text" class="newText" placeholder="Price in $" id="priceTxt"></p> <br>
+    <label id="overflowBandwidthGBTitle"><p class="subtitle">Price per GB for Overflowing Bandwidth: </label><input type="text" class="newText" placeholder="Overflow Bandwidth Fee for each GB" id="overflowBandwidthGBTxt"> </p><br>
+    <label id="overflowStorageGBTitle"><p class="subtitle">Price per GB for Overflowing Storage: </label><input type="text" class="newText" placeholder="Overflow Storage Fee for each GB" id="overflowStorageGBTxt"> </p><br>
+  <input type="button" class="centeredButton" value="SET NEW RATES" id="addRates" onclick="addRates()">
   </div>
   <div id="deleteRatesForm">
-    <h3>Delete Rates</h3>
-    <label id="deleteRID">RID of the Rate:</label><input type="text" id="deleteRIDtxt" placeholder="RID to be deleted...">
-    <input type="button" value="Delete Rate" id="deleteRIDbutton" onclick="deleteRates()">
+    <br/><br/>
+    <p class="subtitle">DELETE RATES</p></br>
+    <label id="deleteRID"><p class="subtitle">RID of the Rate: </label><input type="text" class="newText" id="deleteRIDtxt" placeholder="RID to be deleted..."></p>
+    <input type="button" class="centeredButton" value="DELETE RATE" id="deleteRIDbutton" onclick="deleteRates()">
   </div>
 
   <script>
@@ -127,5 +136,6 @@
     }
 
   </script>
+  </div>
 </body>
 </html>

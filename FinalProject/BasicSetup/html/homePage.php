@@ -1,5 +1,5 @@
 <!--
-  authors: Alexandre Therrien, Daniel Vigny-Pau
+  authors: Francois David, Daniel Vigny-Pau
  -->
 
  <?php

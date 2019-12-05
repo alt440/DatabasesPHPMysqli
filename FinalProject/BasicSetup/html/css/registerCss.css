@@ -84,6 +84,7 @@ body
     text-align: center;
     font-size: 20px;
     color: #457687;
+    margin: auto;
 }
 
 .links:hover{
