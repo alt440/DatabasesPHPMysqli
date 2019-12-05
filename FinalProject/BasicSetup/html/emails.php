@@ -1,3 +1,8 @@
+<!-- 
+    authors:  Alexendre Therrien 40057134,
+              Daniel Vigny-Pau 40034769
+ -->
+
 <?php
 
   session_start();
@@ -30,10 +35,12 @@
   <meta charset="utf-8">
   <title>Emails</title>
   <script src="../js/jquery-3.4.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
 </head>
 <body>
+  <div class="smallbox">
   <?php if($isWrite == 0){?>
-  <table>
+  <table class="centeredTable">
     <tr>
       <th>From:</th>
       <td><?php echo getUsername($mysqli, $emailInfo[2]);?></td>
@@ -53,30 +60,31 @@
   </table>
 <?php } else{
   ?>
-  <table>
+  <p class="subtitle">SEND AN EMAIL</p>
+  <table class="centeredTable">
     <tr>
       <th>From:</th>
       <td><?php echo $username;?></td>
     </tr>
     <tr>
       <th>To:</th>
-      <td><input type="text" placeholder="User destination..." id="toUser"></td>
+      <td><input type="text" class="newText" placeholder="User destination..." id="toUser"></td>
     </tr>
     <tr>
       <th>Title:</th>
-      <td><input type="text" placeholder="Title of email..." id="titleEmail"></td>
+      <td><input type="text" class="newText" placeholder="Title of email..." id="titleEmail"></td>
     </tr>
     <tr>
       <th>Content</th>
-      <td><input type="text" placeholder="Content email..." id="contentEmail"></td>
+      <td><input type="text" class="newText" placeholder="Content email..." id="contentEmail"></td>
     </tr>
     <tr>
-      <td colspan="2"><input type="button" value="Send" onclick="sendEmail('<?php echo $username;?>')"></td>
+      <td colspan="2"><input type="button" class="centeredButton" value="SEND" onclick="sendEmail('<?php echo $username;?>')"></td>
     </tr>
   </table>
   <?php
 }?>
-  <input type="button" value="RETURN TO HOME PAGE" onclick="returnToHomePage()">
+  <input type="button" value="RETURN TO HOME PAGE" class="returnButton" onclick="returnToHomePage()">
 
   <script>
     function returnToHomePage(){
@@ -97,5 +105,6 @@
       });
     }
   </script>
+  </div>
 </body>
 </html>

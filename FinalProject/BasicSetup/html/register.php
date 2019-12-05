@@ -1,3 +1,7 @@
+<!--
+  author: Francois David 40046319
+ -->
+
 <?php
 
 session_start();

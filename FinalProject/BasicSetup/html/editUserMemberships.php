@@ -1,5 +1,6 @@
 <!--
-  authors: Alexandre Therrien, Daniel Vigny-Pau
+  authors:  Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
 -->
 
 <?php
