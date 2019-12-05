@@ -73,7 +73,7 @@ and open the template in the editor.
        }?>
          <br/><br/>
          <p class="subtitle">USER DATA</p>
-        <table class="homeTable" border="solid 1px">
+        <table class="homeTable" border="1">
             <!-- <tr><td colspan="2"><h3>USER DATA</h3> </td></tr> -->
             <tr><td><b>SCC User ID: </b></td><td> <?php echo $result[0];?></td> </tr>
             <tr><td><b>Name: </b></td><td> <?php echo $result[4];?></td> </tr>

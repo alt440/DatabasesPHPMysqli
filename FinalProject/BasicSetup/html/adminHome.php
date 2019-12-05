@@ -1,3 +1,6 @@
+<!-- 
+  authors: Alexendre Therrien, Daniel Vigny-Pau
+ -->
 <?php
   session_start();
   require "../database_layer_get.php";
@@ -15,12 +18,14 @@
 <head>
   <meta charset="utf-8">
   <title>Manage System</title>
+  <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+  <div class="smallBox">
   <div id="showUsers">
-    <h3>Users of the system</h3>
-    <table>
+    <p class="subtitle">SYSTEM USERS</p>
+    <table class="homeTableSmall" border="1">
       <tr>
         <th>UID</th>
         <th>Username</th>
@@ -36,10 +41,11 @@
       }
       ?>
     </table>
+    <br/>
   </div>
   <div id="showGroups">
-    <h3>Groups of the system</h3>
-    <table>
+    <p class="subtitle">SYSTEM GROUPS</p>
+    <table class="homeTableSmall" border="1">
       <tr>
         <th>GroupID</th>
         <th>Group Name</th>
@@ -55,10 +61,11 @@
       }
       ?>
     </table>
+    <br/>
   </div>
   <div id="showEvents">
-    <h3>Events of the system</h3>
-    <table>
+    <p class="subtitle">SYSTEM EVENTS</p>
+    <table class="homeTableSmall" border="1">
       <tr>
         <th>EventID</th>
         <th>Event Title</th>
@@ -76,62 +83,72 @@
       }
       ?>
     </table>
+    <br/>
   </div>
+  <div class="centered">
   <div id="removeUserFromGroup">
-    <label>Remove user from group</label><br>
-    <label>Username:</label><input type="text" placeholder="Username" id="UIDRemoveGroup"><br>
-    <label>GroupID:</label><input type="text" placeholder="Group ID" id="GroupIDRemoveGroup"><br>
-    <input type="button" id="UIDRemoveGroupButton" value="Submit" onclick="dropGroupMembership()">
+    <label><p class="subtitle">REMOVE USER FROM GROUP</p></label>
+    <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UIDRemoveGroup"><br>
+    <label>GroupID: </label><input type="text" class="newText" placeholder="Group ID" id="GroupIDRemoveGroup"><br>
+    <input type="button" id="UIDRemoveGroupButton" value="REMOVE" class="centeredDeleteButton" onclick="dropGroupMembership()">
   </div>
   <!--Remove user from group-->
   <!--Remove user from event-->
+  <br/><br/>
   <div id="removeUserFromEvent">
-    <label>Remove user from event</label><br>
-    <label>Username:</label><input type="text" placeholder="Username" id="UIDRemoveEvent"><br>
-    <label>EventID:</label><input type="text" placeholder="Event ID" id="EventIDRemoveEvent"><br>
-    <input type="button" id="UIDRemoveEventButton" value="Submit" onclick="dropEventMembership()">
+    <label><p class="subtitle">REMOVE USER FROM EVENT</p></label>
+    <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UIDRemoveEvent"><br>
+    <label>EventID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDRemoveEvent"><br>
+    <input type="button" id="UIDRemoveEventButton" class="centeredDeleteButton" value="REMOVE" onclick="dropEventMembership()">
   </div>
   <!--Approve event requests-->
+  <br/><br/>
   <div id="approveEvent">
-    <label>Approve event</label><br>
-    <label>Event ID:</label><input type="text" placeholder="Event ID..." id="EventRemoveEvent"><br>
-    <input type="button" id="EventRemoveEventButton" value="Submit" onclick="setEventActive()">
+    <label><p class="subtitle">APPROVE EVENT</p></label>
+    <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventRemoveEvent"><br>
+    <input type="button" id="EventRemoveEventButton" value="APPROVE" class="centeredButton" onclick="setEventActive()">
   </div>
   <!--Publish content on event-->
+  <br/><br/>
   <div id="sendContentEvent">
-    <label>Send Content on Event</label><br>
-    <label>Event Title:</label><input type="text" placeholder="Event Title..." id="EventTitleSendContent"><br>
-    <label>Content:</label><input type="text" placeholder="Content to send..." id="ContentSendContent"><br>
-    <input type="button" id="SendContentEventButton" value="Submit" onclick="addContentToEvent('<?php echo $username;?>')">
+    <label><p class="subtitle">SEND CONTENT ON EVENT</p></label>
+    <label>Event Title: </label><input type="text" class="newText" placeholder="Event Title" id="EventTitleSendContent"><br>
+    <label>Content: </label><input type="text" class="newText" placeholder="Content to send" id="ContentSendContent"><br>
+    <input type="button" id="SendContentEventButton" value="SEND" class="centeredButton" onclick="addContentToEvent('<?php echo $username;?>')">
   </div>
   <!--Publish content on group-->
+  <br/><br/>
   <div id="sendContentGroup">
-    <label>Send Content on Group</label><br>
-    <label>Group ID:</label><input type="text" placeholder="Group ID..." id="GroupIDSendContent"><br>
-    <label>Content:</label><input type="text" placeholder="Content..." id="ContentSendContentGroup"><br>
-    <input type="button" id="SendContentGroupButton" value="Submit" onclick="addContentToGroup('<?php echo $username;?>')">
+    <label><p class="subtitle">SEND CONTENT ON GROUP</p></label>
+    <label>Group ID: </label><input type="text" class="newText" placeholder="Group ID" id="GroupIDSendContent"><br>
+    <label>Content: </label><input type="text" class="newText" placeholder="Content" id="ContentSendContentGroup"><br>
+    <input type="button" id="SendContentGroupButton" value="SEND" class="centeredButton" onclick="addContentToGroup('<?php echo $username;?>')">
   </div>
   <!--Set other user as event manager-->
+  <br/><br/>
   <div id="setOtherUserAsManager">
-    <label>Set other User as Manager</label><br>
-    <label>Event ID:</label><input type="text" placeholder="Event ID..." id="EventIDSetManager"><br>
-    <label>User ID:</label><input type="text" placeholder="User ID..." id="UIDSetManager"><br>
-    <input type="button" id="SetManagerButton" value="Submit" onclick="setNewEventManager()">
+    <label><p class="subtitle">SET OTHER USER AS MANAGER</p></label>
+    <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDSetManager"><br>
+    <label>User ID: </label><input type="text" class="newText" placeholder="User ID" id="UIDSetManager"><br>
+    <input type="button" id="SetManagerButton" value="SET" class="centeredButton" onclick="setNewEventManager()">
   </div>
   <!--Remove group-->
+  <br/><br/>
   <div id="removeGroup">
-    <label>Remove a Group</label><br>
-    <label>Group ID:</label><input type="text" placeholder="Group ID..." id="GroupIDRemoveTheGroup"><br>
-    <input type="button" id="RemoveTheGroupButton" value="Submit" onclick="removeGroup()">
+    <label><p class="subtitle">REMOVE A GROUP</p></label>
+    <label>Group ID: </label><input type="text" class="newText" placeholder="Group ID" id="GroupIDRemoveTheGroup"><br>
+    <input type="button" id="RemoveTheGroupButton" class="centeredDeleteButton" value="REMOVE" onclick="removeGroup()">
   </div>
   <!--Remove event-->
+  <br/><br/>
   <div id="removeEvent">
-    <label>Remove an Event</label><br>
-    <label>Event ID:</label><input type="text" placeholder="Event ID..." id="EventIDRemoveTheEvent"><br>
-    <input type="button" id="RemoveTheEventButton" value="Submit" onclick="removeEvent()">
+    <label><p class="subtitle">REMOVE AN EVENT</p></label>
+    <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDRemoveTheEvent"><br>
+    <input type="button" id="RemoveTheEventButton" class="centeredDeleteButton" value="REMOVE" onclick="removeEvent()">
   </div>
-
-  <input type="button" value="RETURN TO HOME PAGE" onclick="returnToHomePage()">
+    </div>
+    <br/>
+  <input type="button" class="returnButton" value="RETURN TO HOME PAGE" onclick="returnToHomePage()">
 
   <script>
 
@@ -244,5 +261,6 @@
   }
 
   </script>
+  </body>
 </body>
 </html>
