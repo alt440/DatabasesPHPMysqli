@@ -107,7 +107,11 @@
       ?>
       
       <input type="button" class="newButton" id="seeMembers" value="SEE MEMBERS" onclick="seeMembers()">
-      
+      <!-- <br/>
+      <input type="button" class="newButton" id="seePendingRequests" value="SEE PENDING REQUESTS" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
+      <br/>
+      <input type="button" class="newButton" id="seeAddUser" value="REQUEST A USER TO JOIN" onclick="seeAddUser()">
+       -->
 
       <?php
     } else if(!$archived){
