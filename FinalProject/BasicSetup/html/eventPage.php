@@ -1,3 +1,6 @@
+<!-- 
+  authors: Alexendre Therrien, Daniel Vigny-Pau
+ -->
 <?php
   session_start();
   //reset group
@@ -43,59 +46,69 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Event Page</title>
-  <link rel="stylesheet" type="text/css" href="../css/eventPage.css">
+  <title>Event page - Share, Contribute & Comment System</title>
+  <link rel="stylesheet" type="text/css" href="../css/event.css">
   <script src="../js/searchBar.js"></script>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-  <table id="searchStuff">
+  <div class="bigBox">
+  <table class="centeredRow" id="searchStuff">
     <tr>
       <!--First include a text field to search for user/event-->
-      <td><input type="text" id="searchBar" placeholder="Enter event or user..."></td>
-      <td><input type="button" id="searchEvent" value="Search Event" onclick="searchEvent()"></td>
-      <td><input type="button" id="searchUser" value="Search User" onclick="searchUser()"></td>
+      <td><input type="text" id="searchBar" class="newText" placeholder="Enter event or user..."></td>
+      <td><input type="button" id="searchEvent" class="newButton" value="SEARCH EVENT" onclick="searchEvent()"></td>
+      <td><input type="button" id="searchUser" class="newButton" value="SEARCH USER" onclick="searchUser()"></td>
     </tr>
   </table>
+  <input type="button" class="returnButton" value="RETURN TO HOMEPAGE" id="returnToHomePage" onclick="returnToHomePage()">
   <?php
   if(isset($_SESSION['Event']) && $_SESSION['Event']!=''){
     //show some data indicating that the event is archived
     if($archived){
       ?>
-      <p id="archivedInfo">Archived</p>
+      <br/>
+      <p class="subtitle" id="archivedInfo"><i>Archived</i></p>
       <?php
     }
 
     //checking if status is 0. If so, event has been approved
     if($eventInfo[1] == 0){
   ?>
-  <h1><?php echo $eventTitle; ?></h1>
-  <table id="adminContent">
-    <tr class="table">
-      <td class="table" colspan="3">Event Manager Details</td>
+  <h2><?php echo $eventTitle; ?></h2>
+  <br/>
+  <table class="homeTable" id="adminContent" border="1">
+    <tr>
+      <td colspan="3"><p class="subtitle">Event Manager Details</p></td>
     </tr>
-    <tr class="table">
-      <th class="table">Name</th>
-      <th class="table">Email</th>
-      <th class="table">Phone Number</th>
+    <tr >
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
     </tr>
     <tr>
-      <td class="table"><?php echo $eventAdmin[1]?></td>
-      <td class="table"><?php echo $eventAdmin[0]?></td>
-      <td class="table"><?php echo $eventAdmin[3]?></td>
+      <td><?php echo $eventAdmin[1]?></td>
+      <td><?php echo $eventAdmin[0]?></td>
+      <td><?php echo $eventAdmin[3]?></td>
     </tr>
   </table>
+  <br/>
+  <div class="centered">
   <?php
     //view content/ members
     if($isEventManager && !$archived){
       ?>
-      <input type="button" id="seePendingRequests" value="See Pending Requests" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
-      <input type="button" id="seeAddUser" value="Request a User to Join" onclick="seeAddUser()">
+      <input type="button" class="newButton" id="seePendingRequests" value="SEE PENDING REQUESTS" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
+      <br/>
+      <input type="button" class="newButton" id="seeAddUser" value="REQUEST A USER TO JOIN" onclick="seeAddUser()">
       <?php
     }
     if($isMember){
       ?>
-      <input type="button" id="seeMembers" value="See Members" onclick="seeMembers()">
+      
+      <input type="button" class="newButton" id="seeMembers" value="SEE MEMBERS" onclick="seeMembers()">
+      
+
       <?php
     } else if(!$archived){
       ?>
@@ -105,17 +118,18 @@
       <?php
     }
   if($isMember){?>
-  <h3 id="groupsTitle">Groups</h3>
-  <table id="groupListing">
+  <br/><br/>
+  <p class="subtitle" id="groupsTitle">GROUPS</p>
+  <table class="homeTable" id="groupListing" border="1">
     <tr>
-      <th class="table">Group Name</th>
-      <th class="table">Group Admin</th>
-      <th class="table">Action</th>
+      <th>Group Name</th>
+      <th>Group Admin</th>
+      <th>Action</th>
     </tr>
   <?php
     if(is_bool($result) && $isMember){ ?>
-      <tr class="table">
-        <td class="table">There is no group for this event</td>
+      <tr>
+        <td>There is no group for this event</td>
       </tr>
   <?php  }
   else if($isMember){
@@ -126,7 +140,7 @@
         <tr class="table">
           <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
           <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
-          <td class="table"><input type="button" id="seeContent<?php echo $groupButton?>" name="seeContent<?php echo $groupButton;?>" value="See Group Content" onclick="seeGroupContent()"></td>
+          <td class="table"><input type="button" id="seeContent<?php echo $groupButton?>" name="seeContent<?php echo $groupButton;?>" class="newShortButton" value="SEE GROUP CONTENT" onclick="seeGroupContent()"></td>
         </tr>
         <?php } else{ ?>
        <tr class="table">
@@ -135,13 +149,13 @@
          <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)">
            <br><input type="text" id="verifyOneTimeCodeText<?php echo $row[1]?>" placeholder="Enter one time code..."><input type="button" id="verifyOneTimeCode<?php echo $row[1];?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this,'<?php echo $username;?>')"></td>
        </tr>
+       
        <?php
 
 
     }
     $groupButton+=1;
   }
-
 } //else if($isMember)
 } //if($isMember)
 } else{
@@ -153,9 +167,11 @@
 //see event content
 if($isMember && $eventInfo[1] == 0){
   ?>
+  
+  <br/>
   <div id="wholeContent">
-  <h3 id="contentTitle">Content</h3>
-  <table id="contentTable">
+  <!-- <p class="subtitle" id="contentTitle">CONTENT</p> -->
+  <table class="homeTable" id="contentTable" border="1">
     <tr class="table">
       <th class="table">Username</th>
       <th class="table">Content</th>
@@ -222,72 +238,81 @@ if($isMember && $eventInfo[1] == 0){
 //end of $isMember if condition
 }
   ?>
+  </div>
 
   <!-- This below is the implementation to see the members popup-->
   <div id="seeMembersPopup" class="membersPopup">
-    <label id="titleSeeMembersPopup" class="membersPopup">Members Of Event</label>
-    <input type="button" value="Exit" onclick="closeMemberPopup()">
+    <label id="titleSeeMembersPopup" class="membersPopup"><p class="subtitle">MEMBERS OF EVENT</p></label>
     <div id="table-scroll" class="membersPopup">
       <div id="tableSeeMembersDivPopup" class="membersPopup">
-        <div id="headers">
+        <!-- <div id="headers">
           <div id="headerUsername">Username</div>
           <div id="headerStatus">Status</div>
           <div id="headerEmpty"></div>
-        </div>
+        </div> -->
       <?php
         if(is_bool($eventMembers)){
           ?>
-          <div id="rowMembers">Members of this event not found.</div>
+          <div id="rowMembers"><p class="subtitle">Members of this event not found.</p></div>
           <?php
         } else{
           while($row = mysqli_fetch_row($eventMembers)){
             ?>
             <div class="rowsMembers">
               <div class="innerTableMembersUsername" id="username<?php echo $row[0];?>"><?php echo getUsername($mysqli, $row[0]);?></div>
-              <div class="innerTableMembersStatus" id="status<?php echo $row[0];?>"><?php echo $row[1];?></div>
-              <div class="innerTableMembersButtons" id="buttons<?php echo $row[0];?>"><input type="button" value="Send Message" id="sendMessage<?php echo $row[0];?>" onclick="sendMessage(this,'<?php echo $username;?>','<?php echo $eventTitle;?>')"><input type="button" value="View Home Page" id="viewHomePage<?php echo $row[0];?>" onclick="showHome(this)"></div>
+              <div class="innerTableMembersStatus" id="status<?php echo $row[0];?>"><b><?php echo $row[1];?></b></div>
+              <div class="innerTableMembersButtons" id="buttons<?php echo $row[0];?>"><input type="button" class="newShortButton" value="SEND MESSAGE" id="sendMessage<?php echo $row[0];?>" onclick="sendMessage(this,'<?php echo $username;?>','<?php echo $eventTitle;?>')"><input type="button" class="newShortButton" value="HOME PAGE" id="viewHomePage<?php echo $row[0];?>" onclick="showHome(this)"></div>
+            <br/><br/>
             </div>
             <?php
           }
         }
       ?>
+      <br/>
+      <input type="button" class="newSmallButton" value="CLOSE" onclick="closeMemberPopup()">
+    
     </div>
     </div>
   </div>
 
   <!--This below is to see the pending users-->
-  <div id="seePendingUsersPopup">
-    <label id="titleSeePendingUsers">Pending Users</label>
-    <input type="button" value="Exit" onclick="closePendingUsersPopup()">
-    <div id="table-scroll-pending-users">
+  <div id="seePendingUsersPopup" class="seePendingRequests">
+    <label id="titleSeePendingUsers"><p class="subtitle">PENDING USERS</p></label>
+   <div id="table-scroll-pending-users">
       <div id="tableSeePendingDivPopup">
-        <div id="headersPending">
+        <!-- <div id="headersPending">
           <div id="headerUsernamePending">Username</div>
-        </div>
+        </div> -->
         <?php
           if(!is_bool($pendingUsers) && mysqli_num_rows($pendingUsers)!=0){
             while($row=mysqli_fetch_row($pendingUsers)){
               ?>
               <div class="rowPending">
                 <div class="innerTablePendingUsername" id="username<?php echo $row[0]?>"><?php echo getUsername($mysqli, $row[0]);?></div>
-                <div class="innerTablePendingButton" id="divButtonPending<?php echo $row[0]?>"><input type="button" id="buttonPending<?php echo $row[0]?>" value="Accept as Member" onclick="makeBecomeMember(this,'<?php echo $eventTitle;?>')"></div>
+                <div class="innerTablePendingButton" id="divButtonPending<?php echo $row[0]?>"><input type="button" id="buttonPending<?php echo $row[0]?>" class="newShortButton" value="ACCEPT AS MEMBER" onclick="makeBecomeMember(this,'<?php echo $eventTitle;?>')"></div>
               </div>
               <?php
             }
           }
         ?>
+        <br/>
+        <input type="button" class="newSmallButton" value="CLOSE" onclick="closePendingUsersPopup()">
+    
       </div>
     </div>
   </div>
 
   <div id="requestAddNewMember">
-    <label id="titleRequestAddNewMember">Add New User</label>
-    <input type="button" value="Exit" onclick="closeAddUserPopup()"><br>
-    <label id="addNewMember1">SCC ID: </label><input type="text" placeholder="Enter User's ID " id="addUserID"><br>
-    <label id="addNewMember2">Email: </label><input type="text" placeholder="Enter User's Email Address" id="addUserEmail"><br>
-    <label id="addNewMember3">Date of Birth: </label><input type="text" placeholder="Enter User's Date of Birth" id="addUserDOB"><br>
-    <label id="addNewMember4">Name: </label><input type="text" placeholder="Enter User's Name" id="addUserName"><br>
-    <input type="button" value="Submit" id="submitAddUser" onclick="sendRequestToJoinEvent('<?php echo $eventTitle;?>')">
+    <label id="titleRequestAddNewMember"><p class="subtitle">ADD NEW USER</p></label>
+    <br/>
+    <label id="addNewMember1" class="innerTableMembersUsername" >SCC ID:</label><input type="text" class="newText" placeholder="Enter User's ID " id="addUserID"><br>
+    <label id="addNewMember2" class="innerTableMembersUsername" >Email:</label><input type="text" class="newText" placeholder="Enter User's Email Address" id="addUserEmail"><br>
+    <label id="addNewMember3" class="innerTableMembersUsername" >Date of Birth:</label><input type="text" class="newText" placeholder="Enter User's Date of Birth" id="addUserDOB"><br>
+    <label id="addNewMember4" class="innerTableMembersUsername" >Name:</label><input type="text" class="newText" placeholder="Enter User's Name" id="addUserName"><br>
+    <br/>
+    <input type="button" class="newSmallButton" value="SUBMIT" id="submitAddUser" onclick="sendRequestToJoinEvent('<?php echo $eventTitle;?>')">
+    <br/><br/>
+    <input type="button" class="newSmallButton" value="CANCEL" onclick="closeAddUserPopup()"><br>
   </div>
 
 
@@ -487,6 +512,13 @@ if($isMember && $eventInfo[1] == 0){
       })
     }
 
+    function returnToHomePage(){
+      window.location.href="homePage.php";
+    }
+
   </script>
+  
+  </div>
+
 </body>
 </html>
