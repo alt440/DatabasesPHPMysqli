@@ -3,7 +3,7 @@
     // Include for the database layer functions to add.
     require "database_layer.php";
 
-   // Connection to the database
+    // Connection to the database
     $mysqli = new mysqli("urc353.encs.concordia.ca", "urc353_2", "AqtjPG");
     $mysqli->select_db("urc353_2");
     $filename = 'CSVTables.csv';
@@ -59,29 +59,45 @@ if ($handle = fopen("{$filename}","r")){
              // Get the data of titles so that they are not entered as an entity on the next iteration.
              $data  = fgetcsv($handle, 100, ",");
         }
+        // If the delimiter in the csv is sendEmail, change the current allocator variable.
+         else if ($data[0] == "addCommentCID"){
+             $whatTable = "addCommentCID";
+             // Get the data of titles so that they are not entered as an entity on the next iteration.
+             $data  = fgetcsv($handle, 100, ",");
+        }
+         // If the delimiter in the csv is sendEmail, change the current allocator variable.
+         else if ($data[0] == "addComment"){
+             $whatTable = "addComment";
+             // Get the data of titles so that they are not entered as an entity on the next iteration.
+             $data  = fgetcsv($handle, 100, ",");
+        }
         else if ($whatTable == "addUser"){
             addUser($mysqli, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
         } 
         else if ($whatTable == "createEvent"){
-             createEvent($mysqli, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
+            createEvent($mysqli, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
         }
         else if ($whatTable == "createGroup"){
             createGroup($mysqli,$data[0], $data[1], $data[2]) ;
         }
         else if ($whatTable == "addUserToGroup"){
-           addUserToGroup($mysqli, $data[0], $data[1], $data[2]);
+            addUserToGroup($mysqli, $data[0], $data[1], $data[2]);
         }
          else if ($whatTable == "addUserToEvent"){
             addUserToEvent($mysqli, $data[0], $data[1]);
         }
          else if ($whatTable == "addContent"){
-           // echo "<p>". $data[0]." ". $data[1]." ". $data[2]." ". $data[3]." ". $data[4]." ". $data[5]. "</p>";
             addContent($mysqli, $data[0], $data[1], $data[2], $data[3], $data[4], $data[5]);
         }
          else if ($whatTable == "sendEmail"){
             sendEmail($mysqli, $data[0], $data[1], $data[2], $data[3]);
         }
-         
+        else if ($whatTable == "addCommentCID"){
+            addCommentCID($mysqli, $data[0], $data[1], $data[2]);
+        }
+        else if ($whatTable == "addComment"){
+            addComment($mysqli, $data[0], $data[1], $data[2]);
+        }
         
     }
     // Display  that the table were Populated.
