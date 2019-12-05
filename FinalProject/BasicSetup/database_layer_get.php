@@ -393,7 +393,7 @@
     }
     $first_row = mysqli_fetch_row($result);
     //assuming groupID is right...
-    $result2 = $mysqli->query("SELECT UID FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
+    $result2 = $mysqli->query("SELECT UID FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID." AND requestStatus!='pending';");
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 0;
     }
@@ -427,6 +427,28 @@
     $first_row_2 = mysqli_fetch_row($result2);
 
     $result3 = $mysqli->query("SELECT OneTimeCode FROM Is_Member_Event WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
+    if(is_bool($result3) || mysqli_num_rows($result3) == 0){
+      return 0;
+    }
+    $first_row_3 = mysqli_fetch_row($result3);
+    if($first_row_3[0]==null){
+      return 0;
+    }
+    return $first_row_3[0];
+  }
+
+  /*
+  To get the one time code of the user (if any)
+  $mysqli: Connection to the DB object
+  Returns the one time code
+  */
+  function getOneTimeCodeGroup($mysqli, $username, $groupID){
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 'getOneTimeCodeGroup: User with username '.$username.' was not found.';
+    }
+    $first_row = mysqli_fetch_row($result);
+    $result3 = $mysqli->query("SELECT OneTimeCode FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 0;
     }

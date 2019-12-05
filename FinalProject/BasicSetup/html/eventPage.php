@@ -132,7 +132,8 @@
        <tr class="table">
          <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
          <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
-         <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)"><input type="button" id="verifyOneTimeCode<?php echo $groupButton;?>" name="verifyOneTimeCode<?php echo $groupButton;?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this)"></td>
+         <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)">
+           <br><input type="text" id="verifyOneTimeCodeText<?php echo $row[1]?>" placeholder="Enter one time code..."><input type="button" id="verifyOneTimeCode<?php echo $row[1];?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this,'<?php echo $username;?>')"></td>
        </tr>
        <?php
 
@@ -370,8 +371,24 @@ if($isMember && $eventInfo[1] == 0){
       location.reload();
     }
 
-    function verifyOneTimeCode(element){
-
+    function verifyOneTimeCode(element, username){
+      var groupID = (element.id).match(/\d+/)[0];
+      var oneTimeCode = document.getElementById('verifyOneTimeCodeText'+groupID).value;
+      $.ajax({
+        type: "POST",
+        url: "requests/verifyOneTimeCodeGroup.php",
+        data: {
+          'json': JSON.stringify({"username":username, "groupID":groupID, "oneTimeCode":oneTimeCode})
+        },
+        success: function(response){
+          response = $.parseJSON(response);
+          if(response['response']==='Hurray! You got in.'){
+            location.reload();
+          } else{
+            window.alert(response['response']);
+          }
+        }
+      })
     }
 
     function sendComment(username, element){

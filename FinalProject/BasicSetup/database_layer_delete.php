@@ -312,7 +312,7 @@
   }
 
   /*
-  This function deletes the one time code
+  This function deletes the one time code of event
   $mysqli: Connection to the DB
   $username: Username of the user
   $eventTitle: Title of the event
@@ -333,6 +333,24 @@
     $first_row_2 = mysqli_fetch_row($result2);
 
     $mysqli->query("UPDATE Is_Member_Event SET OneTimeCode = NULL WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
+    return $mysqli->error;
+  }
+
+  /*
+  This function deletes the one time code of group
+  $mysqli: Connection to the DB
+  $username: Username of the user
+  $groupID: ID of the group
+  */
+  function deleteOneTimeCodeGroup($mysqli, $username, $groupID){
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."'");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 'deleteOneTimeCode: Could not find user with username '.$username.'.';
+    }
+
+    $first_row = mysqli_fetch_row($result);
+
+    $mysqli->query("UPDATE Is_Member_Group SET OneTimeCode = NULL WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     return $mysqli->error;
   }
 
