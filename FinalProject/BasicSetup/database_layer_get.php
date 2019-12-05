@@ -472,4 +472,13 @@
     $first_row = mysqli_fetch_row($result);
     return $first_row[0];
   }
+
+  /*
+  This function returns the rates that were set
+  $mysqli: Connection to the DB object
+  */
+  function getRates($mysqli){
+    $result = $mysqli->query("SELECT * FROM Rates");
+    return $result;
+  }
 ?>

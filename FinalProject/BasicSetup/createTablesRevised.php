@@ -70,7 +70,7 @@ foreign key (CoID) references Comment(CoID) on delete cascade, foreign key (UID)
 	echo $mysqli->error;
 
 	//this is the rates depending on the type of event and the number of events that the user has.
-	$mysqli->query("CREATE TABLE Rates (NumberEvents int unsigned not null, EventType varchar(20) not null, StorageGB int unsigned not null, BandwidthGB int unsigned not null, Price decimal not null, OverflowFeeBandwidth decimal not null, OverflowFeeStorage decimal not null, foreign key (EventType) references Event_Type(EventType) on delete cascade, primary key(NumberEvents, EventType, StorageGB, BandwidthGB));");
+	$mysqli->query("CREATE TABLE Rates (RID int unsigned not null auto_increment, NumberEvents int unsigned not null, EventType varchar(20) not null, StorageGB int unsigned not null, BandwidthGB int unsigned not null, Price decimal not null, OverflowFeeBandwidth decimal not null, OverflowFeeStorage decimal not null, foreign key (EventType) references Event_Type(EventType) on delete cascade, primary key(RID));");
 	echo $mysqli->error;
 
 	//add the following rows to Event_Type (as the types of events should be constant)

@@ -354,4 +354,13 @@
     return $mysqli->error;
   }
 
+  /*
+  This function deletes an entity of rates
+  $mysqli: Connection to the DB object
+  $RID: ID to be deleted
+  */
+  function deleteRates($mysqli, $RID){
+    $mysqli->query("DELETE FROM Rates WHERE RID=".$RID);
+  }
+
 ?>

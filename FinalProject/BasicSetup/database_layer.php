@@ -543,7 +543,7 @@
         return 'addRates: Was this event type added to the event types table?';
       }
 
-    $mysqli->query("INSERT INTO Rates values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.",".$overflowFeeBandwidth.",".$overflowFeeStorage.");");
+    $mysqli->query("INSERT INTO Rates (NumberEvents, EventType, StorageGB, BandwidthGB, Price, OverflowFeeBandwidth, OverflowFeeStorage) values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.",".$overflowFeeBandwidth.",".$overflowFeeStorage.");");
     return $mysqli->error;
   }
 
