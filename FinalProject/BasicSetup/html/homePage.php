@@ -1,3 +1,7 @@
+<!-- 
+  authors: Alexandre Therrien, Daniel Vigny-Pau
+ -->
+
 <?php
     session_start();
     require "../database_layer_get.php";
@@ -30,28 +34,32 @@ and open the template in the editor.
 
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Home - Share, Contribute & Comment System</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link rel="stylesheet" type="text/css" href="../css/css-file5.css"/>
-         <link rel="stylesheet" type="text/css" href="../css/searchBar.css"/>
+        <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
          <script src="../js/searchBar.js"></script>
          <script src="../js/jquery-3.4.1.min.js"></script>
     </head>
 
     <body>
-      <table id="searchStuff">
+      <div class="bigBox">
+        
+      <table class="centeredRow" id="searchStuff">
         <tr>
           <!--First include a text field to search for user/event-->
-          <td><input type="text" id="searchBar" placeholder="Enter event or user..."></td>
-          <td><input type="button" id="searchEvent" value="Search Event" onclick="searchEvent()"></td>
-          <td><input type="button" id="searchUser" value="Search User" onclick="searchUser()"></td>
+          <td><input type="text" class="newText" id="searchBar" placeholder="Enter event or user..."></td>
+          <td><input type="button" class="newButton" id="searchEvent" value="Search Event" onclick="searchEvent()"></td>
+          <td><input type="button" class="newButton" id="searchUser" value="Search User" onclick="searchUser()"></td>
         </tr>
       </table>
-        <h1>Welcome <?php echo $_SESSION["username"];?>,</h1>
+      <br/>
+      <div class="centered">
+        <h1>Welcome <?php echo $_SESSION["username"];?></h1>
         <form action='login.php' action='POST'>
-            <input type='submit' name='logOut_User' id='logOutMainButton' value='Log Out'/>
+            <input type='submit' class="newButton" name='logOut_User' id='logOutMainButton' value='Log Out'/>
         </form>
+        <br/><br/>
          <?php
          //from DB layer
          $result = getUser($mysqli, $username);
@@ -59,20 +67,20 @@ and open the template in the editor.
 
 
          ?>
-        <table class="zui-table" border='1'>
-            <tr><td colspan="2"><h2>User Data In the System</h2> </td></tr>
+        <table class="zui-table" border="solid 1px">
+            <tr><td colspan="2"><h2>User Data</h2> </td></tr>
             <tr><td><b>SCC User ID: </b></td><td> <?php echo $result[0];?></td> </tr>
             <tr><td><b>Name: </b></td><td> <?php echo $result[4];?></td> </tr>
             <tr><td><b>Username: </b></td><td> <?php echo $result[1];?></td> </tr>
             <tr><td><b>Email: </b></td><td> <?php echo $result[3];?></td> </tr>
             <tr><td><b>Date Of Birth: </b></td><td> <?php echo $result[5];?></td> </tr>
             <?php if($showEmails == 1){ ?>
-            <tr><td colspan="2"><a href="editUserInfo.php">Edit user information </a> </td></tr>
-            <tr><td colspan="2"><a href="editUserMemberships.php">Edit group/event details</a></td></tr>
+            <tr><td colspan="2"><a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a> </td></tr>
+            <tr><td colspan="2"><a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a></td></tr>
             <?php }?>
         </table>
         <?php if($showEmails == 1){?>
-        <h1>Email Notifications</h1>
+        <h2>Email Notifications</h2>
         <h3>Emails Received</h3>
         <table class="zui-table" border='1'>
           <tr><th>Source User</th><th>Email Title</th><th>Content</th></tr>
@@ -134,7 +142,7 @@ and open the template in the editor.
         </table>
 
 
-          <h1>Upcoming Events</h1>
+          <h2>Upcoming Events</h2>
            <table border='1' class="zui-table">
                <tr><th>Event ID</th><th>Title</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
@@ -172,7 +180,7 @@ and open the template in the editor.
         </table>
 
 
-           <h1>Your Groups</h1>
+           <h2>Your Groups</h2>
            <table border='1' class="zui-table">
                <tr><th>Group ID</th><th>Title</th><th>Main Event ID</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
@@ -208,6 +216,7 @@ and open the template in the editor.
 
 
         </table>
-
+              </div>
+            </div>
     </body>
 </html>

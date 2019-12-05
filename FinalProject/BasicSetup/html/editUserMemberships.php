@@ -94,11 +94,16 @@
 
     <h2>Add an Event</h2>
     <table class="centeredTable" id="addEventTable">
-      <tr>
-        <td>Event Name <input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
+    <tr>
+      <td>Event Name</td>
+    </tr>  
+    <tr>
+        <td><input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
     <br/> <br/>
         <form>
+          <br/>
             Event Type
+            <br/><br/>
             <select id="eventTypesSelection">
               <?php
                 $eventTypes = getEventTypes($mysqli);
@@ -111,7 +116,7 @@
                 ?>
             </select>
           </form>
-          Event Template <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
+          <br/>Event Template<br/><br/> <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
           <br><input type="button" class="centeredButton" value="Add an Event" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
       </tr>
     </table>
