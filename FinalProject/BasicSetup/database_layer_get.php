@@ -372,7 +372,7 @@
     }
     $first_row = mysqli_fetch_row($result);
     //find admin from Is_Member_Event
-    $result2 = $mysqli->query("SELECT User_.Email, User_.Name, User_.Address, User_.PhoneNumber FROM User_ INNER JOIN Is_Member_Group ON User_.UID=Is_Member_Group.UID WHERE Is_Member_Group.requestStatus='admin' AND GroupID=".$first_row[0].";");
+    $result2 = $mysqli->query("SELECT User_.UID, User_.Username, User_.Email, User_.Name, User_.Address, User_.PhoneNumber FROM User_ INNER JOIN Is_Member_Group ON User_.UID=Is_Member_Group.UID WHERE Is_Member_Group.requestStatus='admin' AND GroupID=".$first_row[0].";");
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'getGroupAdmin: Oops! Something went wrong.';
     }
@@ -435,5 +435,19 @@
       return 0;
     }
     return $first_row_3[0];
+  }
+
+  /*
+  This function gets the group name from the ID
+  $mysqli: Connection to the DB object
+  $groupID: Group ID
+  */
+  function getGroupName($mysqli, $groupID){
+    $result = $mysqli->query("SELECT GroupName FROM Group_ WHERE GroupID=".$groupID.";");
+    if(is_bool($result) || mysqli_num_rows($result)==0){
+      return 'Could not find group with ID '.$groupID.'.';
+    }
+    $first_row = mysqli_fetch_row($result);
+    return $first_row[0];
   }
 ?>

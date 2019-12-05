@@ -42,7 +42,7 @@
 
 	//this table determines which participant belongs to which group. hasSeenLastMessage has been added
 	//to know if the members have seen the last message. If not a member, set to false or 0.
-	$mysqli->query("CREATE TABLE Is_Member_Group (GroupID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode int, primary key (GroupID, UID), foreign key (GroupID) references Group_(GroupID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
+	$mysqli->query("CREATE TABLE Is_Member_Group (GroupID int unsigned not null, UID int unsigned not null, requestStatus varchar(10), hasSeenLastMessage boolean not null, OneTimeCode bigint, primary key (GroupID, UID), foreign key (GroupID) references Group_(GroupID) on delete cascade, foreign key (UID) references User_(UID) on delete cascade);");
 	echo $mysqli->error;
 
 	//emails of a user.

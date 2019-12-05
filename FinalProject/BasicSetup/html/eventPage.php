@@ -1,6 +1,7 @@
 <?php
   session_start();
-
+  //reset group
+  $_SESSION['Group']='';
   $eventTitle = $_SESSION['Event'];
   $username = $_SESSION['username'];
 
@@ -350,7 +351,7 @@ if($isMember && $eventInfo[1] == 0){
       var elementID = document.getElementById("groupName"+(element.id).match(/\d+/)[0]);
       //extract its value and send
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET","requests/sendRequestToJoinGroup.php?groupName="+elementID.innerHTML+"&username="+username+"&eventTitle="+eventTitle, true);
+      xmlhttp.open("GET","requests/joinGroup.php?groupName="+elementID.innerHTML+"&username="+username+"&eventTitle="+eventTitle, true);
       xmlhttp.send();
       //show a popup that tells you request sent!
 
@@ -392,8 +393,8 @@ if($isMember && $eventInfo[1] == 0){
 
     }
 
-    function seeGroupContent(element){
-
+    function seeGroupContent(){
+      window.location.href="groupConversations.php";
     }
 
     function sendMessage(element, username, eventTitle){

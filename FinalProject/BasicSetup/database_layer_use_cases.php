@@ -97,6 +97,26 @@
   }
 
   /*
+  This function sets a user as a member of the group, from its pending state.
+  ONLY AVAILABLE TO GROUP ADMIN(s)
+  $mysqli: Connection to the DB object
+  $username: Username of the user that we want to join the group.
+  $groupID: Group ID
+  */
+  function setMemberToGroupID($mysqli, $username, $groupID){
+    //find userID
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'setMemberToGroup: User with username '.$username.' does not exist';
+    }
+
+    $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
+    return 'setMemberToGroup: '.$mysqli->error;
+  }
+
+  /*
   Converts a date stamp to a timestamp: 'YYYY-MM-DD' to a long
   $dateStamp: Date in format 'YYYY-MM-DD'
   Returns long
@@ -413,6 +433,16 @@
     }
 
     return 1;
+  }
+
+  /*
+  Changes group name
+  $mysqli: Connection to the DB object
+  $groupID: ID of the group
+  $newGroupName: New group name
+  */
+  function changeGroupName($mysqli, $groupID, $newGroupName){
+    $mysqli->query("UPDATE Group_ SET GroupName='".$newGroupName."' WHERE GroupID=".$groupID.";");
   }
 
 ?>

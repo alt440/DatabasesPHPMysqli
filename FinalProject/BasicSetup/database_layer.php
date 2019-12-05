@@ -502,6 +502,31 @@
   }
 
   /*
+  To add a member to a group. ONLY FOR GROUP MANAGER!
+  $mysqli: Connection to the DB object
+  $groupName: Name of the group (string) - Must exist
+  $username: Username of the user (string) - Must exist
+  $eventTitle: Title of the event in which the group belongs in - Must exist
+  $oneTimeCode: Code to access the group
+  */
+  function addUserToGroupWithCode($mysqli, $username, $groupID, $eventID, $oneTimeCode){
+    //find member with that username
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    //because only a user in the event can create a group...
+    $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$eventID." AND UID=".$first_row[0].";");
+    $first_row_2 = mysqli_fetch_row($findUserInEvent);
+    if(is_bool($first_row_2[0])){
+      return 'addUserToGroup: User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
+    }
+    
+    //now create the entry. set user with status 'pending'
+    $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".$groupID.",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
+    return 'addUserToGroup: '.$mysqli->error;
+  }
+
+  /*
   To add some new rates. ONLY FOR CONTROLLER!
   $mysqli: Connection to the DB object
   $numberEvents: Positive integer that tells how many events for a price (int)

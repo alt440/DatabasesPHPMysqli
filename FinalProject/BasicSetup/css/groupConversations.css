@@ -127,7 +127,43 @@ height: 60%;
 width: 90%;
 font-size: 20px;
 }
-#table-scroll{
+#table-scroll, #table-scroll-pending-users{
   overflow: auto;
+  position: relative;
+}
+
+#seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember, #groupOptions{
+  position: absolute;
+  left: 40%;
+  z-index: 1;
+}
+#seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember, #groupOptions{
+  background-color: white;
+  width: 600px;
+  height: 600px;
+  border: 1px solid black;
+  display: none;
+}
+
+.innerTableMembersUsername, .innerTableMembersStatus, .innerTableMembersButtons{
+  display: inline-block;
+  width: 50px;
+  height: 3px;
+}
+
+.innerTablePendingUsername, .innerTablePendingButton{
+  display: inline-block;
+  width: 50px;
+  height: 3px;
+}
+
+.innerTableMembersButtons{
+  margin-left: 30px;
+  margin-bottom: 7px;
+  width: 150px;
+  height: 20px;
+}
+
+#requestAddNewMember{
   position: relative;
 }
