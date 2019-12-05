@@ -1,7 +1,6 @@
 <?php
   session_start();
-  //reset group
-  $_SESSION['Group']='';
+
   $eventTitle = $_SESSION['Event'];
   $username = $_SESSION['username'];
 
@@ -20,12 +19,7 @@
     $archived = isEventArchived($mysqli, $eventTitle);
     //is user member of event?
     $isMember = isUserMemberOfEvent($mysqli, $username, $eventTitle);
-    //and if so, what is his requestStatus? to know if he/she is the event manager
-    $isEventManager = strcmp(getUserMemberOfEvent($mysqli, $username, $eventTitle)[1],'admin')==0? 1:0;
-    $pendingUsers = 0;
-    if($isEventManager==1){
-      $pendingUsers = getEventPendingUsers($mysqli, $eventTitle);
-    }
+    echo $mysqli->error;
     //get event admin info
     $eventAdmin = getEventAdmin($mysqli, $eventTitle);
     //get all the members of the event
@@ -87,12 +81,6 @@
   </table>
   <?php
     //view content/ members
-    if($isEventManager && !$archived){
-      ?>
-      <input type="button" id="seePendingRequests" value="See Pending Requests" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
-      <input type="button" id="seeAddUser" value="Request a User to Join" onclick="seeAddUser()">
-      <?php
-    }
     if($isMember){
       ?>
       <input type="button" id="seeMembers" value="See Members" onclick="seeMembers()">
@@ -100,8 +88,6 @@
     } else if(!$archived){
       ?>
       <input type="button" id="joinEvent" value="Join Event" onclick="joinEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
-      <input type="text" id="oneTimeCodeEntryEvent" placeholder="Enter one time code here...">
-      <input type="button" id="verifyOneTimeCodeEvent" value="Verify One Time Code" onclick="verifyOneTimeCodeEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
       <?php
     }
   if($isMember){?>
@@ -132,8 +118,7 @@
        <tr class="table">
          <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
          <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
-         <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)">
-           <br><input type="text" id="verifyOneTimeCodeText<?php echo $row[1]?>" placeholder="Enter one time code..."><input type="button" id="verifyOneTimeCode<?php echo $row[1];?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this,'<?php echo $username;?>')"></td>
+         <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)"><input type="button" id="verifyOneTimeCode<?php echo $groupButton;?>" name="verifyOneTimeCode<?php echo $groupButton;?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this)"></td>
        </tr>
        <?php
 
@@ -165,21 +150,6 @@ if($isMember && $eventInfo[1] == 0){
   //get content event
   $allContent = getContentEvent($mysqli, $eventTitle);
 
-  //if event manager, allow to post content (not only comments)
-  if($isEventManager && !$archived){
-    ?>
-    <tr class="table">
-      <td class="table" colspan="3">Reply: <input type="text" id="contentContent" placeholder="Your Reply..."><input type="button" id="contentSubmitContent" value="Submit" onclick="sendContent('<?php echo $username;?>','<?php echo $eventTitle;?>',this)">
-      <select id="permissionTypeSelection">
-        <option value="0">No comments allowed</option>
-        <option value="1">Comments allowed</option>
-        <option value="2">Link to content and comments allowed</option>
-      </select>
-      </td>
-    </tr>
-    <?php
-  }
-
   if(is_bool($allContent) || mysqli_num_rows($allContent)==0){
     ?>
     <tr class="table">
@@ -187,7 +157,6 @@ if($isMember && $eventInfo[1] == 0){
     </tr>
     <?php
   } else{
-
   while($row=mysqli_fetch_row($allContent)){
    ?>
    <tr class="table">
@@ -208,7 +177,7 @@ if($isMember && $eventInfo[1] == 0){
        <?php
      }
    }
-   if($row[4]!=0 && !$archived){
+   if($row[4]!=0){
      //add possibility to add content
 
      ?>
@@ -251,48 +220,10 @@ if($isMember && $eventInfo[1] == 0){
           }
         }
       ?>
+      <!--</table>-->
     </div>
     </div>
   </div>
-
-  <!--This below is to see the pending users-->
-  <div id="seePendingUsersPopup">
-    <label id="titleSeePendingUsers">Pending Users</label>
-    <input type="button" value="Exit" onclick="closePendingUsersPopup()">
-    <div id="table-scroll-pending-users">
-      <div id="tableSeePendingDivPopup">
-        <div id="headersPending">
-          <div id="headerUsernamePending">Username</div>
-        </div>
-        <?php
-          if(!is_bool($pendingUsers) && mysqli_num_rows($pendingUsers)!=0){
-            while($row=mysqli_fetch_row($pendingUsers)){
-              ?>
-              <div class="rowPending">
-                <div class="innerTablePendingUsername" id="username<?php echo $row[0]?>"><?php echo getUsername($mysqli, $row[0]);?></div>
-                <div class="innerTablePendingButton" id="divButtonPending<?php echo $row[0]?>"><input type="button" id="buttonPending<?php echo $row[0]?>" value="Accept as Member" onclick="makeBecomeMember(this,'<?php echo $eventTitle;?>')"></div>
-              </div>
-              <?php
-            }
-          }
-        ?>
-      </div>
-    </div>
-  </div>
-
-  <div id="requestAddNewMember">
-    <label id="titleRequestAddNewMember">Add New User</label>
-    <input type="button" value="Exit" onclick="closeAddUserPopup()"><br>
-    <label id="addNewMember1">SCC ID: </label><input type="text" placeholder="Enter User's ID " id="addUserID"><br>
-    <label id="addNewMember2">Email: </label><input type="text" placeholder="Enter User's Email Address" id="addUserEmail"><br>
-    <label id="addNewMember3">Date of Birth: </label><input type="text" placeholder="Enter User's Date of Birth" id="addUserDOB"><br>
-    <label id="addNewMember4">Name: </label><input type="text" placeholder="Enter User's Name" id="addUserName"><br>
-    <input type="button" value="Submit" id="submitAddUser" onclick="sendRequestToJoinEvent('<?php echo $eventTitle;?>')">
-  </div>
-
-
-  </div>
-
 <?php } else{?>
   <h2>Oops! It looks like this event does not exist yet...</h2>
 <?php }?>
@@ -308,51 +239,12 @@ if($isMember && $eventInfo[1] == 0){
       document.getElementById('tableSeeMembersPopup').style.display = "block";
     }
 
-    function seePendingRequests(){
-      document.getElementById('seePendingUsersPopup').style.display = "block";
-    }
-
-    function closePendingUsersPopup(){
-      document.getElementById('seePendingUsersPopup').style.display = "none";
-    }
-
-    function closeAddUserPopup(){
-      document.getElementById('requestAddNewMember').style.display = "none";
-    }
-
-    function seeAddUser(){
-      document.getElementById('requestAddNewMember').style.display = "block";
-    }
-
-    function sendRequestToJoinEvent(eventTitle){
-      var UID = document.getElementById('addUserID').value;
-      var DOB = document.getElementById('addUserDOB').value;
-      var email = document.getElementById('addUserEmail').value;
-      var name = document.getElementById('addUserName').value;
-
-      $.ajax({
-        type: "POST",
-        url: "requests/sendRequestToJoinEvent.php",
-        data: {
-          'json': JSON.stringify({"UID":UID,"eventTitle":eventTitle,"DOB":DOB,"email":email,"name":name})
-        },
-        success: function (response){
-          response = $.parseJSON(response);
-          if(response['response']!=='OK'){
-            window.alert(response['response']);
-          } else{
-            location.reload();
-          }
-        }
-      });
-    }
-
     function sendRequest(username, eventTitle, element){
       //get element of group
       var elementID = document.getElementById("groupName"+(element.id).match(/\d+/)[0]);
       //extract its value and send
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET","requests/joinGroup.php?groupName="+elementID.innerHTML+"&username="+username+"&eventTitle="+eventTitle, true);
+      xmlhttp.open("GET","requests/sendRequestToJoinGroup.php?groupName="+elementID.innerHTML+"&username="+username+"&eventTitle="+eventTitle, true);
       xmlhttp.send();
       //show a popup that tells you request sent!
 
@@ -371,24 +263,8 @@ if($isMember && $eventInfo[1] == 0){
       location.reload();
     }
 
-    function verifyOneTimeCode(element, username){
-      var groupID = (element.id).match(/\d+/)[0];
-      var oneTimeCode = document.getElementById('verifyOneTimeCodeText'+groupID).value;
-      $.ajax({
-        type: "POST",
-        url: "requests/verifyOneTimeCodeGroup.php",
-        data: {
-          'json': JSON.stringify({"username":username, "groupID":groupID, "oneTimeCode":oneTimeCode})
-        },
-        success: function(response){
-          response = $.parseJSON(response);
-          if(response['response']==='Hurray! You got in.'){
-            location.reload();
-          } else{
-            window.alert(response['response']);
-          }
-        }
-      })
+    function verifyOneTimeCode(element){
+
     }
 
     function sendComment(username, element){
@@ -411,7 +287,7 @@ if($isMember && $eventInfo[1] == 0){
     }
 
     function seeGroupContent(){
-      window.location.href="groupConversations.php";
+
     }
 
     function sendMessage(element, username, eventTitle){
@@ -436,55 +312,6 @@ if($isMember && $eventInfo[1] == 0){
           window.location.href="homePage.php";
         }
       });
-    }
-
-    function sendContent(username, eventTitle, element){
-      var e = document.getElementById("permissionTypeSelection");
-      var privilegeLevel = e.options[e.selectedIndex].value;
-      var replyString = document.getElementById('contentContent').value;
-
-      $.ajax({
-        type: "GET",
-        url: "requests/sendContent.php?username="+username+"&privilegeLevel="+privilegeLevel+"&replyString="+replyString+"&eventTitle="+eventTitle,
-        success: function (response){
-          location.reload();
-        }
-      });
-    }
-
-    function makeBecomeMember(element, eventTitle){
-      var UID = (element.id).match(/\d+/)[0];
-      $.ajax({
-        type: "POST",
-        url: "requests/addMemberToEvent.php",
-        data: {
-          'json': JSON.stringify({"UID":UID,"eventTitle":eventTitle})
-        },
-        success: function(response){
-          response = $.parseJSON(response);
-          location.reload();
-          //location.reload();
-        }
-      });
-    }
-
-    function verifyOneTimeCodeEvent(username, eventTitle){
-      var oneTimeCode = document.getElementById('oneTimeCodeEntryEvent').value;
-      $.ajax({
-        type: "POST",
-        url: "requests/verifyOneTimeCodeEvent.php",
-        data: {
-          'json': JSON.stringify({"username":username, "eventTitle":eventTitle, "oneTimeCode":oneTimeCode})
-        },
-        success: function(response){
-          response = $.parseJSON(response);
-          if(response['response']==='Hurray! You got in.'){
-            location.reload();
-          } else{
-            window.alert(response['response']);
-          }
-        }
-      })
     }
 
   </script>

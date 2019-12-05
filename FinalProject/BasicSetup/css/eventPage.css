@@ -18,7 +18,7 @@ html, body{
   top: -20px;
 }
 
-#seeMembers, #joinEvent, #seePendingRequests, #seeAddUser, #oneTimeCodeEntryEvent, #verifyOneTimeCodeEvent{
+#seeMembers, #joinEvent{
   margin: 0 auto;
   display: block;
 }
@@ -40,12 +40,12 @@ h1,h3, #archivedInfo{
   top: 80px;
 }
 
-#seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+#seeMembersPopup{
   position: absolute;
   left: 40%;
   z-index: 1;
 }
-#seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+#seeMembersPopup{
   background-color: white;
   width: 600px;
   height: 600px;
@@ -54,12 +54,6 @@ h1,h3, #archivedInfo{
 }
 
 .innerTableMembersUsername, .innerTableMembersStatus, .innerTableMembersButtons{
-  display: inline-block;
-  width: 50px;
-  height: 3px;
-}
-
-.innerTablePendingUsername, .innerTablePendingButton{
   display: inline-block;
   width: 50px;
   height: 3px;

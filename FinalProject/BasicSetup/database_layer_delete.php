@@ -13,16 +13,18 @@
   */
   function removeUserFromEvent($mysqli, $username, $eventTitle){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
-      return 'removeUserFromEvent: User with username '.$username.' was not found.';
-    }
     $first_row = mysqli_fetch_row($result);
 
+    if(is_bool($first_row[0])){
+      return 'removeUserFromEvent: User with username '.$username.' was not found.';
+    }
+
     $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
       return 'removeUserFromEvent: Event with title '.$eventTitle.' was not found.';
     }
-    $first_row_2 = mysqli_fetch_row($result2);
 
     //now remove the user with Is_Member_Event table
     $mysqli->query("DELETE FROM Is_Member_Event WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
@@ -44,10 +46,11 @@
   */
   function removeUserFromEventID($mysqli, $username, $eventID){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
       return 'removeUserFromEvent: User with username '.$username.' was not found.';
     }
-    $first_row = mysqli_fetch_row($result);
 
     //now remove the user with Is_Member_Event table
     $mysqli->query("DELETE FROM Is_Member_Event WHERE UID=".$first_row[0]." AND EventID=".$eventID.";");
@@ -72,18 +75,18 @@
   */
   function removeUserFromGroup($mysqli, $username, $groupName){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
-      return 'removeUserFromGroup: User with username '.$username.' was not found.';
-    }
     $first_row = mysqli_fetch_row($result);
 
-    $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
-
-    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
-      return 'removeUserFromGroup: Group with name '.$groupName.' was not found.';
+    if(is_bool($first_row[0])){
+      return 'removeUserFromGroup: User with username '.$username.' was not found.';
     }
 
+    $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'removeUserFromGroup: Group with name '.$groupName.' was not found.';
+    }
 
     $mysqli->query("DELETE FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$first_row_2[0].";");
     return 'removeUserFromGroup: '.$mysqli->error;
@@ -97,11 +100,11 @@
   */
   function removeUserFromGroupID($mysqli, $username, $groupID){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
+    if(is_bool($first_row[0])){
       return 'removeUserFromGroup: User with username '.$username.' was not found.';
     }
-    $first_row = mysqli_fetch_row($result);
 
     $mysqli->query("DELETE FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     return 'removeUserFromGroup: '.$mysqli->error;
@@ -115,11 +118,10 @@
   function removeUser($mysqli, $username){
     //first find his UID
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
+    $first_row = mysqli_fetch_row($result);
+    if(is_bool($first_row[0])){
       return 'removeUser: User with username '.$username.' does not exist.';
     }
-    $first_row = mysqli_fetch_row($result);
 
     //now delete all:Emails, Event member, Group member, Content, Comment. Because there are foreign keys, I cannot replace certain values by bogus values
     //start with emails: easiest
@@ -164,11 +166,11 @@
   function removeGroup($mysqli, $groupName){
     //must remove all content from group, all membership to group, and the group itself.
     $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
+    if(is_bool($first_row[0])){
       return 'removeGroup: Could not find Group with GroupName '.$groupName.'.';
     }
-    $first_row = mysqli_fetch_row($result);
 
     //find all posts belonging to the group
     $result2 = $mysqli->query("SELECT CID FROM Content WHERE GroupID=".$first_row[0].";");
@@ -216,11 +218,11 @@
   function removeEvent($mysqli, $eventTitle){
     //find the eventID, then all the groups associated with it
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
+    if(is_bool($first_row[0])){
       return 'removeEvent: Event with title '.$eventTitle.' was not found.';
     }
-    $first_row = mysqli_fetch_row($result);
 
     $result_main = $mysqli->query("SELECT GroupID FROM Group_ WHERE MainEventID=".$first_row[0].";");
 
@@ -309,58 +311,6 @@
     //then remove the event
     $mysqli->query("DELETE FROM Event_ WHERE EventID=".$eventID.";");
     return 'removeEvent: '.$mysqli->error;
-  }
-
-  /*
-  This function deletes the one time code of event
-  $mysqli: Connection to the DB
-  $username: Username of the user
-  $eventTitle: Title of the event
-  */
-  function deleteOneTimeCode($mysqli, $username, $eventTitle){
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."'");
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
-      return 'deleteOneTimeCode: Could not find user with username '.$username.'.';
-    }
-
-    $first_row = mysqli_fetch_row($result);
-
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
-      return 'deleteOneTimeCode: Could not find event with title '.$eventTitle.'.';
-    }
-
-    $first_row_2 = mysqli_fetch_row($result2);
-
-    $mysqli->query("UPDATE Is_Member_Event SET OneTimeCode = NULL WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
-    return $mysqli->error;
-  }
-
-  /*
-  This function deletes the one time code of group
-  $mysqli: Connection to the DB
-  $username: Username of the user
-  $groupID: ID of the group
-  */
-  function deleteOneTimeCodeGroup($mysqli, $username, $groupID){
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."'");
-    if(is_bool($result) || mysqli_num_rows($result) == 0){
-      return 'deleteOneTimeCode: Could not find user with username '.$username.'.';
-    }
-
-    $first_row = mysqli_fetch_row($result);
-
-    $mysqli->query("UPDATE Is_Member_Group SET OneTimeCode = NULL WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
-    return $mysqli->error;
-  }
-
-  /*
-  This function deletes an entity of rates
-  $mysqli: Connection to the DB object
-  $RID: ID to be deleted
-  */
-  function deleteRates($mysqli, $RID){
-    $mysqli->query("DELETE FROM Rates WHERE RID=".$RID);
   }
 
 ?>

@@ -3,7 +3,6 @@
   //this adds a comment to the list of comments for a post
   require "../../database_layer.php";
   require "../../database_layer_get.php";
-  require "../../database_layer_use_cases.php";
 
   $mysqli = new mysqli("localhost", "root", "");
   $mysqli->select_db("comp353_final_project");
@@ -16,7 +15,5 @@
   createGroupPrivate($mysqli, $eventTitle, "Group".$usernamep2.$usernamep1, $usernamep2);
   //now add the other one to the group
   addUserToGroup($mysqli, $usernamep1, "Group".$usernamep2.$usernamep1, $eventTitle);
-  //now make position permanent
-  setMemberToGroup($mysqli, $usernamep1, "Group".$usernamep2.$usernamep1);
 
 ?>

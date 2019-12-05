@@ -23,8 +23,6 @@
   echo $return_val."<br>";
   $return_val=addUser($mysqli, 'rrr','rrr','r@r.com','rrl rrr','1777-04-30',2);
   echo $return_val."<br>";
-  $return_val=addUser($mysqli, 'controller','controller','controller@controller.com','controller','1777-04-30',1);
-  echo $return_val."<br>";
   $return_val=addUser($mysqli, 'ppp','ppp','p@p.com','ppl ppp','1777-04-30',0);
   echo $return_val."<br>";
   $return_val=createEvent($mysqli, '1999-01-11','Some_Event','2009-01-22','family','aaa', 1);
