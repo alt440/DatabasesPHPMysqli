@@ -4,34 +4,27 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
 <html>
     <head>
-        <title>Sign Up</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../css/css-file3.css"/>
+         <link rel="stylesheet" type="text/css" href="../css/registerCss.css"/>
     </head>
+
     <body>
-        <div><h1>Registration<br></h1></div>
-        <form action="register.php" method="POST" name="register">
-            <p>Username:</p>
-            <input name="username" type="text"/>
-            <p>Password:</p>
-            <input name="password1" type="password"/>
-            <br><br>
-            <p>Confirm Password:</p>
-            <input name="password2" type="password"/>
-            <br><br>
-            <p>Name:</p>
-            <input name="name" type="text">
-            <p>Email:</p>
-            <input name="email" type="text">
-            <p>Date of birth:</p>
-            <input name="DOB" type="date">
-            <br><br>
-            <input id="submitRegister" name="submit" type="submit" value="Register">
-        </form>
-        <br></br>
-         <a href='index.html'>Login Page</a>
-    </body>
+		<form action="register.php" method="POST" name="register" id="signup">
+			<h1>Registration</h1>
+			<input name="username" type="text" placeholder="Username" required="">
+			<input type="password" placeholder="Choose your password" required="">
+			<input type="password" placeholder="Confirm password" required="">
+			<input name="name" type="text" placeholder="Full Name" required="">
+			<input name="email" type="email" placeholder="Email" required="">
+			<input name="DOB" type="date" required="">
+			<button id="submitRegister" name="submit" type="submit" value="Register">Register</button>  
+			<br></br>
+			<a class="links" id="link" href='index.html'>Login page</a>
+		</form>
+	</body>
 </html>
