@@ -105,8 +105,8 @@
       <div id="optionsBar">
         <?php if(strcmp($groupAdmin,$username)==0){?>
       	  <button id="OptionsButton" type="button" onclick="seeOptions()">Options</button>
+        <?php } ?>
 		      <button id="MembersButton" type="button" onclick="seeMembers('<?php echo $currentGroup?>')">Members</button>
-        <?php }?>
       </div>
         <textarea id = "TextArea"
                   rows = "3"
@@ -153,6 +153,7 @@
   </div>
 
   <!-- div to add members / remove members -->
+  <?php if(strcmp($groupAdmin,$username)==0){ ?>
   <div id="requestAddNewMemberGroup" class="membersPopup">
     <label id="titleRequestAddNewMember">Add New User</label><br>
     <label id="addNewMember1">SCC ID: </label><input type="text" placeholder="Enter User's ID " id="addUserID"><br>
@@ -170,6 +171,7 @@
     <label id="removeNewMember4">Name: </label><input type="text" placeholder="Enter User's Name" id="removeUserName"><br>
     <input type="button" value="Submit" id="submitRemoveUser" onclick="removeUserFromGroup('<?php echo $currentGroup;?>')">
   </div>
+<?php } ?>
 </div>
 
 <div id="groupOptions">

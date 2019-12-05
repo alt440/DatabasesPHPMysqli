@@ -1,14 +1,13 @@
-<!-- 
-  authors: Alexendre Therrien, Daniel Vigny-Pau
+<!--
+  authors:  Alexendre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
  -->
 <?php
   session_start();
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
-
   $mysqli = new mysqli("localhost", "root", "");
   $mysqli->select_db("comp353_final_project");
-
   $users = getAllUsers($mysqli);
   $events = getAllEvents($mysqli);
   $groups = getAllGroups($mysqli);
@@ -151,11 +150,9 @@
   <input type="button" class="returnButton" value="RETURN TO HOME PAGE" onclick="returnToHomePage()">
 
   <script>
-
   function returnToHomePage(){
     window.location.href="homePage.php";
   }
-
   function addContentToEvent(username){
     var replyString = document.getElementById('ContentSendContent').value;
     var eventTitle = document.getElementById('EventTitleSendContent').value;
@@ -167,7 +164,6 @@
       }
     });
   }
-
   function addContentToGroup(username){
     var replyString = document.getElementById('ContentSendContentGroup').value;
     var groupID = document.getElementById('GroupIDSendContent').value;
@@ -183,7 +179,6 @@
       }
     });
   }
-
   function setEventActive(){
     var eventID = document.getElementById('EventRemoveEvent').value;
     $.ajax({
@@ -197,10 +192,8 @@
       }
     });
   }
-
   function removeEvent(){
     var eventID= document.getElementById('EventIDRemoveTheEvent').value;
-
     $.ajax({
       type: "GET",
       url: "requests/deleteEvent.php?eventID="+eventID,
@@ -209,10 +202,8 @@
       }
     });
   }
-
   function removeGroup(){
     var groupID = document.getElementById('GroupIDRemoveTheGroup').value;
-
     $.ajax({
       type: "GET",
       url: "requests/deleteGroup.php?groupID="+groupID,
@@ -221,7 +212,6 @@
       }
     });
   }
-
   function setNewEventManager(){
     var eventID = document.getElementById('EventIDSetManager').value;
     var UID = document.getElementById('UIDSetManager').value;
@@ -233,7 +223,6 @@
       }
     });
   }
-
   function dropEventMembership(){
     //cannot drop event membership if admin of a group; the group will be deleted.
     var eventID = document.getElementById('EventIDRemoveEvent').value;
@@ -246,11 +235,9 @@
       }
     });
   }
-
   function dropGroupMembership(){
     var groupID = document.getElementById('GroupIDRemoveGroup').value;
     var username = document.getElementById('UIDRemoveGroup').value;
-
     $.ajax({
       type: "GET",
       url: "requests/dropGroupMembership.php?groupID="+groupID+"&username="+username,
@@ -259,7 +246,6 @@
       }
     });
   }
-
   </script>
   </body>
 </body>

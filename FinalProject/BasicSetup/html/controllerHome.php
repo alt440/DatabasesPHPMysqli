@@ -1,18 +1,14 @@
-<!-- 
-  authors: Alexandre Therrien, Daniel Vigny-Pau
+<!--
+  authors:  Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
  -->
 
 <?php
-
-
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
-
   $mysqli = new mysqli("localhost", "root", "");
   $mysqli->select_db("comp353_final_project");
-
   $getRates = getRates($mysqli);
-
 ?>
 
 <html>
@@ -63,7 +59,6 @@
     <label id="eventTypeTitle"><p class="subtitle">Event Type: </label><select id="eventTypeSelection"></p>
       <?php
         $eventTypes = getEventTypes($mysqli);
-
         while($row = mysqli_fetch_row($eventTypes)){
           ?>
           <option value="<?php echo $row[0]?>"><?php echo $row[0]?></option>
@@ -86,7 +81,6 @@
   </div>
 
   <script>
-
     function addRates(){
       var nbEvents = document.getElementById('nbEventsTxt').value;
       var e = document.getElementById('eventTypeSelection');
@@ -96,7 +90,6 @@
       var price = document.getElementById('priceTxt').value;
       var overflowBandwidth = document.getElementById('overflowBandwidthGBTxt').value;
       var overflowStorage = document.getElementById('overflowStorageGBTxt').value;
-
       $.ajax({
         type: "POST",
         url: "requests/addRatesController.php",
@@ -112,12 +105,9 @@
           }
         }
       });
-
     }
-
     function deleteRates(){
       var RID = document.getElementById('deleteRIDtxt').value;
-
       $.ajax({
         type: "POST",
         url: "requests/deleteRatesController.php",
@@ -134,7 +124,6 @@
         }
       });
     }
-
   </script>
   </div>
 </body>

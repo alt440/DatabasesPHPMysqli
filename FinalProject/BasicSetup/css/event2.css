@@ -3,7 +3,7 @@
 */
 
 body {
-    
+
 	background-color: #46acce;
 }
 
@@ -40,7 +40,7 @@ tr {
 
 .sub {
     color: #404040;
-    font-size: 12px;   
+    font-size: 12px;
 }
 
 .subtitle {
@@ -260,12 +260,12 @@ p{
 #groupListing, #contentTable, #searchStuff, #adminContent{
     margin: 0 auto;
   }
-  
+
   #groupListing{
     position: relative;
     top: -20px;
   }
-  
+
   #seeMembers, #joinEvent, #seePendingRequests, #seeAddUser, #oneTimeCodeEntryEvent, #verifyOneTimeCodeEvent{
     margin: 0 auto;
     display: block;
@@ -274,7 +274,7 @@ p{
   h1,h3, #archivedInfo{
     text-align: center;
   }
-  
+
   #wholeContent{
     position: relative;
     top: 150px;
@@ -282,13 +282,13 @@ p{
   #contentTable{
     padding-top: 100px;
   }
-  
+
   #contentTitle{
     position: relative;
     top: 80px;
   }
-  
-  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+
+  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember, #seeHiddenGroupsPopup{
     position: absolute;
     margin-left: auto;
     margin-right: auto;
@@ -297,14 +297,14 @@ p{
     right: 0;
     z-index: 1;
   }
-  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember, #seeHiddenGroupsPopup{
     background-color: white;
     width: 600px;
     border: solid 2px #737373;
     box-shadow: 5px 5px #457687;
     display: none;
   }
-  
+
   #seeMembersPopup, #seePendingRequests, #requestAddNewMember {
       padding-top: 16px;
       padding-bottom: 16px;
@@ -316,13 +316,13 @@ p{
     height: 3px;
     font-family: Arial, Helvetica, sans-serif;
   }
-  
+
   .innerTablePendingUsername, .innerTablePendingButton{
     display: inline-block;
     width: 100px;
     height: 3px;
   }
-  
+
   .innerTableMembersButtons{
     margin-left: 30px;
     margin-bottom: 7px;
@@ -332,17 +332,17 @@ p{
   /*.innerTableMembersUsername{
     margin-right: 100px;
   }*/
-  
+
   /*.innerTableMembersStatus{
     position: relative;
-  
+
   }*/
-  
+
   #headerUsername, #headerStatus{
     display:inline;
     font-family: Arial, Helvetica, sans-serif;
   }
-  
+
   #table-scroll{
     overflow: auto;
     position: relative;

@@ -270,7 +270,13 @@ if($isMember && $eventInfo[1] == 0){
           }
         }
       ?>
+      <br>
+      <?php if($isEventManager && !$archived){ ?>
+      <label>Remove a member</label>
+      <input type="text" placeholder="Username of member..." id="removeMemberUsername">
+      <input type="button" class="newSmallButton" value="REMOVE MEMBER" onclick="removeMemberFromEvent('<?php echo $eventInfo[0];?>')">
       <br/>
+    <?php } ?>
       <input type="button" class="newSmallButton" value="CLOSE" onclick="closeMemberPopup()">
 
     </div>
@@ -314,9 +320,12 @@ if($isMember && $eventInfo[1] == 0){
           <div class="rowPending">
             <div class="innerTablePendingUsername" id="groupName<?php echo $row[1];?>"><?php echo $row[0];?></div>
             <div class="innerTablePendingButton" id="groupAction<?php echo $row[1];?>"><input type="button" id="groupActionButton<?php echo $row[1];?>" class="newShortButton" value="PUT PUBLIC" onclick="makeGroupPublic(this)"></div>
+          </div>
         <?php
       }
       ?>
+    </div>
+  </div>
       <input type="button" class="newSmallButton" value="CANCEL" onclick="closeHiddenGroupsPopup()"><br>
   </div>
 
@@ -351,11 +360,9 @@ if($isMember && $eventInfo[1] == 0){
 
     function closeMemberPopup(){
       document.getElementById('seeMembersPopup').style.display = "none";
-      document.getElementById('tableSeeMembersPopup').style.display = "none";
     }
     function seeMembers(){
       document.getElementById('seeMembersPopup').style.display = "block";
-      document.getElementById('tableSeeMembersPopup').style.display = "block";
     }
     function seePendingRequests(){
       document.getElementById('seePendingUsersPopup').style.display = "block";
@@ -522,6 +529,17 @@ if($isMember && $eventInfo[1] == 0){
       $.ajax({
         type: "GET",
         url: "requests/makeGroupPublic.php?groupID="+groupID,
+        success: function (response){
+          location.reload();
+        }
+      });
+    }
+
+    function removeMemberFromEvent(eventID){
+      var username = document.getElementById('removeMemberUsername').value;
+      $.ajax({
+        type: "GET",
+        url: "requests/dropEventMembership.php?username="+username+"&eventID="+eventID,
         success: function (response){
           location.reload();
         }

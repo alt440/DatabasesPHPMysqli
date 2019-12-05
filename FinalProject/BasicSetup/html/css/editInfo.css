@@ -135,25 +135,6 @@ background-color: #cc6666;
 border-color: #cc6666;
 }
 
-.centeredDeleteButton{
-    background-color:  #bf4040;
-    border-color: #bf4040;
-    width: 250px;
-    color: white;
-    padding: 8px;
-    border-radius: 4px;
-    display: block;
-    margin-top: 16px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 12px;
-}
-
-.centeredDeleteButton:hover{
-background-color: #cc6666;
-border-color: #cc6666;
-}
-
 .newText {
     padding: 8px;
     border-radius: 4px;
@@ -252,11 +233,3 @@ p{
     border: solid 2px #404040;
     border-collapse: collapse;
 }
-
-.homeTableSmall{
-    margin: auto;
-    width: 400px;
-    border: solid 2px #404040;
-    border-collapse: collapse;
-}
-
