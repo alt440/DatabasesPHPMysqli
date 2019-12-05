@@ -50,6 +50,25 @@
   }
 
   /*
+  This function sets a user as a member of the event, from its pending state.
+  $mysqli: Connection to the DB object
+  $username: Username of the user that we want to join the event.
+  $eventTitle: Title of the event we want to set the user a member to.
+  */
+  function setMemberToEventID($mysqli, $UID, $eventTitle){
+
+    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    if(is_bool($first_row_2[0])){
+      return 'setMemberToEvent: Event with event title '.$eventTitle.' does not exist.';
+    }
+
+    $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$UID." AND EventID=".$first_row_2[0].";");
+    return 'setMemberToEvent: '.$mysqli->error;
+  }
+
+  /*
   This function sets a user as a member of the group, from its pending state.
   ONLY AVAILABLE TO GROUP ADMIN(s)
   $mysqli: Connection to the DB object
@@ -78,12 +97,34 @@
   }
 
   /*
+  This function sets a user as a member of the group, from its pending state.
+  ONLY AVAILABLE TO GROUP ADMIN(s)
+  $mysqli: Connection to the DB object
+  $username: Username of the user that we want to join the group.
+  $groupID: Group ID
+  */
+  function setMemberToGroupID($mysqli, $username, $groupID){
+    //find userID
+    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $first_row = mysqli_fetch_row($result);
+
+    if(is_bool($first_row[0])){
+      return 'setMemberToGroup: User with username '.$username.' does not exist';
+    }
+
+    $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
+    return 'setMemberToGroup: '.$mysqli->error;
+  }
+
+  /*
   Converts a date stamp to a timestamp: 'YYYY-MM-DD' to a long
   $dateStamp: Date in format 'YYYY-MM-DD'
   Returns long
   */
   function convertDateStampToTimeStamp($dateStamp){
     $a = strptime($dateStamp, '%Y-%m-%d');
+    //$a = date('Y-m-d', $dateStamp);
+    //$a = strtotime($dateStamp);
     return mktime(0, 0, 0, $a['tm_mon']+1, $a['tm_mday'], $a['tm_year']+1900);
   }
 
@@ -117,7 +158,6 @@
     if(is_bool($first_row[0])){
       return 'isEventArchived: Event with title '.$eventTitle.' was not found.';
     }
-
     //current time
     $timestamp = time();
 
@@ -309,6 +349,60 @@
   function isUserMemberOfEvent($mysqli, $username, $eventTitle){
     //find EventID and UID
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 'Event with title '.$eventTitle.' could not be found.';
+    }
+    $first_row = mysqli_fetch_row($result);
+
+    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
+      return 'User with username '.$username.' could not be found.';
+    }
+    $first_row_2 = mysqli_fetch_row($result2);
+    $result3 = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE UID=".$first_row_2[0]." AND EventID=".$first_row[0].";");
+    if(is_bool($result3) || mysqli_num_rows($result3)==0){
+      return 0;
+    }
+    $first_row_3 = mysqli_fetch_row($result3);
+    if(strcmp($first_row_3[1],'pending')==0){
+      return 0;
+    }
+
+    return 1;
+  }
+
+  /*
+  Is user a member of the event
+  $mysqli: Connection to the DB object
+  $UID: Username of the user
+  $eventID: ID of the event
+
+  Returns boolean
+  */
+  function isUserMemberOfEventID($mysqli, $UID, $eventID){
+    $result3 = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE UID=".$UID." AND EventID=".$eventID.";");
+    if(is_bool($result3) || mysqli_num_rows($result3)==0){
+      return 0;
+    }
+    $first_row_3 = mysqli_fetch_row($result3);
+    if(strcmp($first_row_3[1],'pending')==0){
+      return 0;
+    }
+
+    return 1;
+  }
+
+  /*
+  Get user as a member of the event
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  $eventTitle: Title of the event
+
+  Returns UID, requestStatus
+  */
+  function getUserMemberOfEvent($mysqli, $username, $eventTitle){
+    //find EventID and UID
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result)){
       return 'Event with title '.$eventTitle.' could not be found.';
     }
@@ -328,7 +422,7 @@
       return 0;
     }
 
-    return 1;
+    return $first_row_3;
   }
 
   /*
@@ -361,6 +455,47 @@
     }
 
     return 1;
+  }
+
+  /*
+  Changes group name
+  $mysqli: Connection to the DB object
+  $groupID: ID of the group
+  $newGroupName: New group name
+  */
+  function changeGroupName($mysqli, $groupID, $newGroupName){
+    $mysqli->query("UPDATE Group_ SET GroupName='".$newGroupName."' WHERE GroupID=".$groupID.";");
+  }
+
+  /*
+  Set event active
+  $mysqli: Connection to the DB object
+  $eventID: ID of the event
+  */
+  function setEventActive($mysqli, $eventID){
+    $mysqli->query("UPDATE Event_ SET Status=0 WHERE EventID=".$eventID.";");
+  }
+
+  /*
+  Set new event manager
+  $mysqli: Connection to the DB object
+  $eventID: ID of the event
+  $UID: User ID
+  */
+  function setEventManager($mysqli, $eventID, $UID){
+    //verify if user in event
+    $result2 = $mysqli->query("SELECT User_.UID, User_.Email, User_.Name, User_.Address, User_.PhoneNumber FROM User_ INNER JOIN Is_Member_Event ON User_.UID=Is_Member_Event.UID WHERE Is_Member_Event.requestStatus='admin' AND EventID=".$eventID.";");
+    $first_row_2 = mysqli_fetch_row($result2);
+
+    $result = $mysqli->query("SELECT User_.Username FROM User_ INNER JOIN Is_Member_Event ON User_.UID=Is_Member_Event.UID WHERE User_.UID=".$UID.";");
+    if(mysqli_num_rows($result)!=0){
+      //then just set request status
+      $result3 = $mysqli->query("UPDATE Is_Member_Event SET requestStatus='admin' WHERE UID=".$UID." AND EventID=".$eventID.";");
+    } else{
+      $mysqli->query("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage) VALUES (".$eventID.",".$UID.",'admin',1)");
+    }
+    //remove other admin status
+    $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$first_row_2[0].";");
   }
 
 ?>

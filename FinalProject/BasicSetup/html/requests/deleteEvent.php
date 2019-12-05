@@ -6,7 +6,7 @@
   $mysqli = new mysqli("localhost", "root", "");
   $mysqli->select_db("comp353_final_project");
 
-  $username = $_REQUEST['username'];
+  //$username = $_REQUEST['username'];
   $eventID = $_REQUEST['eventID'];
   removeEventID($mysqli, $eventID);
 

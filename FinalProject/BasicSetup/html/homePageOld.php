@@ -1,17 +1,15 @@
-<!--
-  authors: Alexandre Therrien, Daniel Vigny-Pau
- -->
-
- <?php
+<?php
     session_start();
     require "../database_layer_get.php";
     require "../database_layer_use_cases.php";
+
     // Connection to the database
     /*$mysqli = new mysqli("urc353.encs.concordia.ca", "urc353_2", "AqtjPG");
     $mysqli->select_db("urc353_2");*/
     //log in to the database
     $mysqli = new mysqli("localhost", "root", "");
   	$mysqli->select_db("comp353_final_project");
+
     // Query the database to display the user info.
     // This variable is set only when the username is the same as the search user value
     $showEmails = 1;
@@ -32,61 +30,59 @@ and open the template in the editor.
 
 <html>
     <head>
-        <title>Home - Share, Contribute & Comment System</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
+         <link rel="stylesheet" type="text/css" href="../css/css-file5.css"/>
+         <link rel="stylesheet" type="text/css" href="../css/searchBar.css"/>
+         <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
          <script src="../js/searchBar.js"></script>
          <script src="../js/jquery-3.4.1.min.js"></script>
     </head>
 
     <body>
-      <div class="bigBox">
-
-      <table class="centeredRow" id="searchStuff">
+      <table id="searchStuff">
         <tr>
           <!--First include a text field to search for user/event-->
-          <td><input type="text" class="newText" id="searchBar" placeholder="Enter event or user..."></td>
-          <td><input type="button" class="newButton" id="searchEvent" value="SEARCH EVENT" onclick="searchEvent()"></td>
-          <td><input type="button" class="newButton" id="searchUser" value="SEARCH USER" onclick="searchUser()"></td>
+          <td><input type="text" id="searchBar" placeholder="Enter event or user..."></td>
+          <td><input type="button" id="searchEvent" value="Search Event" onclick="searchEvent()"></td>
+          <td><input type="button" id="searchUser" value="Search User" onclick="searchUser()"></td>
         </tr>
       </table>
-      <br/>
-      <div class="centered">
-        <h2>Welcome <?php echo $_SESSION["username"];?></h2>
-        <a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a>
-        <br/>
-        <a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a>
+        <h1>Welcome <?php echo $_SESSION["username"];?>,</h1>
+        <form action='login.php' action='POST'>
+            <input type='submit' name='logOut_User' id='logOutMainButton' value='Log Out'/>
+        </form>
          <?php
-
          //from DB layer
          $result = getUser($mysqli, $username);
          $pid = $result[0];
-         if($result[6] == 1){
+
+
          ?>
-         <a class="links" href="controllerHome.php">EDIT RATES</a>
-         <?php
-       } else if($result[6] == 2){
-         ?>
-         <a class="links" href="adminHome.php">MANAGE SYSTEM</a>
-         <?php
-       }?>
-         <br/><br/>
-         <p class="subtitle">USER DATA</p>
-        <table class="homeTable" border="solid 1px">
-            <!-- <tr><td colspan="2"><h3>USER DATA</h3> </td></tr> -->
+        <table class="zui-table" border='1'>
+            <tr><td colspan="2"><h2>User Data In the System</h2> </td></tr>
             <tr><td><b>SCC User ID: </b></td><td> <?php echo $result[0];?></td> </tr>
             <tr><td><b>Name: </b></td><td> <?php echo $result[4];?></td> </tr>
             <tr><td><b>Username: </b></td><td> <?php echo $result[1];?></td> </tr>
             <tr><td><b>Email: </b></td><td> <?php echo $result[3];?></td> </tr>
             <tr><td><b>Date Of Birth: </b></td><td> <?php echo $result[5];?></td> </tr>
             <?php if($showEmails == 1){ ?>
-            <?php }?>
+            <tr><td colspan="2"><a href="editUserInfo.php">Edit user information </a> </td></tr>
+            <tr><td colspan="2"><a href="editUserMemberships.php">Edit group/event details</a></td></tr>
+            <?php if($result[6] == 1){ ?>
+            <tr><td colspan="2"><a href="controllerHome.php">Edit rates</a></td></tr>
+          <?php } else if($result[6] == 2){
+                  ?>
+            <tr><td colspan="2"><a href="adminHome.php">Manage system</a></td></tr>
+            <?php
+                }
+            }?>
         </table>
-        <br/>
         <?php if($showEmails == 1){?>
-        <p class="subtitle">EMAILS RECEIVED</p>
-        <table class="homeTable" border='1'>
+        <h1>Email Notifications</h1>
+        <h3>Emails Received</h3>
+        <table class="zui-table" border='1'>
           <tr><th>Source User</th><th>Email Title</th><th>Content</th></tr>
         <?php
          // Query the database to display the email notifications.
@@ -94,7 +90,7 @@ and open the template in the editor.
          if(is_bool($emails) || mysqli_num_rows($emails) == 0){
            ?>
            <tr>
-             <td colspan="3">You have no received emails</td>
+             <td colspan="3">You currently have no emails</td>
            </tr>
            <?php
          } else{
@@ -112,9 +108,9 @@ and open the template in the editor.
          }
          ?>
        </table>
-      <br/>
-       <p class="subtitle">EMAILS SENT</p>
-       <table class="homeTable" border='1'>
+
+       <h3>Emails Sent</h3>
+       <table class="zui-table" border='1'>
          <tr><th>Target User</th><th>Email Title</th><th>Content</th></tr>
        <?php
         // Query the database to display the email notifications.
@@ -122,7 +118,7 @@ and open the template in the editor.
         if(is_bool($emails) || mysqli_num_rows($emails) == 0){
           ?>
           <tr>
-            <td colspan="3">You have no sent emails</td>
+            <td colspan="3">You currently have no emails</td>
           </tr>
           <?php
         } else{
@@ -141,12 +137,13 @@ and open the template in the editor.
         ?>
       </table>
     <?php }//closes showEmails if condition ?>
-        <!-- <table class="homeTable" border='1'>
-        </table> -->
-        <br/>
+        <table border='1'>
 
-          <p class="subtitle">UPCOMING EVENTS</p>
-           <table border='1' class="homeTable">
+        </table>
+
+
+          <h1>Upcoming Events</h1>
+           <table border='1' class="zui-table">
                <tr><th>Event ID</th><th>Title</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
          // Query the database to display the upcomming events.
@@ -181,14 +178,15 @@ and open the template in the editor.
 
 
         </table>
-        <br/>
 
-           <p class="subtitle">YOUR GROUPS</p>
-           <table border='1' class="homeTable">
+
+           <h1>Your Groups</h1>
+           <table border='1' class="zui-table">
                <tr><th>Group ID</th><th>Title</th><th>Main Event ID</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
          // Query the database to display the upcomming events.
             $result = getGroupsOfUser($mysqli, $username);
+
             if ($result->num_rows > 0) {
                     while ($rowEvent = mysqli_fetch_row($result)) {
                       $latestPost = getLatestPostGroup($mysqli, $rowEvent[0]);
@@ -218,11 +216,6 @@ and open the template in the editor.
 
 
         </table>
-        <br/><br/>
-        <form action='login.php' action='POST'>
-            <input type='submit' class="deleteButton" name='logOut_User' id='logOutMainButton' value='LOG OUT'/>
-        </form>
-              </div>
-            </div>
+
     </body>
 </html>
