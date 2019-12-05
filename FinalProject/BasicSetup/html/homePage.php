@@ -1,11 +1,15 @@
 <!--
-  authors: Francois David, Daniel Vigny-Pau
+  authors: Alexandre Therrien, Daniel Vigny-Pau, Francois
  -->
 
  <?php
     session_start();
     require "../database_layer_get.php";
     require "../database_layer_use_cases.php";
+
+    //reset email page
+    $_SESSION['email']='';
+
     // Connection to the database
     /*$mysqli = new mysqli("urc353.encs.concordia.ca", "urc353_2", "AqtjPG");
     $mysqli->select_db("urc353_2");*/
@@ -57,6 +61,8 @@ and open the template in the editor.
         <a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a>
         <br/>
         <a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a>
+        <br/>
+        <a class="links" href="emails.php">SEND EMAIL</a>
          <?php
 
          //from DB layer
@@ -98,16 +104,14 @@ and open the template in the editor.
            </tr>
            <?php
          } else{
-           $i=0;
            while($row = mysqli_fetch_row($emails)){
              ?>
-             <tr>
-               <td id="sourceUser<?php echo $i;?>"><?php echo getUsername($mysqli, $row[0]);?></td>
-               <td id="emailTitle<?php echo $i;?>"><?php echo $row[1];?></td>
-               <td id="contentEmail<?php echo $i;?>"><?php echo $row[2];?></td>
+             <tr id="email<?php echo $row[3];?>" class="emails">
+               <td id="sourceUser<?php echo $row[3];?>"><?php echo getUsername($mysqli, $row[0]);?></td>
+               <td id="emailTitle<?php echo $row[3];?>"><?php echo $row[1];?></td>
+               <td id="contentEmail<?php echo $row[3];?>"><?php echo $row[2];?></td>
              </tr>
              <?php
-             $i+=1;
            }
          }
          ?>
@@ -129,7 +133,7 @@ and open the template in the editor.
           $i=0;
           while($row = mysqli_fetch_row($emails)){
             ?>
-            <tr>
+            <tr id="emailsSent<?php echo $row[3];?>" class="emails">
               <td id="targetUser<?php echo $i;?>"><?php echo getUsername($mysqli, $row[0]);?></td>
               <td id="emailTitle<?php echo $i;?>"><?php echo $row[1];?></td>
               <td id="contentEmail<?php echo $i;?>"><?php echo $row[2];?></td>
@@ -224,5 +228,24 @@ and open the template in the editor.
         </form>
               </div>
             </div>
+
+
+    <script>
+
+      $(document).ready(function(){
+        $(".emails").click(function(){
+          var valID = $(this).attr('id').match(/\d+/)[0];
+          $.ajax({
+            type: "GET",
+            url: "requests/setEmailID.php?email="+valID,
+            success: function (response){
+              window.location.href="emails.php";
+            }
+          });
+        });
+      })
+
+    </script>
+
     </body>
 </html>
