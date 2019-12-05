@@ -69,7 +69,10 @@ and open the template in the editor.
             <?php if($showEmails == 1){ ?>
             <tr><td colspan="2"><a href="editUserInfo.php">Edit user information </a> </td></tr>
             <tr><td colspan="2"><a href="editUserMemberships.php">Edit group/event details</a></td></tr>
-            <?php }?>
+            <?php if($result[6] == 1){ ?>
+            <tr><td colspan="2"><a href="controllerHome.php">Edit rates</a></td></tr>
+            <?php }
+            }?>
         </table>
         <?php if($showEmails == 1){?>
         <h1>Email Notifications</h1>

@@ -520,7 +520,7 @@
     if(is_bool($first_row_2[0])){
       return 'addUserToGroup: User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
-    
+
     //now create the entry. set user with status 'pending'
     $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".$groupID.",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
     return 'addUserToGroup: '.$mysqli->error;
@@ -534,15 +534,17 @@
   $bandwidthGB: Bandwidth that the event takes in gigabytes (int)
   $eventType: Type of event (family, community, non-profit, profit) (string)
   $price: Price for this package (double)
+  $overflowFeeStorage: Price added when user gets over max storage (in GB)
+  $overflowFeeBandwidth: Price added when user gets over max bandwidth (in GB)
   */
   function addRates($mysqli, $numberEvents, $storageGB, $bandwidthGB, $eventType,
-    $price){
+    $price, $overflowFeeStorage, $overflowFeeBandwidth){
     if(doesEventTypeExist($eventType)){
         return 'addRates: Was this event type added to the event types table?';
       }
 
-    $mysqli->query("INSERT INTO Rates values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.");");
-    return 'addRates: '.$mysqli->error;
+    $mysqli->query("INSERT INTO Rates values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.",".$overflowFeeBandwidth.",".$overflowFeeStorage.");");
+    return $mysqli->error;
   }
 
   /*

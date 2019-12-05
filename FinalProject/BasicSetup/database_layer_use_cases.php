@@ -122,7 +122,9 @@
   Returns long
   */
   function convertDateStampToTimeStamp($dateStamp){
-    $a = strptime($dateStamp, '%Y-%m-%d');
+    //$a = strptime($dateStamp, '%Y-%m-%d');
+    //$a = date('Y-m-d', $dateStamp);
+    $a = strtotime($dateStamp);
     return mktime(0, 0, 0, $a['tm_mon']+1, $a['tm_mday'], $a['tm_year']+1900);
   }
 
