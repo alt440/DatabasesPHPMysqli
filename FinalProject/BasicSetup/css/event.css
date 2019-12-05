@@ -1,0 +1,349 @@
+/*
+    author: Daniel Vigny-Pau, Alexandre Therrien
+*/
+
+body {
+    
+	background-color: #deeaee;
+}
+
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+
+h2{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin-bottom:4px;
+}
+
+h3{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #404040;
+
+}
+
+td {
+    font-size: 14px;
+    font-family: Arial;
+}
+
+th {
+    font-family: Arial;
+}
+
+tr {
+    margin: 16px;
+}
+
+.sub {
+    color: #404040;
+    font-size: 12px;   
+}
+
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 4px;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 4px;
+}
+
+.newButton {
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 12px;
+}
+
+.newButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.newSmallButton{
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newSmallButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.newShortButton{
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newShortButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.centeredButton{
+    width: 250px;
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    display: block;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 12px;
+}
+
+.centeredButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.returnButton {
+    width: 250px;
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    margin-top: 28px;
+    border-radius: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 14px;
+    font-size: 12px;
+}
+
+.returnButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.deleteButton{
+    background-color:  #bf4040;
+    border-color: #bf4040;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 12px;
+}
+
+.deleteButton:hover{
+background-color: #cc6666;
+border-color: #cc6666;
+}
+
+.newText {
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    width: 200px;
+}
+
+
+.centeredNewText {
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.bigBox {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    background-color: white;
+    padding-top: 14px;
+    padding-bottom: 28px;
+    padding-left: 32px;
+    padding-right: 32px;
+    border: solid 2px #737373;
+    box-shadow: 5px 5px #457687;
+}
+
+.smallBox {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border: solid 2px #737373;
+    background-color: white;
+    padding-top: 14px;
+    padding-bottom: 28px;
+    padding-left: 32px;
+    padding-right: 32px;
+    box-shadow: 5px 5px #457687;
+    font-family: Arial;
+}
+
+.currentInfo {
+    color: #404040;
+    padding-top: 16px;
+}
+
+.loginBox {
+    margin: auto;
+    max-width: 400px;
+    text-align: center;
+    font-family: Arial;
+}
+
+.loginP {
+    font-family: Arial;
+    color: #404040;
+    font-size: 12px;
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.links{
+    text-decoration: none;
+    text-align: center;
+    font-size: 12px;
+    color: #457687;
+    font-family: Arial;
+}
+
+.links:hover{
+    color: #abc9d4;
+}
+
+.centeredRow {
+    margin: auto;
+    border: none;
+}
+
+.centered{
+    text-align: center;
+    margin: auto;
+}
+
+.centeredTable {
+    margin: auto;
+    text-align: right;
+}
+
+.homeTable{
+    margin: auto;
+    width: 600px;
+    border: solid 2px #404040;
+    border-collapse: collapse;
+}
+
+.widerHomeTableCell{
+    padding: 8px;
+    margin: auto;
+    width: 600px;
+    border: solid 2px #404040;
+    border-collapse: collapse;
+}
+
+
+#groupListing, #contentTable, #searchStuff, #adminContent{
+    margin: 0 auto;
+  }
+  
+  #groupListing{
+    position: relative;
+    top: -20px;
+  }
+  
+  #seeMembers, #joinEvent, #seePendingRequests, #seeAddUser, #oneTimeCodeEntryEvent, #verifyOneTimeCodeEvent{
+    margin: 0 auto;
+    display: block;
+  }
+
+  h1,h3, #archivedInfo{
+    text-align: center;
+  }
+  
+  #wholeContent{
+    position: relative;
+    top: 150px;
+  }
+  #contentTable{
+    padding-top: 100px;
+  }
+  
+  #contentTitle{
+    position: relative;
+    top: 80px;
+  }
+  
+  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top:25%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+  #seeMembersPopup, #seePendingUsersPopup, #requestAddNewMember{
+    background-color: white;
+    width: 600px;
+    border: solid 2px #737373;
+    box-shadow: 5px 5px #457687;
+    display: none;
+  }
+  
+  #seeMembersPopup, #seePendingRequests, #requestAddNewMember {
+      padding-top: 16px;
+      padding-bottom: 16px;
+  }
+
+  .innerTableMembersUsername, .innerTableMembersStatus, .innerTableMembersButtons{
+    display: inline-block;
+    width: 100px;
+    height: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .innerTablePendingUsername, .innerTablePendingButton{
+    display: inline-block;
+    width: 100px;
+    height: 3px;
+  }
+  
+  .innerTableMembersButtons{
+    margin-left: 30px;
+    margin-bottom: 7px;
+    width: 150px;
+    height: 20px;
+  }
+  /*.innerTableMembersUsername{
+    margin-right: 100px;
+  }*/
+  
+  /*.innerTableMembersStatus{
+    position: relative;
+  
+  }*/
+  
+  #headerUsername, #headerStatus{
+    display:inline;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #table-scroll{
+    overflow: auto;
+    position: relative;
+  }
