@@ -40,7 +40,7 @@ up with to design the whole database.
 
 You can go on draw.io and upload this file to see the FinalER.
 
-# Missing functionalities
+# Missing functionalities back end
 - Cannot reply with images
 - Limiting functionality to the comment (compares content's string to know CID, weak way of doing it)
 - Admin should be able to assign an event manager to an event
@@ -52,3 +52,13 @@ You can go on draw.io and upload this file to see the FinalER.
 - ~~Get events of a user/ Get groups of a user~~
 - Edit (~~user details~~, group, event)
 - Add debit info to an event manager
+
+# Missing functionalities front end
+- See the pending requests to join group/~~event~~ and be able to accept members
+- The whole group page (Charles Antoine started it, in folder Group): Invite members to group, remove members from group, reply with images
+- The admin functionalities to be the supreme leader (accept event demands, select event admins, remove people from all groups/ all events,...)
+- Scheduling an event date
+- The controller functionalities to be the finance guy
+- ~~Sending the one time code to invite new users to the group~~
+- The 'hasSeenLastMessage' functionality
+
