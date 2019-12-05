@@ -21,7 +21,7 @@
     $first_row = mysqli_fetch_row($result);
 
 
-    $result2 = $mysqli->query("SELECT SourceUser, TitleEmail, Content FROM Emails WHERE TargetUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
+    $result2 = $mysqli->query("SELECT SourceUser, TitleEmail, Content, EID FROM Emails WHERE TargetUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
     return $result2;
   }
 
@@ -40,7 +40,7 @@
     }
     $first_row = mysqli_fetch_row($result);
 
-    $result2 = $mysqli->query("SELECT TargetUser, TitleEmail, Content FROM Emails WHERE SourceUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
+    $result2 = $mysqli->query("SELECT TargetUser, TitleEmail, Content, EID FROM Emails WHERE SourceUser=".$first_row[0]." ORDER BY TimeStamp DESC;");
     return $result2;
   }
 
@@ -328,6 +328,27 @@
   }
 
   /*
+  Gets all the groups that belong to an event
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event
+
+  Return all the group names that belong to the event.
+  */
+  function getGroupsInEventHidden($mysqli, $eventTitle){
+    //first find event
+    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 'getGroupsInEvent: Event with title '.$eventTitle.' was not found.';
+    }
+    $first_row = mysqli_fetch_row($result);
+
+    //now find all groups
+    $result2 = $mysqli->query("SELECT Group_.GroupName, Group_.GroupID, Is_Member_Group.UID FROM Group_ INNER JOIN Is_Member_Group ON Is_Member_Group.GroupID=Group_.GroupID WHERE Group_.MainEventID=".$first_row[0]." AND Is_Member_Group.requestStatus='admin' AND Group_.Privacy = 1;");
+    return $result2;
+  }
+
+  /*
   Basic getter that gets all the associated details with the event
   $mysqli: Connection to the DB object
   $eventTitle: Title of the event
@@ -520,6 +541,16 @@
   */
   function getGroupMainEventID($mysqli, $groupID){
     $result = $mysqli->query("SELECT MainEventID FROM Group_ WHERE GroupID=".$groupID);
+    return mysqli_fetch_row($result);
+  }
+
+  /*
+  Get email info with ID.
+  $mysqli: Connection to the DB object
+  $emailID: ID of the email
+  */
+  function getEmailInfo($mysqli, $emailID){
+    $result = $mysqli->query("SELECT * FROM Emails WHERE EID=".$emailID.";");
     return mysqli_fetch_row($result);
   }
 

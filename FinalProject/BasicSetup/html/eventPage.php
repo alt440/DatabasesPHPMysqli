@@ -14,6 +14,7 @@
     $mysqli->select_db("comp353_final_project");
     //ask DB for the event information
     $result = getGroupsInEvent($mysqli, $eventTitle);
+    $hiddenGroups = getGroupsInEventHidden($mysqli, $eventTitle);
     $eventInfo = getEvent($mysqli, $eventTitle);
     //is Event archived?
     $archived = isEventArchived($mysqli, $eventTitle);
@@ -42,7 +43,15 @@
 <head>
   <meta charset="utf-8">
   <title>Event page - Share, Contribute & Comment System</title>
+  <?php if($eventInfo[6] == 1){?>
   <link rel="stylesheet" type="text/css" href="../css/event.css">
+  <?
+} else{
+  ?>
+  <link rel="stylesheet" type="text/css" href="../css/event2.css">
+<?php
+}
+?>
   <script src="../js/searchBar.js"></script>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
@@ -95,6 +104,8 @@
       <input type="button" class="newButton" id="seePendingRequests" value="SEE PENDING REQUESTS" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
       <br/>
       <input type="button" class="newButton" id="seeAddUser" value="REQUEST A USER TO JOIN" onclick="seeAddUser()">
+      <br>
+      <input type="button" class="newButton" id="seeHiddenGroups" value="VIEW HIDDEN GROUPS" onclick="openHiddenGroupsPopup()">
       <?php
     }
     if($isMember){
@@ -102,7 +113,7 @@
 
       <input type="button" class="newButton" id="seeMembers" value="SEE MEMBERS" onclick="seeMembers()">
       <!-- <br/>
-      <input type="button" class="newButton" id="seePendingRequests" value="SEE PENDING REQUESTS" onclick="seePendingRequests('<?php echo $eventTitle;?>')">
+      <input type="button" class="newButton" id="seePendingRequests" value="SEE PENDING REQUESTS" onclick="seePendingRequests('<?php //echo $eventTitle;?>')">
       <br/>
       <input type="button" class="newButton" id="seeAddUser" value="REQUEST A USER TO JOIN" onclick="seeAddUser()">
        -->
@@ -293,6 +304,22 @@ if($isMember && $eventInfo[1] == 0){
     </div>
   </div>
 
+  <div id="seeHiddenGroupsPopup">
+    <label id="titleSeeHiddenGroups"><p class="subtitle">AUTHORIZE HIDDEN GROUPS</p></label>
+    <div id="table-scroll-hidden-groups">
+      <div id="tableHiddenGroupsDivPopup">
+       <?php
+        while($row = mysqli_fetch_row($hiddenGroups)){
+          ?>
+          <div class="rowPending">
+            <div class="innerTablePendingUsername" id="groupName<?php echo $row[1];?>"><?php echo $row[0];?></div>
+            <div class="innerTablePendingButton" id="groupAction<?php echo $row[1];?>"><input type="button" id="groupActionButton<?php echo $row[1];?>" class="newShortButton" value="PUT PUBLIC" onclick="makeGroupPublic(this)"></div>
+        <?php
+      }
+      ?>
+      <input type="button" class="newSmallButton" value="CANCEL" onclick="closeHiddenGroupsPopup()"><br>
+  </div>
+
   <div id="requestAddNewMember">
     <label id="titleRequestAddNewMember"><p class="subtitle">ADD NEW USER</p></label>
     <br/>
@@ -314,6 +341,14 @@ if($isMember && $eventInfo[1] == 0){
 <?php }?>
 
   <script>
+    function closeHiddenGroupsPopup(){
+      document.getElementById('seeHiddenGroupsPopup').style.display = "none";
+    }
+
+    function openHiddenGroupsPopup(){
+      document.getElementById('seeHiddenGroupsPopup').style.display = "block";
+    }
+
     function closeMemberPopup(){
       document.getElementById('seeMembersPopup').style.display = "none";
       document.getElementById('tableSeeMembersPopup').style.display = "none";
@@ -480,6 +515,17 @@ if($isMember && $eventInfo[1] == 0){
     }
     function returnToHomePage(){
       window.location.href="homePage.php";
+    }
+
+    function makeGroupPublic(element){
+      var groupID = (element.id).match(/\d+/)[0];
+      $.ajax({
+        type: "GET",
+        url: "requests/makeGroupPublic.php?groupID="+groupID,
+        success: function (response){
+          location.reload();
+        }
+      });
     }
   </script>
 

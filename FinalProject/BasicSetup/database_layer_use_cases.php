@@ -498,4 +498,13 @@
     $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$first_row_2[0].";");
   }
 
+  /*
+  Set group public
+  $mysqli: Connection to the DB object
+  $groupID: ID of the group
+  */
+  function setGroupPublic($mysqli, $groupID){
+    $mysqli->query("UPDATE Group_ SET Privacy=0 WHERE GroupID=".$groupID.";");
+  }
+
 ?>
