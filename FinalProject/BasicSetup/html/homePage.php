@@ -49,40 +49,38 @@ and open the template in the editor.
         <tr>
           <!--First include a text field to search for user/event-->
           <td><input type="text" class="newText" id="searchBar" placeholder="Enter event or user..."></td>
-          <td><input type="button" class="newButton" id="searchEvent" value="Search Event" onclick="searchEvent()"></td>
-          <td><input type="button" class="newButton" id="searchUser" value="Search User" onclick="searchUser()"></td>
+          <td><input type="button" class="newButton" id="searchEvent" value="SEARCH EVENT" onclick="searchEvent()"></td>
+          <td><input type="button" class="newButton" id="searchUser" value="SEARCH USER" onclick="searchUser()"></td>
         </tr>
       </table>
       <br/>
       <div class="centered">
-        <h1>Welcome <?php echo $_SESSION["username"];?></h1>
-        <form action='login.php' action='POST'>
-            <input type='submit' class="newButton" name='logOut_User' id='logOutMainButton' value='Log Out'/>
-        </form>
-        <br/><br/>
+        <h2>Welcome <?php echo $_SESSION["username"];?></h2>
+        <a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a>
+        <br/>
+        <a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a>
+         
          <?php
          //from DB layer
          $result = getUser($mysqli, $username);
          $pid = $result[0];
-
-
          ?>
-        <table class="zui-table" border="solid 1px">
-            <tr><td colspan="2"><h2>User Data</h2> </td></tr>
+         <br/><br/>
+         <p class="subtitle">USER DATA</p>
+        <table class="homeTable" border="solid 1px">
+            <!-- <tr><td colspan="2"><h3>USER DATA</h3> </td></tr> -->
             <tr><td><b>SCC User ID: </b></td><td> <?php echo $result[0];?></td> </tr>
             <tr><td><b>Name: </b></td><td> <?php echo $result[4];?></td> </tr>
             <tr><td><b>Username: </b></td><td> <?php echo $result[1];?></td> </tr>
             <tr><td><b>Email: </b></td><td> <?php echo $result[3];?></td> </tr>
             <tr><td><b>Date Of Birth: </b></td><td> <?php echo $result[5];?></td> </tr>
             <?php if($showEmails == 1){ ?>
-            <tr><td colspan="2"><a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a> </td></tr>
-            <tr><td colspan="2"><a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a></td></tr>
             <?php }?>
         </table>
+        <br/>   
         <?php if($showEmails == 1){?>
-        <h2>Email Notifications</h2>
-        <h3>Emails Received</h3>
-        <table class="zui-table" border='1'>
+        <p class="subtitle">EMAILS RECEIVED</p>
+        <table class="homeTable" border='1'>
           <tr><th>Source User</th><th>Email Title</th><th>Content</th></tr>
         <?php
          // Query the database to display the email notifications.
@@ -90,7 +88,7 @@ and open the template in the editor.
          if(is_bool($emails) || mysqli_num_rows($emails) == 0){
            ?>
            <tr>
-             <td colspan="3">You currently have no emails</td>
+             <td colspan="3">You have no received emails</td>
            </tr>
            <?php
          } else{
@@ -108,9 +106,9 @@ and open the template in the editor.
          }
          ?>
        </table>
-
-       <h3>Emails Sent</h3>
-       <table class="zui-table" border='1'>
+      <br/>
+       <p class="subtitle">EMAILS SENT</p>
+       <table class="homeTable" border='1'>
          <tr><th>Target User</th><th>Email Title</th><th>Content</th></tr>
        <?php
         // Query the database to display the email notifications.
@@ -118,7 +116,7 @@ and open the template in the editor.
         if(is_bool($emails) || mysqli_num_rows($emails) == 0){
           ?>
           <tr>
-            <td colspan="3">You currently have no emails</td>
+            <td colspan="3">You have no sent emails</td>
           </tr>
           <?php
         } else{
@@ -137,13 +135,13 @@ and open the template in the editor.
         ?>
       </table>
     <?php }//closes showEmails if condition ?>
-        <table border='1'>
+        <!-- <table class="homeTable" border='1'>
 
-        </table>
+        </table> -->
+        <br/>
 
-
-          <h2>Upcoming Events</h2>
-           <table border='1' class="zui-table">
+          <p class="subtitle">UPCOMING EVENTS</p>
+           <table border='1' class="homeTable">
                <tr><th>Event ID</th><th>Title</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
          // Query the database to display the upcomming events.
@@ -178,10 +176,10 @@ and open the template in the editor.
 
 
         </table>
+        <br/>
 
-
-           <h2>Your Groups</h2>
-           <table border='1' class="zui-table">
+           <p class="subtitle">YOUR GROUPS</p>
+           <table border='1' class="homeTable">
                <tr><th>Group ID</th><th>Title</th><th>Main Event ID</th><th>Latest Post</th><th>Latest Post Timestamp</th></tr>
         <?php
          // Query the database to display the upcomming events.
@@ -216,6 +214,10 @@ and open the template in the editor.
 
 
         </table>
+        <br/><br/>
+        <form action='login.php' action='POST'>
+            <input type='submit' class="deleteButton" name='logOut_User' id='logOutMainButton' value='LOG OUT'/>
+        </form>
               </div>
             </div>
     </body>

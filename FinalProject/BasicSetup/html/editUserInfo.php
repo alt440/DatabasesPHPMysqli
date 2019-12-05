@@ -27,69 +27,69 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Modify User Information</title>
+  <title>Edit user information - Share, Contribute & Comment System</title>
   <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
   <div class="bigBox">
-  <h2>Modify User Information</h2>
+  <h2>Edit user information</h2>
   <table id="userInformation">
     <tr>
-      <td class="currentInfo">Current Email: <?php echo $userInfo[3];?></td>
+      <td class="currentInfo"><b>Current email: </b><?php echo $userInfo[3];?></td>
     </tr><tr>
-      <td class="sub">Change Email</td>
+      <td class="sub">Change email</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeEmailTxt" placeholder="New email..."><input type="button"  class="newButton" value="Change Email" id="changeEmail" onclick="changeEmail('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeEmailTxt" placeholder="New email..."><input type="button"  class="newButton" value="CHANGE EMAIL" id="changeEmail" onclick="changeEmail('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Password cannot be seen for security reasons</td>
+      <td class="currentInfo"><b>Password:</b> hidden for your privacy</td>
     </tr><tr>
-      <td class="sub">Change Password</td>
+      <td class="sub">Change password</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changePasswordTxt" placeholder="New password..."><input type="text" class="newText" id="oldPassword" placeholder="Old password..."><input type="button" class="newButton" value="Change Password" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changePasswordTxt" placeholder="New password..."><input type="text" class="newText" id="oldPassword" placeholder="Old password..."><input type="button" class="newButton" value="CHANGE PASSWORD" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Current Name: <?php echo $userInfo[4];?></td>
+      <td class="currentInfo"><b>Current name:</b> <?php echo $userInfo[4];?></td>
     </tr><tr>
-      <td class="sub">Change Name</td>
+      <td class="sub">Change name</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeNameTxt" placeholder="New name..."><input type="button" class="newButton" value="Change Name" id="changeName" onclick="changeName('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeNameTxt" placeholder="New name..."><input type="button" class="newButton" value="CHANGE NAME" id="changeName" onclick="changeName('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Bank Name cannot be seen for security reasons</td>
+      <td class="currentInfo"><b>Bank name: </b>hidden for your privacy</td>
     </tr><tr>
-      <td class="sub">Change Bank Name</td>
+      <td class="sub">Change nank name</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeBankNameTxt" placeholder="New bank name..."><input type="button" class="newButton" value="Change Bank Name" id="changeBankName" onclick="changeBankName('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeBankNameTxt" placeholder="New bank name..."><input type="button" class="newButton" value="CHANGE BANK NAME" id="changeBankName" onclick="changeBankName('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Credit card number cannot be seen for security reasons</td>
+      <td class="currentInfo"><b>Credit card number: </b>hidden for your privacy</td>
     </tr><tr>
-      <td class="sub">Change Credit Card Number</td>
+      <td class="sub">Change credit card number</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeCreditCardNbTxt" placeholder="New credit card number..."><input type="button" class="newButton" value="Change Credit Card Number" id="changeCreditCardNb" onclick="changeCreditCardNb('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeCreditCardNbTxt" placeholder="New credit card number..."><input type="button" class="newButton" value="CHANGE CARD NUMBER" id="changeCreditCardNb" onclick="changeCreditCardNb('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Account number cannot be seen for security reasons</td>
+      <td class="currentInfo"><b>Account number: </b>hidden for your privacy</td>
     </tr><tr>
-      <td class="sub">Change Account Number</td>
+      <td class="sub">Change account number</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeAccountNbTxt" placeholder="New account number..."><input type="button" class="newButton" value="Change Account Number" id="changeAccountNb" onclick="changeAccountNb('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeAccountNbTxt" placeholder="New account number..."><input type="button" class="newButton" value="CHANGE ACCOUNT NUMBER" id="changeAccountNb" onclick="changeAccountNb('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Current Address: <?php echo $userInfo[10];?></td>
+      <td class="currentInfo"><b>Current address: </b><?php echo $userInfo[10];?></td>
     </tr><tr>
-      <td class="sub">Change Address</td>
+      <td class="sub">Change address</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changeAddressTxt" placeholder="New address..."><input type="button" class="newButton" value="Change Address" id="changeAddress" onclick="changeAddress('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changeAddressTxt" placeholder="New address..."><input type="button" class="newButton" value="CHANGE ADDRESS" id="changeAddress" onclick="changeAddress('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Current Phone Number: <?php echo $userInfo[11];?></td>
+      <td class="currentInfo"><b>Current phone number: </b><?php echo $userInfo[11];?></td>
     </tr><tr>
-      <td class="sub">Change Phone Number</td>
+      <td class="sub">Change phone number</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changePhoneNumberTxt" placeholder="New phone number..."><input type="button" class="newButton"  value="Change Phone Number" id="changePhoneNumber" onclick="changePhoneNumber('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="text" class="newText" id="changePhoneNumberTxt" placeholder="New phone number..."><input type="button" class="newButton"  value="CHANGE PHONE" id="changePhoneNumber" onclick="changePhoneNumber('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
-      <td class="currentInfo">Delete User Account</td>
+      <td class="currentInfo"><b>Delete user account</b></td>
     </tr><tr>
-      <td><input type="button" class="newButton" value="Delete User Account" id="deleteAllUser" onclick="deleteUser('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="button" class="deleteButton" value="DELETE USER ACCOUNT" id="deleteAllUser" onclick="deleteUser('<?php echo $userInfo[1];?>')"></td>
     </tr>
   </table>
-  <input type="button" class="returnButton" value="Return to home page" id="returnToHomePage" onclick="returnToHomePage()">
+  <input type="button" class="returnButton" value="RETURN TO HOMEPAGE" id="returnToHomePage" onclick="returnToHomePage()">
 
   <script>
 

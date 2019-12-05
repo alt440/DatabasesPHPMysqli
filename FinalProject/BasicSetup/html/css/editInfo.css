@@ -43,6 +43,14 @@ tr {
     font-size: 12px;   
 }
 
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 4px;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 4px;
+}
+
 .newButton {
     background-color:  #78a9ba;
     border-color: #78a9ba;
@@ -50,9 +58,25 @@ tr {
     padding: 8px;
     border-radius: 4px;
     width: 200px;
+    font-size: 12px;
 }
 
 .newButton:hover{
+    background-color: #abc9d4;
+    border-color: #abc9d4;
+}
+
+.newSmallButton{
+    background-color:  #78a9ba;
+    border-color: #78a9ba;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newSmallButton:hover{
     background-color: #abc9d4;
     border-color: #abc9d4;
 }
@@ -68,6 +92,7 @@ tr {
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
+    font-size: 12px;
 }
 
 .centeredButton:hover{
@@ -87,11 +112,27 @@ tr {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 14px;
+    font-size: 12px;
 }
 
 .returnButton:hover{
     background-color: #abc9d4;
     border-color: #abc9d4;
+}
+
+.deleteButton{
+    background-color:  #bf4040;
+    border-color: #bf4040;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 12px;
+}
+
+.deleteButton:hover{
+background-color: #cc6666;
+border-color: #cc6666;
 }
 
 .newText {
@@ -138,15 +179,8 @@ tr {
 }
 
 .currentInfo {
-    font-weight: bold;
     color: #404040;
     padding-top: 16px;
-}
-
-.centeredTable {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
 }
 
 .loginBox {
@@ -171,6 +205,7 @@ p{
     text-align: center;
     font-size: 12px;
     color: #457687;
+    font-family: Arial;
 }
 
 .links:hover{
@@ -187,9 +222,14 @@ p{
     margin: auto;
 }
 
-table{
-    width: 600px;
+.centeredTable {
     margin: auto;
+    text-align: right;
+}
+
+.homeTable{
+    margin: auto;
+    width: 600px;
     border: solid 2px #404040;
     border-collapse: collapse;
 }

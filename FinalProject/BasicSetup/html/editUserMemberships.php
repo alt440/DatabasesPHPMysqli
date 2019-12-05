@@ -25,16 +25,17 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Edit Group/Event Details</title>
+  <title>Edit group/event details - Share, Contribute & Comment System</title>
   <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
   <div class="smallBox">
-  <h2>Edit Group/Event Details</h2>
-  <table class="centeredTable" id="userMemberships">
+  <h2>Edit group/event details</h2>
+  <br/>
+  <table class="centeredRow" id="userMemberships">
     <tr>
-      <th>Events</th>
+      <td colspan="2"><p class="subtitle">EVENTS</p></td>
     </tr>
     <?php
     if(is_bool($events) || mysqli_num_rows($events) == 0){
@@ -48,13 +49,15 @@
         if($row[2]=='admin'){
           ?>
           <tr>
-            <td>Event <?php echo $row[1];?>: <input type="button" value="Delete Event" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
+            <td>Event <b><?php echo $row[1];?></b>: </td>
+            <td><input type="button" class="newSmallButton" value="DELETE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
           </tr>
           <?php
         } else{
         ?>
         <tr>
-          <td>Event <?php echo $row[1];?>: <input type="button" value="Leave Event" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
+          <td>Event <b><?php echo $row[1];?></b>: </td>
+          <td><input type="button" class="newSmallButton" value="LEAVE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
         </tr>
         <?php
         }
@@ -64,7 +67,7 @@
       <td><br/></td>
     </tr>
     <tr>
-      <th>Groups</th>
+      <td colspan="2"><p class="subtitle">GROUPS</p></td>
     </tr>
     <?php
       if(is_bool($groups) || mysqli_num_rows($groups) == 0){
@@ -78,13 +81,15 @@
           if($row[3]=='admin'){
             ?>
             <tr>
-              <td>Group <?php echo $row[1]?>: <input type="button" value="Delete Group" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
+              <td>Group <b><?php echo $row[1]?></b>: </td>
+              <td><input type="button" class="newSmallButton" value="DELETE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
             </tr>
             <?php
           } else{
           ?>
           <tr>
-            <td>Group <?php echo $row[1]?>: <input type="button" value="Leave Group" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
+            <td>Group <b><?php echo $row[1]?></b>: </td>
+            <td><input type="button" class="newSmallButton" value="LEAVE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
           </tr>
           <?php
           }
@@ -92,18 +97,17 @@
       }?>
     </table>
 
-    <h2>Add an Event</h2>
-    <table class="centeredTable" id="addEventTable">
+    <br/><br/>
+    <p class="subtitle">ADD AN EVENT</p>
+    <table class="centeredRow" id="addEventTable">
     <tr>
-      <td>Event Name</td>
+      <td><p class="sub">Event Name</p></td>
     </tr>  
     <tr>
         <td><input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
-    <br/> <br/>
+   
         <form>
-          <br/>
-            Event Type
-            <br/><br/>
+            <p class="sub">Event Type</p>
             <select id="eventTypesSelection">
               <?php
                 $eventTypes = getEventTypes($mysqli);
@@ -116,12 +120,13 @@
                 ?>
             </select>
           </form>
-          <br/>Event Template<br/><br/> <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
-          <br><input type="button" class="centeredButton" value="Add an Event" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
+          <p class="sub">Event Template</p>
+          <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
+          <br><input type="button" class="centeredButton" value="ADD AN EVENT" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
       </tr>
     </table>
 
-    <input type="button" value="Return to home page" class="returnButton" id="returnToHomePage" onclick="returnToHomePage()">
+    <input type="button" value="RETURN TO HOMEPAGE" class="returnButton" id="returnToHomePage" onclick="returnToHomePage()">
 
     <script>
     function returnToHomePage(){
