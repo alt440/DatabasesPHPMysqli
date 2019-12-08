@@ -26,7 +26,6 @@
     $_SESSION['searchUser']='';
   }
 ?>
-
 <!--author: Charles-Antoine Guité 40063098
             Alexandre Therrien 40057134
 -->

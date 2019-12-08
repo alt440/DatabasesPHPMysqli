@@ -1,7 +1,3 @@
-<!--
-  authors:  Alexandre Therrien 40057134,
-            Daniel Vigny-Pau 40034769
- -->
  <?php
   session_start();
   //reset group
@@ -41,6 +37,10 @@
 ?>
 
 <html>
+<!--
+  authors:  Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
+ -->
 <head>
   <meta charset="utf-8">
   <title>Event page - Share, Contribute & Comment System</title>
@@ -53,6 +53,7 @@
 <?php
 }
 ?>
+  <link rel="stylesheet" type="text/css" href="../css/event.css">
   <script src="../js/searchBar.js"></script>
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>

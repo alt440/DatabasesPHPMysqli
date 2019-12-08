@@ -1,7 +1,3 @@
-<!-- 
-  authors:  Alexendre Therrien 40057134,
-            Daniel Vigny-Pau 40034769
- -->
 <?php
   session_start();
   require "../database_layer_get.php";
@@ -16,6 +12,10 @@
   $username = $_SESSION['username'];
 ?>
 <html>
+<!-- 
+  authors:  Alexendre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
+ -->
 <head>
   <meta charset="utf-8">
   <title>Manage System</title>

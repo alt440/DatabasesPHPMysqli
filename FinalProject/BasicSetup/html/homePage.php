@@ -1,9 +1,3 @@
-<!--
-  authors:  Francois David 40046319,
-            Alexandre Therrien 40057134,
-            Daniel Vigny-Pau 40034769
- -->
-
  <?php
     session_start();
     require "../database_layer_get.php";
@@ -36,7 +30,13 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 
+
 <html>
+<!--
+  authors:  Francois David 40046319,
+            Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
+ -->
     <head>
         <title>Home - Share, Contribute & Comment System</title>
         <meta charset="UTF-8">
@@ -59,27 +59,30 @@ and open the template in the editor.
       </table>
       <br/>
       <div class="centered">
-        <h2>Welcome <?php echo $_SESSION["username"];?></h2>
-        <a class="links" href="editUserInfo.php">EDIT USER INFORMATION</a>
-        <br/>
-        <a class="links" href="editUserMemberships.php">EDIT GROUP/EVENT DETAILS</a>
-        <br/>
-        <a class="links" href="emails.php">SEND EMAIL</a>
-         <?php
+        <h2>Welcome <?php echo $_SESSION["username"];?></h2><br/>
+        <input type="button" class="newButton" onclick="window.location.href = 'editUserInfo.php';" value="EDIT USER INFORMATION"/>
+        <br/><br/>
+        <input type="button" class="newButton" onclick="window.location.href = 'editUserMemberships.php';" value="EDIT GROUP/EVENT DETAILS"/>
+        <br/><br/>
+        <input type="button" class="newButton" onclick="window.location.href = 'emails.php';" value="SEND EMAIL"/>
+        <br/><br/>
+        <?php
 
          //from DB layer
          $result = getUser($mysqli, $username);
          $pid = $result[0];
          if($result[6] == 1){
          ?>
-         <a class="links" href="controllerHome.php">EDIT RATES</a>
+         <input type="button" class="newButton" onclick="window.location.href = 'controllerHome.php';" value="EDIT RATES"/>
+         <br/>
          <?php
        } else if($result[6] == 2){
          ?>
-         <a class="links" href="adminHome.php">MANAGE SYSTEM</a>
+         <input type="button" class="newButton" onclick="window.location.href = 'adminHome.php';" value="MANAGE SYSTEM"/>
+         <br/>
          <?php
        }?>
-         <br/><br/>
+         <br/>
          <p class="subtitle">USER DATA</p>
         <table class="homeTable" border="1">
             <!-- <tr><td colspan="2"><h3>USER DATA</h3> </td></tr> -->

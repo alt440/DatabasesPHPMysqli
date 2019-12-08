@@ -1,11 +1,4 @@
-<!-- 
-  authors:  Alexandre Therrien 40057134,
-            Daniel Vigny-Pau 40034769
- -->
-
 <?php
-
-
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
 
@@ -13,10 +6,13 @@
   $mysqli->select_db("comp353_final_project");
 
   $getRates = getRates($mysqli);
-
 ?>
 
 <html>
+<!-- 
+  authors:  Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
+ -->
 <head>
   <meta charset="utf-8">
   <title>Controller Home</title>
@@ -86,6 +82,7 @@
     <input type="button" class="centeredButton" value="DELETE RATE" id="deleteRIDbutton" onclick="deleteRates()">
   </div>
 
+  <input type="button" class="returnButton" value="RETURN TO HOMEPAGE" id="returnToHomePage" onclick="returnToHomePage()">
   <script>
 
     function addRates(){
@@ -134,6 +131,10 @@
           }
         }
       });
+    }
+
+    function returnToHomePage(){
+      window.location.href="homePage.php";
     }
 
   </script>

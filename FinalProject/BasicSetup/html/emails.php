@@ -1,8 +1,3 @@
-<!-- 
-    authors:  Alexendre Therrien 40057134,
-              Daniel Vigny-Pau 40034769
- -->
-
 <?php
 
   session_start();
@@ -31,6 +26,10 @@
 ?>
 
 <html>
+<!-- 
+    authors:  Alexendre Therrien 40057134,
+              Daniel Vigny-Pau 40034769
+ -->
 <head>
   <meta charset="utf-8">
   <title>Emails</title>

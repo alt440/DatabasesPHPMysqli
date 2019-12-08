@@ -1,8 +1,6 @@
-<!--
-  author: Francois David 40046319
- -->
-
 <?php
+
+// author: Francois David 40046319
 
 session_start();
 
