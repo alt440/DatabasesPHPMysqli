@@ -228,7 +228,7 @@ and open the template in the editor.
 
         </table>
         <br/><br/>
-        <form action='login.php' action='POST'>
+        <form action='index.html' action='POST'>
             <input type='submit' class="deleteButton" name='logOut_User' id='logOutMainButton' value='LOG OUT'/>
         </form>
               </div>
