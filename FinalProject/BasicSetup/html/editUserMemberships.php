@@ -50,14 +50,14 @@
           ?>
           <tr>
             <td>Event <b><?php echo $row[1];?></b>: </td>
-            <td><input type="button" class="newSmallButton" value="DELETE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
+            <td><input type="button" class="newSmallDeleteButton" value="DELETE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
           </tr>
           <?php
         } else{
         ?>
         <tr>
           <td>Event <b><?php echo $row[1];?></b>: </td>
-          <td><input type="button" class="newSmallButton" value="LEAVE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
+          <td><input type="button" class="newSmallDeleteButton" value="LEAVE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
         </tr>
         <?php
         }
@@ -82,14 +82,14 @@
             ?>
             <tr>
               <td>Group <b><?php echo $row[1]?></b>: </td>
-              <td><input type="button" class="newSmallButton" value="DELETE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
+              <td><input type="button" class="newSmallDeleteButton" value="DELETE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
             </tr>
             <?php
           } else{
           ?>
           <tr>
             <td>Group <b><?php echo $row[1]?></b>: </td>
-            <td><input type="button" class="newSmallButton" value="LEAVE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
+            <td><input type="button" class="newSmallDeleteButton" value="LEAVE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
           </tr>
           <?php
           }

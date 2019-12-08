@@ -81,6 +81,21 @@ tr {
     border-color: #abc9d4;
 }
 
+.newSmallDeleteButton{
+    background-color:  #bf4040;
+    border-color: #bf4040;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newSmallDeleteButton:hover{
+    background-color: #cc6666;
+    border-color: #cc6666;
+}
+
 .centeredButton{
     width: 250px;
     background-color:  #78a9ba;
@@ -131,8 +146,8 @@ tr {
 }
 
 .deleteButton:hover{
-background-color: #cc6666;
-border-color: #cc6666;
+    background-color: #cc6666;
+    border-color: #cc6666;
 }
 
 .centeredDeleteButton{
