@@ -78,8 +78,8 @@
   <div id="deleteRatesForm">
     <br/><br/>
     <p class="subtitle">DELETE RATES</p></br>
-    <label id="deleteRID"><p class="subtitle">RID of the Rate: </label><input type="text" class="newText" id="deleteRIDtxt" placeholder="RID to be deleted..."></p>
-    <input type="button" class="centeredButton" value="DELETE RATE" id="deleteRIDbutton" onclick="deleteRates()">
+    <label id="deleteRID"><p class="subtitle">RID of the Rate: </label><input type="text" class="newText" id="deleteRIDtxt" placeholder="RID to be deleted"></p>
+    <input type="button" class="centeredDeleteButton" value="DELETE RATE" id="deleteRIDbutton" onclick="deleteRates()">
   </div>
 
   <input type="button" class="returnButton" value="RETURN TO HOMEPAGE" id="returnToHomePage" onclick="returnToHomePage()">
