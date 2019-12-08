@@ -67,15 +67,15 @@
     </tr>
     <tr>
       <th>To:</th>
-      <td><input type="text" class="newText" placeholder="User destination..." id="toUser"></td>
+      <td><input type="text" class="newText" placeholder="Enter username" id="toUser"></td>
     </tr>
     <tr>
       <th>Title:</th>
-      <td><input type="text" class="newText" placeholder="Title of email..." id="titleEmail"></td>
+      <td><input type="text" class="newText" placeholder="Enter title of email" id="titleEmail"></td>
     </tr>
     <tr>
       <th>Content</th>
-      <td><input type="text" class="newText" placeholder="Content email..." id="contentEmail"></td>
+      <td><input type="text" class="newText" placeholder="Enter email content" id="contentEmail"></td>
     </tr>
     <tr>
       <td colspan="2"><input type="button" class="centeredButton" value="SEND" onclick="sendEmail('<?php echo $username;?>')"></td>

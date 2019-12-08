@@ -52,7 +52,7 @@ and open the template in the editor.
       <table class="centeredRow" id="searchStuff">
         <tr>
           <!--First include a text field to search for user/event-->
-          <td><input type="text" class="newText" id="searchBar" placeholder="Enter event or user..."></td>
+          <td><input type="text" class="newText" id="searchBar" placeholder="Search for event or user"></td>
           <td><input type="button" class="newButton" id="searchEvent" value="SEARCH EVENT" onclick="searchEvent()"></td>
           <td><input type="button" class="newButton" id="searchUser" value="SEARCH USER" onclick="searchUser()"></td>
         </tr>

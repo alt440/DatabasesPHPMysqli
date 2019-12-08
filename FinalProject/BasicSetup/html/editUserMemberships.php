@@ -104,7 +104,7 @@
       <td><p class="sub">Event Name</p></td>
     </tr>  
     <tr>
-        <td><input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
+        <td><input type="text" class="newText" id="addEventTxt" placeholder="Event name">
    
         <form>
             <p class="sub">Event Type</p>

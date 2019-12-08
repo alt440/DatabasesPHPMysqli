@@ -62,7 +62,7 @@
   <table class="centeredRow" id="searchStuff">
     <tr>
       <!--First include a text field to search for user/event-->
-      <td><input type="text" id="searchBar" class="newText" placeholder="Enter event or user..."></td>
+      <td><input type="text" id="searchBar" class="newText" placeholder="Search for event or user"></td>
       <td><input type="button" id="searchEvent" class="newButton" value="SEARCH EVENT" onclick="searchEvent()"></td>
       <td><input type="button" id="searchUser" class="newButton" value="SEARCH USER" onclick="searchUser()"></td>
     </tr>
@@ -123,9 +123,9 @@
       <?php
     } else if(!$archived){
       ?>
-      <input type="button" id="joinEvent" value="Join Event" onclick="joinEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
-      <input type="text" id="oneTimeCodeEntryEvent" placeholder="Enter one time code here...">
-      <input type="button" id="verifyOneTimeCodeEvent" value="Verify One Time Code" onclick="verifyOneTimeCodeEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
+      <input type="button" class="newButton" id="joinEvent" value="JOIN EVENT" onclick="joinEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
+      <input type="text" class="newText" id="oneTimeCodeEntryEvent" placeholder="Enter one time code here">
+      <input type="button" class="newButton" id="verifyOneTimeCodeEvent" value="VERIFY ONE TIME CODE" onclick="verifyOneTimeCodeEvent('<?php echo $username;?>','<?php echo $eventTitle?>')">
       <?php
     }
   if($isMember){?>
@@ -158,7 +158,7 @@
          <td class="table" id="groupName<?php echo $groupButton;?>"><?php echo $row[0]; ?></td>
          <td class="table" id="groupAdmin<?php echo $groupButton;?>"><?php echo getUsername($mysqli,$row[2]);?></td>
          <td class="table"><input type="button" id="sendRequest<?php echo $groupButton;?>" name="sendRequest<?php echo $groupButton;?>" value="Send Request" onclick="sendRequest('<?php echo $username;?>', '<?php echo $eventTitle; ?>', this)">
-           <br><input type="text" id="verifyOneTimeCodeText<?php echo $row[1]?>" placeholder="Enter one time code..."><input type="button" id="verifyOneTimeCode<?php echo $row[1];?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this,'<?php echo $username;?>')"></td>
+           <br><input type="text" class="newText" id="verifyOneTimeCodeText<?php echo $row[1]?>" placeholder="Enter one time code"><input type="button" id="verifyOneTimeCode<?php echo $row[1];?>" value="Verify One Time Code" onclick="verifyOneTimeCode(this,'<?php echo $username;?>')"></td>
        </tr>
 
        <?php
@@ -169,7 +169,7 @@
 } //if($isMember)
 } else{
   ?>
-  <h2>Oops! It looks like this event does not exist yet...</h2>
+  <h2>Oops! It looks like this event does not exist yet.</h2>
   <?php
 }
 //see event content
@@ -192,7 +192,7 @@ if($isMember && $eventInfo[1] == 0){
   if($isEventManager && !$archived){
     ?>
     <tr class="table">
-      <td class="table" colspan="3">Reply: <input type="text" id="contentContent" placeholder="Your Reply..."><input type="button" id="contentSubmitContent" value="Submit" onclick="sendContent('<?php echo $username;?>','<?php echo $eventTitle;?>',this)">
+      <td class="table" colspan="3">Reply: <input type="text" class="newText" id="contentContent" placeholder="Your reply"><input type="button" id="contentSubmitContent" value="Submit" onclick="sendContent('<?php echo $username;?>','<?php echo $eventTitle;?>',this)">
       <select id="permissionTypeSelection">
         <option value="0">No comments allowed</option>
         <option value="1">Comments allowed</option>
@@ -233,7 +233,7 @@ if($isMember && $eventInfo[1] == 0){
      //add possibility to add content
      ?>
      <tr class="table">
-       <td class="table" colspan="3">Reply: <input type="text" id="content<?php echo $row[0];?>" placeholder="Your Reply..."><input type="button" id="contentSubmit<?php echo $row[0];?>" value="Submit" onclick="sendComment('<?php echo $username;?>',this)"></td>
+       <td class="table" colspan="3">Reply: <input type="text" id="content<?php echo $row[0];?>" placeholder="Your reply"><input type="button" id="contentSubmit<?php echo $row[0];?>" value="Submit" onclick="sendComment('<?php echo $username;?>',this)"></td>
      </tr>
      <?php
    }
@@ -339,7 +339,7 @@ if($isMember && $eventInfo[1] == 0){
   </div>
 
 <?php } else{?>
-  <h2>Oops! It looks like this event does not exist yet...</h2>
+  <h2>Oops! It looks like this event does not exist yet.</h2>
 <?php }?>
 
   <script>
