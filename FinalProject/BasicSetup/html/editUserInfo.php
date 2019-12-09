@@ -4,6 +4,12 @@
 
 <?php
   session_start();
+
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
+
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
   // Connection to the database
@@ -43,7 +49,7 @@
     </tr><tr>
       <td class="sub">Change password</td>
     </tr><tr>
-      <td><input type="text" class="newText" id="changePasswordTxt" placeholder="New password..."><input type="text" class="newText" id="oldPassword" placeholder="Old password..."><input type="button" class="newButton" value="CHANGE PASSWORD" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
+      <td><input type="password" class="newText" id="changePasswordTxt" placeholder="New password..."><input type="password" class="newText" id="oldPassword" placeholder="Old password..."><input type="button" class="newButton" value="CHANGE PASSWORD" id="changePassword" onclick="changePassword('<?php echo $userInfo[1];?>')"></td>
     </tr><tr>
       <td class="currentInfo"><b>Current name:</b> <?php echo $userInfo[4];?></td>
     </tr><tr>
@@ -115,7 +121,13 @@
           'json': JSON.stringify(new_email)
         },
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!=1){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }
@@ -132,10 +144,10 @@
           json: JSON.stringify(new_password)
         },
         success: function (response){
-          console.log(response);
           response= $.parseJSON(response);
           if(response['response']==1){
             window.alert("Successfully changed password");
+            location.reload();
           } else{
             window.alert("Change unsuccessful");
           }
@@ -154,7 +166,13 @@
           'json': JSON.stringify(new_name)
         },
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!=1){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }
@@ -170,6 +188,7 @@
           'json': JSON.stringify(new_bankname)
         },
         success: function (response){
+          window.alert("Success!");
           location.reload();
         }
       });
@@ -186,7 +205,13 @@
           'json': JSON.stringify(new_creditcardnb)
         },
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!=1){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }
@@ -202,7 +227,13 @@
           'json': JSON.stringify(new_accountnb)
         },
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!=1){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }
@@ -218,6 +249,7 @@
           'json': JSON.stringify(new_address)
         },
         success: function (response){
+          window.alert("Success!");
           location.reload();
         }
       });
@@ -234,7 +266,13 @@
           'json': JSON.stringify(new_phonenumber)
         },
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!=1){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }

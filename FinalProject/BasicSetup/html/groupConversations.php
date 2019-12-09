@@ -2,6 +2,11 @@
 
   session_start();
 
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
+
   require "../database_layer_get.php";
   require "../database_layer.php";
 
@@ -322,19 +327,6 @@
       }
     });
   }
-
-  /*function makeGroupPublic(groupID){
-    $.ajax({
-      type: "POST",
-      url: "requests/makeGroupPublic.php",
-      data: {
-        'json': JSON.stringify({"groupID":groupID})
-      },
-      success: function (response){
-        location.reload();
-      }
-    });
-  }*/
 
   function makeBecomeMember(element, groupID){
     var UID = (element.id).match(/\d+/)[0];

@@ -16,6 +16,14 @@
   $val1 = $decoded_json->name;//['email'];
   $val2 = $decoded_json->username;//['username'];
 
-  updateUser_Name($mysqli, $val2, $val1);
+  //check if name contains only alpha chars
+  if(ctype_alpha($val1)){
+    updateUser_Name($mysqli, $val2, $val1);
+    echo json_encode(array("response"=>"1"));
+  } else{
+    echo json_encode(array("response"=>"Wrong format. Name contains non-alphabetic characters."));
+  }
+
+
 
 ?>

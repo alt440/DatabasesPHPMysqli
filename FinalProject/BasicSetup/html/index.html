@@ -1,4 +1,4 @@
-<!-- 
+<!--
     authors: Alexandre Therrien, Daniel Vigny-Pau
  -->
 
@@ -7,6 +7,7 @@
         <title>Login - Share, Contribute & Comment System</title>
         <meta charset="UTF-8"></meta>
         <link rel="stylesheet" type="text/css" href="css/editInfo.css"></link>
+        <script src="../js/jquery-3.4.1.min.js"></script>
     </head>
     <body>
         <div class="smallBox">
@@ -14,17 +15,40 @@
             <h1>SHARE, CONTRIBUTE & COMMENT SYSTEM</h1>
             <div class="loginBox">
                 <h3>LOGIN</h3>
-                <form action="login.php" method="POST" name='login_user'>
+                <form name='login_user'>
                         <p class="loginP">USERNAME</p>
-                        <input name="username" class="centeredNewText" type="text"/>
+                        <input id="username" class="centeredNewText" type="text"/>
                         <p class="loginP">PASSWORD</p>
-                        <input name="password" class="centeredNewText" type="password"/>
+                        <input id="password" class="centeredNewText" type="password"/>
                         <br></br>
-                        <input id="submit" name="login_user" class="newButton" type="submit" value="SUBMIT"/>
+                        <input id="submit" name="login_user" class="newButton" type="button" value="SUBMIT" onclick="logIn()"/>
                 </form>
                 <a class="links" href='signUp.html'>REGISTER NOW</a>
                 <br/><br/>
             </div>
         </div>
+
+        <script>
+          function logIn(){
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            $.ajax({
+              type: "POST",
+              url: "login.php",
+              data: {
+                'json': JSON.stringify({"username":username,"password":password})
+              },
+              success: function (response){
+                response = $.parseJSON(response);
+                if(response['response']!=="1"){
+                  window.alert(response['response']);
+                } else{
+                  window.location.href="homePage.php";
+                }
+              }
+            })
+          }
+        </script>
     </body>
 </html>

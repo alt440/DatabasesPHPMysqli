@@ -1,16 +1,28 @@
+<?php
+  session_start();
+  require "../database_layer_get.php";
+  require "../database_layer_use_cases.php";
+
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
+
+  $mysqli = new mysqli("localhost", "root", "");
+  $mysqli->select_db("comp353_final_project");
+  $getRates = getRates($mysqli);
+
+  //confirm the controller is accessing the page
+  $username = $_SESSION['username'];
+  $current_user = getUser($mysqli, $username);
+  if($current_user[6] != 1){
+    header('Location:homePage.php');
+  }
+?>
 <!--
   authors:  Alexandre Therrien 40057134,
             Daniel Vigny-Pau 40034769
  -->
-
-<?php
-  require "../database_layer_get.php";
-  require "../database_layer_use_cases.php";
-  $mysqli = new mysqli("localhost", "root", "");
-  $mysqli->select_db("comp353_final_project");
-  $getRates = getRates($mysqli);
-?>
-
 <html>
 <head>
   <meta charset="utf-8">
@@ -80,6 +92,8 @@
     <input type="button" class="centeredButton" value="DELETE RATE" id="deleteRIDbutton" onclick="deleteRates()">
   </div>
 
+  <input type="button" class="returnButton" value="RETURN TO HOMEPAGE" id="returnToHomePage" onclick="returnToHomePage()">
+
   <script>
     function addRates(){
       var nbEvents = document.getElementById('nbEventsTxt').value;
@@ -98,7 +112,7 @@
         },
         success: function (response){
           response = $.parseJSON(response);
-          if(response['response']!=='OK'){
+          if(response['response']!=="1"){
             window.alert(response['response']);
           } else{
             location.reload();
@@ -116,13 +130,17 @@
         },
         success: function (response){
           response = $.parseJSON(response);
-          if(response['response']!=='OK'){
+          if(response['response']!=="1"){
             window.alert(response['response']);
           } else{
             location.reload();
           }
         }
       });
+    }
+
+    function returnToHomePage(){
+      window.location.href="homePage.php";
     }
   </script>
   </div>

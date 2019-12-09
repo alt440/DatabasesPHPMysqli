@@ -14,17 +14,21 @@
   function addComment($mysqli, $replyString, $replyStringCID, $username){
     //search for the content made with timestamp timestampCID
     $result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE replyString='".$replyStringCID."';");
-    $first_row = mysqli_fetch_row($result);
-    if(is_bool($first_row[0])){
+
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addComment: There is no such content which has this string as content: '.$replyStringCID;
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     //get user and see if exists
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row_2 = mysqli_fetch_row($result2);
-    if(is_bool($first_row_2[0])){
+
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'addComment: There is no such user that has this username: '.$username;
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     if($first_row[2]!=''){
       return 'addComment: Content comes from a group. Cannot comment on some content from a group.';
@@ -60,17 +64,21 @@
   function addCommentCID($mysqli, $replyString, $CID, $username){
     //search for the content made with timestamp timestampCID
     $result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE CID='".$CID."';");
-    $first_row = mysqli_fetch_row($result);
-    if(is_bool($first_row[0])){
+
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addComment: There is no such content which has this CID: '.$CID;
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     //get user and see if exists
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row_2 = mysqli_fetch_row($result2);
-    if(is_bool($first_row_2[0])){
+
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'addComment: There is no such user that has this username: '.$username;
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     if($first_row[2]!=''){
       return 'addComment: Content comes from a group. Cannot comment on some content from a group.';
@@ -113,30 +121,34 @@
     $eventTitle, $groupName, $username){
     //find event related
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addContent: Could not find any Event with the name '.$eventTitle."<br>";
     }
+
+    $first_row = mysqli_fetch_row($result);
 
     //find group related (if any)
     $result2 = 0;
     $first_row_2 = [FALSE];
     if($groupName!=''){
       $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
-      $first_row_2 = mysqli_fetch_row($result2);
-      if(is_bool($first_row_2[0])){
+
+      if(is_bool($result2) || mysqli_num_rows($result2) == 0){
         return 'addContent: Could not find any Group with the name '.$groupName."<br>";
       }
+
+      $first_row_2 = mysqli_fetch_row($result2);
     }
 
     //find the user that posted this content
     $result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row_3 = mysqli_fetch_row($result3);
 
-    if(is_bool($first_row_3[0])){
+    if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 'addContent: Could not find any user with username '.$username."<br>";
     }
+
+    $first_row_3 = mysqli_fetch_row($result3);
 
     if($permissionType>2 || $permissionType<0){
       return 'addContent: Error: Invalid permission type';
@@ -165,11 +177,11 @@
     }
 
     $val=$mysqli->query("SELECT CID FROM Content WHERE TimeStamp=".$timestamp.";");
-    $first_row_4 = mysqli_fetch_row($val);
-    if(!is_bool($first_row_4[0])){
+
+    if(!is_bool($val) && mysqli_num_rows($val)!=0){
+      $first_row_4 = mysqli_fetch_row($val);
       $mysqli->query("INSERT INTO Post (CID, UID) VALUES (".$first_row_4[0].",".$first_row_3[0].");");
     }
-
 
     return 'addContent: '.$mysqli->error;
   }
@@ -192,11 +204,11 @@
 
     //find the user that posted this content
     $result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row_3 = mysqli_fetch_row($result3);
 
-    if(is_bool($first_row_3[0])){
+    if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 'addContent: Could not find any user with username '.$username."<br>";
     }
+    $first_row_3 = mysqli_fetch_row($result3);
 
     if($permissionType>2 || $permissionType<0){
       return 'addContent: Error: Invalid permission type';
@@ -225,8 +237,9 @@
     }
 
     $val=$mysqli->query("SELECT CID FROM Content WHERE TimeStamp=".$timestamp.";");
-    $first_row_4 = mysqli_fetch_row($val);
-    if(!is_bool($first_row_4[0])){
+
+    if(!is_bool($val) && mysqli_num_rows($val)!=0){
+      $first_row_4 = mysqli_fetch_row($val);
       $mysqli->query("INSERT INTO Post (CID, UID) VALUES (".$first_row_4[0].",".$first_row_3[0].");");
     }
 
@@ -245,16 +258,20 @@
   function sendEmail($mysqli, $sourceUsername, $targetUsername, $titleEmail, $replyString){
     //find source user and target user
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$sourceUsername."';");
-    $first_row = mysqli_fetch_row($result);
-    if(is_bool($first_row[0])){
+
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'sendEmail: Source username does not exist';
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$targetUsername."';");
-    $first_row_2 = mysqli_fetch_row($result2);
-    if(is_bool($first_row_2[0])){
+
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'sendEmail: Target username does not exist';
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     $timestamp = time();
 
@@ -309,11 +326,12 @@
 
     //make sure the creator actually exists, and make him the admin of the event.
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createEvent: The username provided does not correspond to any user';
     }
+
+    $first_row = mysqli_fetch_row($result);
 
     $mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType, TemplateSelection) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."',".$templateSelection.");");
     $error = $mysqli->error;
@@ -352,27 +370,30 @@
   function createGroup($mysqli, $eventTitle, $groupName, $usernameCreator){
     //first search for event
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createGroup: Event with title '.$eventTitle.' does not exist';
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     //then search for user creator. Need to verify the user is already a member of the event!
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
-    $first_row_2 = mysqli_fetch_row($result2);
 
-    if(is_bool($first_row_2[0])){
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'createGroup: User with username '.$usernameCreator.' does not exist';
     }
 
+    $first_row_2 = mysqli_fetch_row($result2);
+
     //because only a user in the event can create a group...
     $findUserInEvent = $mysqli->query("SELECT requestStatus FROM Is_Member_Event WHERE EventID=".$first_row[0]." AND UID=".$first_row_2[0].";");
-    $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
-    if(is_bool($first_row_3[0])){
+    if(is_bool($findUserInEvent) || mysqli_num_rows($findUserInEvent) == 0){
       return 'createGroup: User with username '.$usernameCreator.' cannot create a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
+
+    $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
     //then add group with privacy 0 (group is not private, so showing)
     $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',0);");
@@ -398,27 +419,30 @@
   function createGroupPrivate($mysqli, $eventTitle, $groupName, $usernameCreator){
     //first search for event
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createGroup: Event with title '.$eventTitle.' does not exist';
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     //then search for user creator. Need to verify the user is already a member of the event!
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
-    $first_row_2 = mysqli_fetch_row($result2);
 
-    if(is_bool($first_row_2[0])){
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'createGroup: User with username '.$usernameCreator.' does not exist';
     }
 
+    $first_row_2 = mysqli_fetch_row($result2);
+
     //because only a user in the event can create a group...
     $findUserInEvent = $mysqli->query("SELECT requestStatus FROM Is_Member_Event WHERE EventID=".$first_row[0]." AND UID=".$first_row_2[0].";");
-    $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
-    if(is_bool($first_row_3[0])){
+    if(is_bool($findUserInEvent) || mysqli_num_rows($findUserInEvent) == 0){
       return 'createGroup: User with username '.$usernameCreator.' cannot create a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
+
+    $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
     //then add group with privacy 1 (group is private, so not showing)
     $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',1);");
@@ -488,10 +512,12 @@
 
     //because only a user in the event can create a group...
     $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$first_row_3[0]." AND UID=".$first_row[0].";");
-    $first_row_2 = mysqli_fetch_row($findUserInEvent);
-    if(is_bool($first_row_2[0])){
+
+    if(is_bool($findUserInEvent) || mysqli_num_rows($findUserInEvent) == 0){
       return 'addUserToGroup: User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
+
+    $first_row_2 = mysqli_fetch_row($findUserInEvent);
 
     //find event with that title
     $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
@@ -516,10 +542,12 @@
 
     //because only a user in the event can create a group...
     $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$eventID." AND UID=".$first_row[0].";");
-    $first_row_2 = mysqli_fetch_row($findUserInEvent);
-    if(is_bool($first_row_2[0])){
+
+    if(is_bool($findUserInEvent) || mysqli_num_rows($findUserInEvent) == 0){
       return 'addUserToGroup: User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
     }
+
+    $first_row_2 = mysqli_fetch_row($findUserInEvent);
 
     //now create the entry. set user with status 'pending'
     $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".$groupID.",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
@@ -570,6 +598,8 @@
     if($privilegelevel>2||$privilegelevel<0){
       return 'addUser: Wrong privilegelevel';
     }
+
+    $password = password_hash($password, PASSWORD_BCRYPT);
     $mysqli->query("INSERT INTO User_ (Username, Password, Email, Name, DateOfBirth, PrivilegeLevel) values ('".$username."','".$password."','".$email."','".$name."','".$dateofbirth."',".$privilegelevel.");");
     return 'addUser: '.$mysqli->error;
   }

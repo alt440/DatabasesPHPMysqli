@@ -7,6 +7,11 @@
     require "../database_layer_get.php";
     require "../database_layer_use_cases.php";
 
+    //redirect to login screen if not logged in
+    if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+      header('Location:index.html');
+    }
+
     //reset email page
     $_SESSION['email']='';
 
@@ -164,7 +169,7 @@ and open the template in the editor.
                     while ($rowEvent = mysqli_fetch_row($result)) {
                       $rowResult = getLatestPostEvent($mysqli, $rowEvent[0]);
                         ?>
-               <tr><td><?php echo $rowEvent[0]; ?></td>
+               <tr class="events" id="_<?php echo $rowEvent[1];?>"><td><?php echo $rowEvent[0]; ?></td>
                   <td><?php echo $rowEvent[1]; ?> </td>
                   <?php if($rowResult!=0){?>
                   <td><?php echo $rowResult[0] ?></td>
@@ -197,7 +202,7 @@ and open the template in the editor.
                     while ($rowEvent = mysqli_fetch_row($result)) {
                       $latestPost = getLatestPostGroup($mysqli, $rowEvent[0]);
                         ?>
-               <tr><td><?php echo $rowEvent[0]; ?></td>
+               <tr class="groups"><td><?php echo $rowEvent[0]; ?></td>
                   <td><?php echo $rowEvent[1]; ?> </td>
                   <td><?php echo $rowEvent[2]; ?></td>
                   <?php if($latestPost!=0){
@@ -223,8 +228,8 @@ and open the template in the editor.
 
         </table>
         <br/><br/>
-        <form action='login.php' action='POST'>
-            <input type='submit' class="deleteButton" name='logOut_User' id='logOutMainButton' value='LOG OUT'/>
+        <form>
+            <input type='button' class="deleteButton" id='logOutMainButton' value='LOG OUT' onclick="logOut()"/>
         </form>
               </div>
             </div>
@@ -243,7 +248,56 @@ and open the template in the editor.
             }
           });
         });
-      })
+
+        $(".emails").mouseenter(function(){
+          $(this).css("background-color","#deeaee");
+        });
+
+        $(".emails").mouseleave(function(){
+          $(this).css("background-color","white");
+        });
+
+        $(".groups").click(function(){
+          window.location.href="groupConversations.php";
+        });
+
+        $(".groups").mouseenter(function(){
+          $(this).css("background-color","#deeaee");
+        });
+
+        $(".groups").mouseleave(function(){
+          $(this).css("background-color","white");
+        })
+
+        $(".events").click(function(){
+          var element = $(this).attr('id').substring(1,);
+          $.ajax({
+            url: "requests/searchEvent.php?searchEvent="+element,
+            success: function(){
+              window.location.href = "../html/eventPage.php";
+              //location.reload();
+            }
+          });
+        });
+
+        $(".events").mouseenter(function(){
+          $(this).css("background-color","#deeaee");
+        });
+
+        $(".events").mouseleave(function(){
+          $(this).css("background-color","white");
+        });
+      });
+
+      function logOut(){
+        $.ajax({
+          type: "POST",
+          url: "logout.php",
+          success: function (response){
+            window.location.href = "index.html";
+          }
+        });
+      }
 
     </script>
 

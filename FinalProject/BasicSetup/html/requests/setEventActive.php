@@ -9,6 +9,15 @@
   $decoded_json = json_decode($json);
   $val1 = $decoded_json->eventID;
 
-  setEventActive($mysqli, $val1);
+  //make sure event exists
+  $return_val = doesEventExistID($mysqli, $val1);
+  if($return_val == 1){
+    setEventActive($mysqli, $val1);
+    echo json_encode(array("response"=>"1"));
+  } else{
+    echo json_encode(array("response"=>"Could not find event with ID ".$val1."."));
+  }
+
+
 
 ?>

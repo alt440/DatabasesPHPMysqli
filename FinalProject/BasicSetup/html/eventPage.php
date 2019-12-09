@@ -3,6 +3,12 @@
  -->
  <?php
   session_start();
+
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
+  
   //reset group
   $_SESSION['Group']='';
   $eventTitle = $_SESSION['Event'];
@@ -43,7 +49,7 @@
 <head>
   <meta charset="utf-8">
   <title>Event page - Share, Contribute & Comment System</title>
-  <?php if($eventInfo[6] == 1){?>
+  <?php if(isset($eventInfo) && $eventInfo[6] == 1){?>
   <link rel="stylesheet" type="text/css" href="../css/event.css">
   <?
 } else{
@@ -169,6 +175,11 @@
   ?>
   <h2>Oops! It looks like this event does not exist yet...</h2>
   <?php
+  if(isset($eventInfo) && $eventInfo!=false && $eventInfo[1]==1){
+    ?>
+    <h4>Your event has not yet been approved by the event manager!</h4>
+    <?php
+  }
 }
 //see event content
 if($isMember && $eventInfo[1] == 0){
@@ -541,7 +552,13 @@ if($isMember && $eventInfo[1] == 0){
         type: "GET",
         url: "requests/dropEventMembership.php?username="+username+"&eventID="+eventID,
         success: function (response){
-          location.reload();
+          response= $.parseJSON(response);
+          if(response['response']!="1"){
+            window.alert(response['response']);
+          } else{
+            window.alert("Success!");
+            location.reload();
+          }
         }
       });
     }

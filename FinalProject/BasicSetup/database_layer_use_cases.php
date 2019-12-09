@@ -5,9 +5,11 @@
   */
 
   /*
-  Privacy is 0 when group is public (showing)
-  Privacy is 1 when group is private (no show) - happens when a request is
-  sent to the admin of the event and he/she approves creation of group.
+  $stmt = $mysqli->prepare("SELECT * FROM User_ WHERE Username=?");
+	$stmt->bind_param('s',$username);
+	$stmt->execute();
+
+  $results = $stmt->get_result();
   */
 
   /*
@@ -32,18 +34,20 @@
   function setMemberToEvent($mysqli, $username, $eventTitle){
     //find userID
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result)==0){
       return 'setMemberToEvent: User with username '.$username.' does not exist';
     }
 
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row_2 = mysqli_fetch_row($result2);
+    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row_2[0])){
+    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+
+    if(is_bool($result) || mysqli_num_rows($result)==0){
       return 'setMemberToEvent: Event with event title '.$eventTitle.' does not exist.';
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$first_row[0]." AND EventID=".$first_row_2[0].";");
     return 'setMemberToEvent: '.$mysqli->error;
@@ -58,11 +62,12 @@
   function setMemberToEventID($mysqli, $UID, $eventTitle){
 
     $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row_2 = mysqli_fetch_row($result2);
 
-    if(is_bool($first_row_2[0])){
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'setMemberToEvent: Event with event title '.$eventTitle.' does not exist.';
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     $mysqli->query("UPDATE Is_Member_Event SET requestStatus='member' WHERE UID=".$UID." AND EventID=".$first_row_2[0].";");
     return 'setMemberToEvent: '.$mysqli->error;
@@ -78,19 +83,21 @@
   function setMemberToGroup($mysqli, $username, $groupName){
     //find userID
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'setMemberToGroup: User with username '.$username.' does not exist';
     }
 
+    $first_row = mysqli_fetch_row($result);
+
     //find GroupID
     $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
-    $first_row_2 = mysqli_fetch_row($result2);
 
-    if(is_bool($first_row_2[0])){
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'setMemberToGroup: Group with group name '.$groupName.' does not exist.';
     }
+
+    $first_row_2 = mysqli_fetch_row($result2);
 
     $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$first_row_2[0].";");
     return 'setMemberToGroup: '.$mysqli->error;
@@ -106,11 +113,12 @@
   function setMemberToGroupID($mysqli, $username, $groupID){
     //find userID
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'setMemberToGroup: User with username '.$username.' does not exist';
     }
+
+    $first_row = mysqli_fetch_row($result);
 
     $mysqli->query("UPDATE Is_Member_Group SET requestStatus='member' WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     return 'setMemberToGroup: '.$mysqli->error;
@@ -153,11 +161,12 @@
   */
   function isEventArchived($mysqli, $eventTitle){
     $result = $mysqli->query("SELECT ExpiryDate FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'isEventArchived: Event with title '.$eventTitle.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
     //current time
     $timestamp = time();
 
@@ -174,11 +183,12 @@
   */
   function shouldEventBeDeleted($mysqli, $eventTitle){
     $result = $mysqli->query("SELECT ExpiryDate FROM Event_ WHERE Title='".$eventTitle."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'shouldEventBeDeleted: Event with title '.$eventTitle.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
 
     //increase by 7 the year on the expiry date
     $year = strval(intval(substr($first_row[0],0,4))+7);
@@ -202,11 +212,12 @@
   */
   function updateUserEmail($mysqli, $username, $email){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserEmail: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
 
     $mysqli->query("UPDATE User_ SET Email='".$email."' WHERE Username='".$username."';");
     return 'updateUserEmail: '.$mysqli->error;
@@ -221,16 +232,19 @@
   */
   function updateUserPassword($mysqli, $username, $password, $new_password){
     $result= $mysqli->query("SELECT UID, Password FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserPassword: User with username '.$username.' was not found.';
     }
 
-    if(strcmp($password, $first_row[1])!=0){
+    $first_row = mysqli_fetch_row($result);
+
+    $auth = password_verify($password, $first_row[1]);
+    if($auth !=true){
       return 'Wrong credentials!';
     }
 
+    $new_password = password_hash($new_password, PASSWORD_BCRYPT);
     $mysqli->query("UPDATE User_ SET Password='".$new_password."' WHERE UID=".$first_row[0].";");
     //return 'updateUserPassword: '.$mysqli->error;
     return 1;
@@ -244,11 +258,12 @@
   */
   function updateUser_Name($mysqli, $username, $name){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUser_Name: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
     $mysqli->query("UPDATE User_ SET Name='".$name."' WHERE Username='".$username."';");
     return 'updateUser_Name: '.$mysqli->error;
   }
@@ -261,11 +276,13 @@
   */
   function updateUserBankName($mysqli, $username, $bank_name){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserBankName: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
+
     $mysqli->query("UPDATE User_ SET BankName='".$bank_name."' WHERE Username='".$username."';");
     return 'updateUserBankName: '.$mysqli->error;
   }
@@ -278,11 +295,13 @@
   */
   function updateUserCreditCardNumber($mysqli, $username, $credit_card_number){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserCreditCardNumber: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
+
     $mysqli->query("UPDATE User_ SET CreditCardNumber=".$credit_card_number." WHERE Username='".$username."';");
     return 'updateUserCreditCardNumber: '.$mysqli->error;
   }
@@ -295,11 +314,13 @@
   */
   function updateUserAccountNumber($mysqli, $username, $account_number){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserAccountNumber: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
+
     $mysqli->query("UPDATE User_ SET AccountNumber=".$account_number." WHERE Username='".$username."';");
     return 'updateUserAccountNumber: '.$mysqli->error;
   }
@@ -312,11 +333,13 @@
   */
   function updateUserPhoneNumber($mysqli, $username, $phone_number){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserPhoneNumber: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
+
     $mysqli->query("UPDATE User_ SET PhoneNumber='".$phone_number."' WHERE Username='".$username."';");
     return 'updateUserPhoneNumber: '.$mysqli->error;
   }
@@ -329,11 +352,13 @@
   */
   function updateUserAddress($mysqli, $username, $address){
     $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    $first_row = mysqli_fetch_row($result);
 
-    if(is_bool($first_row[0])){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'updateUserAddress: User with username '.$username.' was not found.';
     }
+
+    $first_row = mysqli_fetch_row($result);
+
     $mysqli->query("UPDATE User_ SET Address='".$address."' WHERE Username='".$username."';");
     return 'updateUserAddress: '.$mysqli->error;
   }
@@ -403,13 +428,13 @@
   function getUserMemberOfEvent($mysqli, $username, $eventTitle){
     //find EventID and UID
     $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
-    if(is_bool($result)){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'Event with title '.$eventTitle.' could not be found.';
     }
     $first_row = mysqli_fetch_row($result);
 
     $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
-    if(is_bool($result2)){
+    if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'User with username '.$username.' could not be found.';
     }
     $first_row_2 = mysqli_fetch_row($result2);
@@ -433,7 +458,7 @@
   function verifyUserDetails($mysqli, $username){
     //get the user first
     $result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
-    if(is_bool($result)){
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'User with username '.$username.' was not found.';
     }
 
@@ -505,6 +530,84 @@
   */
   function setGroupPublic($mysqli, $groupID){
     $mysqli->query("UPDATE Group_ SET Privacy=0 WHERE GroupID=".$groupID.";");
+  }
+
+  /*
+  Does event exist?
+  $mysqli: Connection to the DB object
+  $eventTitle: Title of the event
+  */
+  function doesEventExist($mysqli, $eventTitle){
+    $result = $mysqli->query("SELECT * FROM Event_ WHERE Title='".$eventTitle."';");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
+  }
+
+  /*
+  Does event exist? With ID
+  $mysqli: Connection to the DB object
+  $eventID: ID of the event
+  */
+  function doesEventExistID($mysqli, $eventID){
+    $result = $mysqli->query("SELECT * FROM Event_ WHERE EventID=".$eventID.";");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
+  }
+
+  /*
+  Does group exist? With ID
+  $mysqli: Connection to the DB object
+  $groupID: ID of the group
+  */
+  function doesGroupExistID($mysqli, $groupID){
+    $result = $mysqli->query("SELECT * FROM Group_ WHERE GroupID=".$groupID.";");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
+  }
+
+  /*
+  Does UID exist?
+  $mysqli: Connection to the DB object
+  $UID: ID of the user
+  */
+  function doesUIDExist($mysqli, $UID){
+    $result = $mysqli->query("SELECT * FROM User_ WHERE UID=".$UID.";");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
+  }
+
+  /*
+  Does username exist?
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  */
+  function doesUsernameExist($mysqli, $username){
+    $result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
+  }
+
+  /*
+  Does Rates ID exist?
+  $mysqli: Connection to the DB object
+  $RID: Rates ID
+  */
+  function doesRIDExist($mysqli, $RID){
+    $result = $mysqli->query("SELECT * FROM Rates WHERE RID='".$RID."';");
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+    return 1;
   }
 
 ?>

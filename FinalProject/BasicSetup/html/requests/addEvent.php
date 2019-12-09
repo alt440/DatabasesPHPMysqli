@@ -22,10 +22,15 @@
     //by default, event valid for 1 year
     $time_next_year = convertTimeStampToDateStamp(time()+31557600);
 
-    //now create event
-    createEvent($mysqli, $time, $eventTitle, $time_next_year, $eventType, $username, $templateNb);
-
-    echo json_encode(array("response"=>1));
+    if(!is_numeric($templateNb) || $templateNb>2 || $templateNb<1){
+      echo json_encode(array("response"=>"Template value is incorrect. Should be either 1 or 2"));
+    } else if(doesEventExist($mysqli, $eventTitle) == 1){
+      echo json_encode(array("response"=>"Event title already existent. You should change it to something else."));
+    } else{
+      //now create event
+      createEvent($mysqli, $time, $eventTitle, $time_next_year, $eventType, $username, $templateNb);
+      echo json_encode(array("response"=>"1"));
+    }
   }
 
 

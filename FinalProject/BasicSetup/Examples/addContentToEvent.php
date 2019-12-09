@@ -17,15 +17,21 @@
 	$mysqli->select_db("comp353_final_project");
 
   //from addMemberToEvent.php
-  $return_val=addUser($mysqli, 'aaa','aaa','a@a.com','abl arr','1777-04-05',0);
+  $password = password_hash('aaa', PASSWORD_BCRYPT);
+  echo 'Password: '.var_dump($password)."<br>";
+  $return_val=addUser($mysqli, 'aaa',$password,'a@a.com','abl arr','1777-04-05',0);
   echo $return_val."<br>";
-  $return_val=addUser($mysqli, 'bbb','bbb','b@b.com','bbl brr','1777-04-25',0);
+  $password = password_hash('bbb', PASSWORD_BCRYPT);
+  $return_val=addUser($mysqli, 'bbb',$password,'b@b.com','bbl brr','1777-04-25',0);
   echo $return_val."<br>";
-  $return_val=addUser($mysqli, 'rrr','rrr','r@r.com','rrl rrr','1777-04-30',2);
+  $password = password_hash('rrr', PASSWORD_BCRYPT);
+  $return_val=addUser($mysqli, 'rrr',$password,'r@r.com','rrl rrr','1777-04-30',2);
   echo $return_val."<br>";
-  $return_val=addUser($mysqli, 'controller','controller','controller@controller.com','controller','1777-04-30',1);
+  $password = password_hash('controller', PASSWORD_BCRYPT);
+  $return_val=addUser($mysqli, 'controller',$password,'controller@controller.com','controller','1777-04-30',1);
   echo $return_val."<br>";
-  $return_val=addUser($mysqli, 'ppp','ppp','p@p.com','ppl ppp','1777-04-30',0);
+  $password = password_hash('ppp', PASSWORD_BCRYPT);
+  $return_val=addUser($mysqli, 'ppp',$password,'p@p.com','ppl ppp','1777-04-30',0);
   echo $return_val."<br>";
   $return_val=createEvent($mysqli, '1999-01-11','Some_Event','2009-01-22','family','aaa', 1);
   echo $return_val."<br>";

@@ -6,6 +6,10 @@
   session_start();
   require "../database_layer_get.php";
 
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
   // Connection to the database
   /*$mysqli = new mysqli("urc353.encs.concordia.ca", "urc353_2", "AqtjPG");
   $mysqli->select_db("urc353_2");*/
@@ -102,10 +106,10 @@
     <table class="centeredRow" id="addEventTable">
     <tr>
       <td><p class="sub">Event Name</p></td>
-    </tr>  
+    </tr>
     <tr>
         <td><input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
-   
+
         <form>
             <p class="sub">Event Type</p>
             <select id="eventTypesSelection">
@@ -197,7 +201,11 @@
           if(response['response']!=1){
             window.alert(response['response']);
           }
-          location.reload();
+          else{
+            window.alert("Success! Event was added. Now, administrator needs to approve the event.");
+            location.reload();
+          }
+
         }
       });
     }

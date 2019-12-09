@@ -1,18 +1,30 @@
-<!--
-  authors:  Alexendre Therrien 40057134,
-            Daniel Vigny-Pau 40034769
- -->
 <?php
   session_start();
   require "../database_layer_get.php";
   require "../database_layer_use_cases.php";
+
+  //redirect to login screen if not logged in
+  if(!isset($_SESSION['username']) || $_SESSION['username']==''){
+    header('Location:index.html');
+  }
+
   $mysqli = new mysqli("localhost", "root", "");
   $mysqli->select_db("comp353_final_project");
   $users = getAllUsers($mysqli);
   $events = getAllEvents($mysqli);
   $groups = getAllGroups($mysqli);
   $username = $_SESSION['username'];
+
+  //confirm it is the admin that accesses this page
+  $current_user = getUser($mysqli, $username);
+  if($current_user[6] !=2){
+    header('Location:homePage.php');
+  }
 ?>
+<!--
+  authors:  Alexendre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
+ -->
 <html>
 <head>
   <meta charset="utf-8">
@@ -28,6 +40,8 @@
       <tr>
         <th>UID</th>
         <th>Username</th>
+        <th>Event IDs</th>
+        <th>Group IDs</th>
       </tr>
       <?php
       while($row= mysqli_fetch_row($users)){
@@ -35,6 +49,26 @@
         <tr>
           <td><?php echo $row[0];?></td>
           <td><?php echo $row[1];?></td>
+          <td>
+          <?php
+          $userEvents = getEventsOfUser($mysqli, $row[1]);
+          while($row_In = mysqli_fetch_row($userEvents)){
+            ?>
+            <?php echo $row_In[0];?>,
+            <?php
+          }
+          ?>
+          </td>
+          <td>
+            <?php
+            $userGroups = getGroupsOfUser($mysqli, $row[1]);
+            while($row_In = mysqli_fetch_row($userGroups)){
+              ?>
+              <?php echo $row_In[0];?>,
+              <?php
+            }
+            ?>
+          </td>
         </tr>
         <?php
       }
@@ -145,6 +179,24 @@
     <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDRemoveTheEvent"><br>
     <input type="button" id="RemoveTheEventButton" class="centeredDeleteButton" value="REMOVE" onclick="removeEvent()">
   </div>
+  <!--Remove user-->
+  <br/><br/>
+  <div id="removeUser">
+    <label><p class="subtitle">REMOVE A USER</p></label>
+    <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UsernameRemoveUser"><br>
+    <input type="button" id="RemoveUserButton" class="centeredDeleteButton" value="REMOVE" onclick="removeUser()">
+  </div>
+  <!--Add user-->
+  <br/><br/>
+  <div id="addUser">
+    <label><p class="subtitle">ADD USER</p></label>
+    <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UsernameAddUser"><br>
+    <label>Password: </label><input type="password" class="newText" placeholder="Password" id="PasswordAddUser"><br>
+    <label>Name: </label><input type="text" class="newText" placeholder="Name" id="NameAddUser"><br>
+    <label>Email: </label><input type="text" class="newText" placeholder="Email" id="EmailAddUser"><br>
+    <label>Date Of Birth: </label><input type="text" class="newText" placeholder="YYYY-MM-DD" id="DOBAddUser"><br>
+    <label>Privilege Level: </label><input type="text" class="newText" placeholder="0 for user,1 for controller" id="PrivilegeLevelAddUser"><br>
+    <input type="button" id="AddUserButton" class="centeredButton" value="SET" onclick="addUser()">
     </div>
     <br/>
   <input type="button" class="returnButton" value="RETURN TO HOME PAGE" onclick="returnToHomePage()">
@@ -153,6 +205,7 @@
   function returnToHomePage(){
     window.location.href="homePage.php";
   }
+
   function addContentToEvent(username){
     var replyString = document.getElementById('ContentSendContent').value;
     var eventTitle = document.getElementById('EventTitleSendContent').value;
@@ -160,7 +213,13 @@
       type: "GET",
       url: "requests/sendContent.php?username="+username+"&privilegeLevel=0&replyString="+replyString+"&eventTitle="+eventTitle,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -174,8 +233,13 @@
         'json': JSON.stringify({"username":username, "eventID":"missing", "groupID":groupID, "replyString":replyString})
       },
       success: function(response){
-        //response = $.parseJSON(response);
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -188,7 +252,13 @@
         'json': JSON.stringify({"eventID":eventID})
       },
       success: function(response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -198,7 +268,13 @@
       type: "GET",
       url: "requests/deleteEvent.php?eventID="+eventID,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -208,7 +284,13 @@
       type: "GET",
       url: "requests/deleteGroup.php?groupID="+groupID,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -219,7 +301,13 @@
       type: "GET",
       url: "requests/setNewEventManager.php?eventID="+eventID+"&UID="+UID,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -231,7 +319,13 @@
       type: "GET",
       url: "requests/dropEventMembership.php?eventID="+eventID+"&username="+username,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
   }
@@ -242,9 +336,61 @@
       type: "GET",
       url: "requests/dropGroupMembership.php?groupID="+groupID+"&username="+username,
       success: function (response){
-        location.reload();
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
       }
     });
+  }
+
+  function removeUser(){
+    var username = document.getElementById('UsernameRemoveUser').value;
+    $.ajax({
+      type:"POST",
+      url: "requests/deleteUser.php",
+      data: {
+        'json': JSON.stringify({"username":username})
+      },
+      success: function(response){
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
+      }
+    })
+  }
+
+  function addUser(){
+    var username = document.getElementById('UsernameAddUser').value;
+    var password = document.getElementById('PasswordAddUser').value;
+    var email = document.getElementById('EmailAddUser').value;
+    var name = document.getElementById('NameAddUser').value;
+    var dob = document.getElementById('DOBAddUser').value;
+    var privilegeLevel = document.getElementById('PrivilegeLevelAddUser').value;
+
+    $.ajax({
+      type:"POST",
+      url: "requests/addUser.php",
+      data: {
+        'json': JSON.stringify({"username":username, "password":password, "email":email, "name":name, "dateofbirth":dob, "privilegelevel":privilegeLevel})
+      },
+      success: function(response){
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
+      }
+    })
   }
   </script>
   </body>

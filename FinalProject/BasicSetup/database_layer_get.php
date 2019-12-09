@@ -157,8 +157,6 @@
     }
     $first_row = mysqli_fetch_row($result);
 
-
-
     $result2 = $mysqli->query("SELECT Content.CID, Content.replyString, Post.UID, Content.TimeStamp, Content.PermissionType FROM Content INNER JOIN Post ON Content.CID=Post.CID WHERE EventID=".$first_row[0]." AND GroupID IS NULL ORDER BY TimeStamp DESC;");
     return $result2;
   }

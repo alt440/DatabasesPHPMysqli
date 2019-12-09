@@ -37,7 +37,7 @@
 	echo $mysqli->error;
 
 	//query the database with the command in ().
-	$mysqli->query("CREATE TABLE User_ (UID int unsigned not null auto_increment, Username varchar(20) unique not null, Password varchar(20) not null, Email varchar(30) not null, Name varchar(50) not null, DateOfBirth varchar(20) not null, PrivilegeLevel smallint unsigned not null, BankName varchar(30), AccountNumber bigint unsigned, CreditCardNumber bigint unsigned, Address varchar(20), PhoneNumber varchar(20), primary key (UID));");
+	$mysqli->query("CREATE TABLE User_ (UID int unsigned not null auto_increment, Username varchar(20) unique not null, Password varchar(60) not null, Email varchar(30) not null, Name varchar(50) not null, DateOfBirth varchar(20) not null, PrivilegeLevel smallint unsigned not null, BankName varchar(30), AccountNumber bigint unsigned, CreditCardNumber bigint unsigned, Address varchar(20), PhoneNumber varchar(20), primary key (UID));");
 	echo $mysqli->error;
 
 	//this table determines which participant belongs to which group. hasSeenLastMessage has been added
