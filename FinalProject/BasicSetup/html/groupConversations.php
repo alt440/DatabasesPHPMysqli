@@ -37,12 +37,13 @@
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-<div class="header">
-  <h1>Group Conversations</h1>
-</div>
 
+<div class="bigBox">
+<div class="header">
+  <h1>Group conversations</h1>
+</div>
 <div class="row">
-  <div class="menu" style="background-color:#aaa;">
+  <div class="menu">
      <ul>
        <?php
         $start = 0;
@@ -62,7 +63,7 @@
             $groupAdmin = getGroupAdmin($mysqli, $row[1])[1];
           }
           ?>
-          <li class="groupInfo" id="someGroupInfo<?php echo $i;?>"><label><?php echo $row[1];?></label>
+          <li class="groupInfo" id="someGroupInfo<?php echo $i;?>"><label><b><?php echo $row[1];?></b></label>
           <?php
           $latest_post = getLatestPostGroup($mysqli, $row[0]);
           //echo $latest_post[1];
@@ -76,7 +77,7 @@
 
     </ul>
   </div>
-  <div class="convos" id="convos" style="background-color:#bbb;">
+  <div class="convos" id="convos">
     <div id="table-scroll" class="membersPopup">
     <div style="list-style-type:none;">
       <?php
@@ -86,11 +87,13 @@
 
           if($userID == $row[1]){
           ?>
-            <div class="textPerso whiteBackground"><?php echo $row[0];?> : <?php echo getUsername($mysqli,$row[1]);?></div><br><br>
+            <div class="textPerso whiteBackground"><b>You: </b><?php echo $row[0];?> </div><br><br>
+            <div class="space"></div>
           <?php
           } else {
           ?>
-            <div class="text whiteBackground"><?php echo getUsername($mysqli,$row[1]);?> : <?php echo $row[0];?></div><br><br>
+            <div class="text whiteBackground"><b><?php echo getUsername($mysqli,$row[1]);?> :</b> <?php echo $row[0];?></div><br><br>
+            <div class="space"></div>
           <?php
           }
 
@@ -112,8 +115,8 @@
                   cols = "80"></textarea>
 
        <div>
-      	  <input id="SendButton" type="button" value="Send" onclick="sendMessageConvo('<?php echo $currentEvent?>','<?php echo $currentGroup;?>','<?php echo $username?>')">
-		      <input id="FilesButton" type="button" value="Files">
+      	  <input id="SendButton"  type="button" class="newSmallButton" value="SEND" onclick="sendMessageConvo('<?php echo $currentEvent?>','<?php echo $currentGroup;?>','<?php echo $username?>')">
+		      <input id="FilesButton" type="button" class="newSmallButton"  value="FILES">
       </div>
   	</div>
   </div>
@@ -198,9 +201,12 @@
     </div>
   </div>
 </div>
-
-<input type="button" value="Return to Home Page" onclick="returnToHomePage()">
-
+<br/>
+<br/>
+<br/>
+<input type="button" class="newSmallButton" value="BACK TO HOMEPAGE" onclick="returnToHomePage()">
+<br/>
+<br/>
 <script>
 
   function closeMemberPopup(){
@@ -368,6 +374,6 @@
   });
 
 </script>
-
+</div>
 </body>
 </html>
