@@ -26,8 +26,9 @@
     $_SESSION['searchUser']='';
   }
 ?>
-<!--author: Charles-Antoine Guité 40063098
-            Alexandre Therrien 40057134
+<!--author: Charles-Antoine Guité 40063098,
+            Alexandre Therrien 40057134,
+            Daniel Vigny-Pau 40034769
 -->
 <!DOCTYPE html>
 <html>
