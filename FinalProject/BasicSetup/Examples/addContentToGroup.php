@@ -21,6 +21,9 @@
   $return_val=addUser($mysqli, 'ccc','ccc','c@c.com','cbl crr','1777-12-05',0);
   echo $return_val."<br>";
 
+  $return_val=addUser($mysqli, 'controller','controller','cont@cont.com','cbl crr','1777-12-05',1);
+  echo $return_val."<br>";
+
   $return_val=addUser($mysqli, 'aaa','aaa','a@a.com','abl arr','1777-04-05',0);
   echo $return_val."<br>";
   $return_val=addUser($mysqli, 'bbb','bbb','b@b.com','bbl brr','1777-04-25',0);
