@@ -1,8 +1,4 @@
-<!--
-  authors: Alexandre Therrien, Daniel Vigny-Pau, Francois
- -->
-
- <?php
+<?php
     session_start();
     require "../database_layer_get.php";
     require "../database_layer_use_cases.php";
@@ -34,10 +30,8 @@
 ?>
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+  authors: Alexandre Therrien, Daniel Vigny-Pau, Francois
+ -->
 
 <html>
     <head>

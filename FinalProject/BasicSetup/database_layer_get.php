@@ -1,8 +1,10 @@
 <?php
-
+  //Alexandre Therrien
   /*
   This file has many functions used for extracting data from the database.
   Unlike the other database_layer file, this does not do any modification.
+  Prepared statements for queries are required to protect against SQL injection.
+  Done for all queries which depend on input from user.
   */
 
   /*
@@ -14,7 +16,11 @@
   */
   function showEmailsReceived($mysqli, $username){
     //find if the user really exists
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'showEmailsReceived: User with username '.$username.' does not exist';
     }
@@ -34,7 +40,11 @@
   */
   function showEmailsSent($mysqli, $username){
     //find if the user really exists
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'showEmailsSent: User with username '.$username.' does not exist';
     }
@@ -53,7 +63,11 @@
   */
   function getEventMembers($mysqli, $eventTitle){
     //find eventID
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getEventMembers: Event with title '.$eventTitle.' does not exist.';
     }
@@ -74,7 +88,11 @@
   */
   function getEventPendingUsers($mysqli, $eventTitle){
     //find eventID
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getEventPendingUsers: Event with title '.$eventTitle.' does not exist.';
     }
@@ -94,7 +112,11 @@
   */
   function getGroupMembers($mysqli, $groupName){
     //find groupID
-    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupMembers: Group with group name '.$groupName.' does not exist.';
     }
@@ -115,7 +137,11 @@
   */
   function getGroupPendingUsers($mysqli, $groupName){
     //find groupID
-    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupPendingUsers: Group with group name '.$groupName.' does not exist.';
     }
@@ -134,7 +160,11 @@
   Returns false if the UID does not exist.
   */
   function getUsername($mysqli, $UID){
-    $result = $mysqli->query("SELECT Username FROM User_ WHERE UID=".$UID.";");
+    $stmt = $mysqli->prepare("SELECT Username FROM User_ WHERE UID=? ;");
+    $stmt->bind_param('i', $UID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT Username FROM User_ WHERE UID=".$UID.";");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getUsername: Could not find username of user with ID '.$UID.'.';
     }
@@ -151,7 +181,11 @@
   (User ID) of the person that did the post.
   */
   function getContentEvent($mysqli, $eventTitle){
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getContentEvent: Event with title '.$eventTitle.' does not exist';
     }
@@ -169,7 +203,11 @@
   Returns the string and the UID (ID of user that did the post) of the post.
   */
   function getCommentsContent($mysqli, $CID){
-    $result = $mysqli->query("SELECT Comment.replyString, Post_Comment.UID, Comment.TimeStamp FROM Comment INNER JOIN Post_Comment ON Comment.CoID=Post_Comment.CoID WHERE CID=".$CID." ORDER BY TimeStamp ASC;");
+    $stmt = $mysqli->prepare("SELECT Comment.replyString, Post_Comment.UID, Comment.TimeStamp FROM Comment INNER JOIN Post_Comment ON Comment.CoID=Post_Comment.CoID WHERE CID=? ORDER BY TimeStamp ASC ;");
+    $stmt->bind_param('i', $CID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT Comment.replyString, Post_Comment.UID, Comment.TimeStamp FROM Comment INNER JOIN Post_Comment ON Comment.CoID=Post_Comment.CoID WHERE CID=".$CID." ORDER BY TimeStamp ASC;");
     return $result;
   }
 
@@ -182,7 +220,11 @@
   */
   function getContentGroup($mysqli, $groupName){
     //find the group
-    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getContentGroup: Group with name '.$groupName.' could not be found';
     }
@@ -204,7 +246,11 @@
   */
   function getEventsOfUser($mysqli, $username){
     //find userID (UID)
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getEventsOfUser: User with username '.$username.' was not found.';
     }
@@ -223,7 +269,11 @@
   $eventID: ID of the event
   */
   function getLatestPostEvent($mysqli, $eventID){
-    $result = $mysqli->query("SELECT replyString, MAX(TimeStamp) FROM Content WHERE EventID=".$eventID." AND GroupID IS NULL GROUP BY replyString;");
+    $stmt = $mysqli->prepare("SELECT replyString, MAX(TimeStamp) FROM Content WHERE EventID=? AND GroupID IS NULL GROUP BY replyString ;");
+    $stmt->bind_param('i', $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT replyString, MAX(TimeStamp) FROM Content WHERE EventID=".$eventID." AND GroupID IS NULL GROUP BY replyString;");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 0;
     }
@@ -239,7 +289,11 @@
   Returns the GroupIDs and the GroupNames of the groups the user belongs to.
   */
   function getGroupsOfUser($mysqli, $username){
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupsOfUser: User with username '.$username.' was not found.';
     }
@@ -259,12 +313,21 @@
   Returns the replyString that has the greatest timestamp value (most recent post)
   */
   function getLatestPostGroup($mysqli, $groupID){
-    $result = $mysqli->query("SELECT MAX(TimeStamp) FROM Content WHERE GroupID=".$groupID.";");
+    $stmt = $mysqli->prepare("SELECT MAX(TimeStamp) FROM Content WHERE GroupID=? ;");
+    $stmt->bind_param('i', $groupID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT MAX(TimeStamp) FROM Content WHERE GroupID=".$groupID.";");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 0;
     }
     $first_row = mysqli_fetch_row($result);
-    $result2 = $mysqli->query("SELECT replyString, TimeStamp FROM Content WHERE GroupID=".$groupID." AND TimeStamp=".$first_row[0].";");
+
+    $stmt = $mysqli->prepare("SELECT replyString, TimeStamp FROM Content WHERE GroupID=? AND TimeStamp=? ;");
+    $stmt->bind_param('ii', $groupID, $first_row[0]);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT replyString, TimeStamp FROM Content WHERE GroupID=".$groupID." AND TimeStamp=".$first_row[0].";");
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 0;
     }
@@ -280,7 +343,11 @@
   in DB for order of variables)
   */
   function getUser($mysqli, $username){
-    $result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT * FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT * FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 0;
     }
@@ -296,7 +363,11 @@
   in DB for order of variables)
   */
   function getUserWithID($mysqli, $UID){
-    $result = $mysqli->query("SELECT * FROM User_ WHERE UID='".$UID."';");
+    $stmt = $mysqli->prepare("SELECT * FROM User_ WHERE UID=? ;");
+    $stmt->bind_param('i', $UID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT * FROM User_ WHERE UID='".$UID."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 0;
     }
@@ -313,7 +384,11 @@
   */
   function getGroupsInEvent($mysqli, $eventTitle){
     //first find event
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupsInEvent: Event with title '.$eventTitle.' was not found.';
@@ -334,7 +409,11 @@
   */
   function getGroupsInEventHidden($mysqli, $eventTitle){
     //first find event
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupsInEvent: Event with title '.$eventTitle.' was not found.';
@@ -352,7 +431,11 @@
   $eventTitle: Title of the event
   */
   function getEvent($mysqli, $eventTitle){
-    $result = $mysqli->query("SELECT * FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT * FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT * FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 0;
     }
@@ -366,7 +449,11 @@
   $eventTitle: Title of the event
   */
   function getEventAdmin($mysqli, $eventTitle){
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getEventAdmin: Event with title '.$eventTitle.' was not found.';
     }
@@ -385,7 +472,11 @@
   $groupName: Name of the group
   */
   function getGroupAdmin($mysqli, $groupName){
-    $result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getGroupAdmin: Event with title '.$eventTitle.' was not found.';
     }
@@ -406,13 +497,21 @@
   */
   function isMemberGroup($mysqli, $groupID, $username){
     //get UID
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'isMemberGroup: User with username '.$username.' was not found.';
     }
     $first_row = mysqli_fetch_row($result);
     //assuming groupID is right...
-    $result2 = $mysqli->query("SELECT UID FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID." AND requestStatus!='pending';");
+    $stmt = $mysqli->prepare("SELECT UID FROM Is_Member_Group WHERE UID=? AND GroupID=? AND requestStatus!='pending' ;");
+    $stmt->bind_param('ii', $first_row[0], $groupID);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID." AND requestStatus!='pending';");
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 0;
     }
@@ -434,12 +533,21 @@
   Returns the one time code
   */
   function getOneTimeCode($mysqli, $username, $eventTitle){
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getOneTimeCode: User with username '.$username.' was not found.';
     }
     $first_row = mysqli_fetch_row($result);
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'getOneTimeCode: Event with title '.$eventTitle.' was not found.';
     }
@@ -462,12 +570,21 @@
   Returns the one time code
   */
   function getOneTimeCodeGroup($mysqli, $username, $groupID){
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'getOneTimeCodeGroup: User with username '.$username.' was not found.';
     }
     $first_row = mysqli_fetch_row($result);
-    $result3 = $mysqli->query("SELECT OneTimeCode FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
+
+    $stmt = $mysqli->prepare("SELECT OneTimeCode FROM Is_Member_Group WHERE UID=? AND GroupID=? ;");
+    $stmt->bind_param('ii', $first_row[0], $groupID);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT OneTimeCode FROM Is_Member_Group WHERE UID=".$first_row[0]." AND GroupID=".$groupID.";");
     if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 0;
     }
@@ -484,7 +601,11 @@
   $groupID: Group ID
   */
   function getGroupName($mysqli, $groupID){
-    $result = $mysqli->query("SELECT GroupName FROM Group_ WHERE GroupID=".$groupID.";");
+    $stmt = $mysqli->prepare("SELECT GroupName FROM Group_ WHERE GroupID=? ;");
+    $stmt->bind_param('i', $groupID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT GroupName FROM Group_ WHERE GroupID=".$groupID.";");
     if(is_bool($result) || mysqli_num_rows($result)==0){
       return 'Could not find group with ID '.$groupID.'.';
     }
@@ -499,6 +620,23 @@
   function getRates($mysqli){
     $result = $mysqli->query("SELECT * FROM Rates");
     return $result;
+  }
+
+  /*
+  This function returns whether there is a rate with ID rateID.
+  $mysqli: Connection to the DB object
+  $rateID: ID of the rates being applied
+  */
+  function isRate($mysqli, $rateID){
+    $stmt = $mysqli->prepare("SELECT * FROM Rates WHERE RID=? ;");
+    $stmt->bind_param('i', $rateID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if(is_bool($result) || mysqli_num_rows($result) == 0){
+      return 0;
+    }
+
+    return 1;
   }
 
   /*
@@ -528,7 +666,11 @@
   $eventID: ID of the event
   */
   function getEventTitle($mysqli, $eventID){
-    $result = $mysqli->query("SELECT Title FROM Event_ WHERE EventID=".$eventID.";");
+    $stmt = $mysqli->prepare("SELECT Title FROM Event_ WHERE EventID=? ;");
+    $stmt->bind_param('i', $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT Title FROM Event_ WHERE EventID=".$eventID.";");
     return mysqli_fetch_row($result);
   }
 
@@ -538,7 +680,11 @@
   $groupID: ID of the group
   */
   function getGroupMainEventID($mysqli, $groupID){
-    $result = $mysqli->query("SELECT MainEventID FROM Group_ WHERE GroupID=".$groupID);
+    $stmt = $mysqli->prepare("SELECT MainEventID FROM Group_ WHERE GroupID=? ;");
+    $stmt->bind_param('i', $groupID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT MainEventID FROM Group_ WHERE GroupID=".$groupID);
     return mysqli_fetch_row($result);
   }
 
@@ -548,8 +694,46 @@
   $emailID: ID of the email
   */
   function getEmailInfo($mysqli, $emailID){
-    $result = $mysqli->query("SELECT * FROM Emails WHERE EID=".$emailID.";");
+    $stmt = $mysqli->prepare("SELECT * FROM Emails WHERE EID=? ;");
+    $stmt->bind_param('i', $emailID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT * FROM Emails WHERE EID=".$emailID.";");
     return mysqli_fetch_row($result);
+  }
+
+  /*
+  Get rates for a certain ID.
+  $mysqli: Connection to the DB object
+  $RID: ID of the affected rates
+  */
+  function getRate($mysqli, $RID){
+    $stmt = $mysqli->prepare("SELECT * FROM Rates WHERE RID=? ;");
+    $stmt->bind_param('i', $RID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return mysqli_fetch_row($result);
+  }
+
+  /*
+  Get number of events the user has.
+  $mysqli: Connection to the DB object
+  $username: Username of the user
+  */
+  function getNbEventsOfUser($mysqli, $username){
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $first_row = mysqli_fetch_row($result);
+    //checks nb of events which the user is admin of
+    $stmt = $mysqli->prepare("SELECT requestStatus FROM Is_Member_Event WHERE requestStatus='admin' AND UID=? ;");
+    $stmt->bind_param('i', $first_row[0]);
+    $stmt->execute();
+    //count nb rows
+    $result = mysqli_num_rows($stmt->get_result());
+    return $result;
   }
 
 ?>

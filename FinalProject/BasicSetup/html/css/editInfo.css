@@ -3,7 +3,7 @@
 */
 
 body {
-    
+
 	background-color: #deeaee;
 }
 
@@ -40,7 +40,7 @@ tr {
 
 .sub {
     color: #404040;
-    font-size: 12px;   
+    font-size: 12px;
 }
 
 .subtitle {
@@ -131,8 +131,8 @@ tr {
 }
 
 .deleteButton:hover{
-background-color: #cc6666;
-border-color: #cc6666;
+  background-color: #cc6666;
+  border-color: #cc6666;
 }
 
 .newText {
@@ -232,4 +232,19 @@ p{
     width: 600px;
     border: solid 2px #404040;
     border-collapse: collapse;
+}
+
+.newSmallDeleteButton{
+    background-color:  #bf4040;
+    border-color: #bf4040;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 150px;
+    font-size: 12px;
+}
+
+.newSmallDeleteButton:hover{
+    background-color: #cc6666;
+    border-color: #cc6666;
 }

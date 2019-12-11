@@ -1,5 +1,5 @@
 <?php
-
+  //Alexandre Therrien
   //this adds a comment to the list of comments for a post
   require "../../database_layer_delete.php";
   require "../../database_layer_use_cases.php";

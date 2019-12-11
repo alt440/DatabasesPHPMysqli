@@ -1,4 +1,5 @@
 <?php
+	//Alexandre Therrien
 	//connect with the database
 	$mysqli = new mysqli("localhost", "root", "");
 	//query to create a database with name comp353
@@ -37,7 +38,7 @@
 	echo $mysqli->error;
 
 	//query the database with the command in ().
-	$mysqli->query("CREATE TABLE User_ (UID int unsigned not null auto_increment, Username varchar(20) unique not null, Password varchar(60) not null, Email varchar(30) not null, Name varchar(50) not null, DateOfBirth varchar(20) not null, PrivilegeLevel smallint unsigned not null, BankName varchar(30), AccountNumber bigint unsigned, CreditCardNumber bigint unsigned, Address varchar(20), PhoneNumber varchar(20), primary key (UID));");
+	$mysqli->query("CREATE TABLE User_ (UID int unsigned not null auto_increment, Username varchar(20) unique not null, Password varchar(255) not null, Email varchar(30) not null, Name varchar(50) not null, DateOfBirth varchar(20) not null, PrivilegeLevel smallint unsigned not null, BankName varchar(30), AccountNumber bigint unsigned, CreditCardNumber bigint unsigned, Address varchar(20), PhoneNumber varchar(20), primary key (UID));");
 	echo $mysqli->error;
 
 	//this table determines which participant belongs to which group. hasSeenLastMessage has been added
@@ -78,6 +79,14 @@ foreign key (CoID) references Comment(CoID) on delete cascade, foreign key (UID)
 	$mysqli->query("INSERT INTO Event_Type values ('community', 1);");
 	$mysqli->query("INSERT INTO Event_Type values ('non-profit', 0);");
 	$mysqli->query("INSERT INTO Event_Type values ('profit', 1);");
+
+	//add the following rows to Rates (just to easily set the payment)
+	$mysqli->query("INSERT INTO Rates VALUES (1,0,'non-profit',999,999,0,0,0)");
+	$mysqli->query("INSERT INTO Rates VALUES (2,0,'family',5,5,20.50,1,1.5)");
+	$mysqli->query("INSERT INTO Rates VALUES (3,5,'family',10,10,20.50,1,1.5)");
+	$mysqli->query("INSERT INTO Rates VALUES (4,0,'community',25,25,40,2.5,2.5)");
+	$mysqli->query("INSERT INTO Rates VALUES (5,0,'profit',5,5,100.69,2.66,2.66)");
+	$mysqli->query("INSERT INTO Rates VALUES (6,5,'profit',10,10,150.79,3.22,3.22)");
 	//close the connection.
 	$mysqli->close();
 ?>

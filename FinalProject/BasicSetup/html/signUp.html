@@ -1,37 +1,41 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+    authors:    Francois David 40046319,
+                Mair Elbaz 40004558
 -->
 <html>
     <head>
         <title>Sign Up</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../css/css-file3.css"/>
+        <link rel="stylesheet" type="text/css" href="css/editInfo.css"/>
     </head>
     <body>
-        <div><h1>Registration<br></h1></div>
-        <form action="register.php" method="POST" name="register">
-            <p>Username:</p>
+        <div class="smallBox">
+        <h2>REGISTRATION</h2>
+        <form action="register.php" class="centered" method="POST" name="register">
+            <p class="sub">Username:</p>
             <input name="username" type="text"/>
-            <p>Password:</p>
+            <p class="sub">Password:</p>
             <input name="password1" type="password"/>
-            <br><br>
-            <p>Confirm Password:</p>
+            <br>
+            <p class="sub">Confirm Password:</p>
             <input name="password2" type="password"/>
-            <br><br>
-            <p>Name:</p>
+            <br>
+            <p class="sub">Name:</p>
             <input name="name" type="text">
-            <p>Email:</p>
+            <p class="sub">Email:</p>
             <input name="email" type="text">
-            <p>Date of birth:</p>
+            <p class="sub">Date of birth:</p>
             <input name="DOB" type="date">
-            <br><br>
-            <input id="submitRegister" name="submit" type="submit" value="Register">
+            <br/><br/>
+            <input id="submitRegister" class="centeredButton" name="submit" type="submit" value="REGISTER">
         </form>
-        <br></br>
-         <a href='index.html'>Login Page</a>
+        <br/>
+        <div class="centered">
+            <a href='index.html' class="links">BACK TO LOGIN</a>
+        </div>
+        <br/>
+         </div>
     </body>
 </html>

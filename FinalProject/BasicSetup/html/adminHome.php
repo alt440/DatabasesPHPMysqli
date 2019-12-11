@@ -20,6 +20,7 @@
   if($current_user[6] !=2){
     header('Location:homePage.php');
   }
+
 ?>
 <!--
   authors:  Alexendre Therrien 40057134,
@@ -33,6 +34,9 @@
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
+  <!--<script>
+  window.alert("Users must be in the event containing a group A to join a group A. If admin is deleted, his event/group is also deleted.");
+</script>-->
   <div class="smallBox">
   <div id="showUsers">
     <p class="subtitle">SYSTEM USERS</p>
@@ -119,6 +123,12 @@
     <br/>
   </div>
   <div class="centered">
+    <div id="extendEventOneYear">
+      <label><p class="subtitle">EXTEND EVENT 1 YEAR</p></label>
+      <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDExtendOneYear"><br>
+      <input type="button" id="EventIDExtendOneYearButton" value="EXTEND" class="centeredButton" onclick="extendEventOneYear()">
+    </div>
+    <br/><br/>
   <div id="removeUserFromGroup">
     <label><p class="subtitle">REMOVE USER FROM GROUP</p></label>
     <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UIDRemoveGroup"><br>
@@ -133,6 +143,22 @@
     <label>Username: </label><input type="text" class="newText" placeholder="Username" id="UIDRemoveEvent"><br>
     <label>EventID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDRemoveEvent"><br>
     <input type="button" id="UIDRemoveEventButton" class="centeredDeleteButton" value="REMOVE" onclick="dropEventMembership()">
+  </div>
+  <!--Add user to group-->
+  <br/><br/>
+  <div id="addUserToGroup1">
+    <label><p class="subtitle">ADD USER TO GROUP</p></label>
+    <label>UID: </label><input type="text" class="newText" placeholder="UID" id="UIDAddGroup1"><br>
+    <label>GroupID: </label><input type="text" class="newText" placeholder="Group ID" id="GroupIDAddGroup1"><br>
+    <input type="button" id="UIDAddGroupButton" class="centeredButton" value="APPROVE" onclick="addUserToGroup()">
+  </div>
+  <!--Add user to event-->
+  <br/><br/>
+  <div id="addUserToEvent1">
+    <label><p class="subtitle">ADD USER TO EVENT</p></label>
+    <label>UID: </label><input type="text" class="newText" placeholder="UID" id="UIDAddEvent1"><br>
+    <label>Event ID: </label><input type="text" class="newText" placeholder="Event ID" id="EventIDAddEvent1"><br>
+    <input type="button" id="UIDAddEventButton" class="centeredButton" value="APPROVE" onclick="addUserToEvent()">
   </div>
   <!--Approve event requests-->
   <br/><br/>
@@ -380,6 +406,73 @@
       url: "requests/addUser.php",
       data: {
         'json': JSON.stringify({"username":username, "password":password, "email":email, "name":name, "dateofbirth":dob, "privilegelevel":privilegeLevel})
+      },
+      success: function(response){
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
+      }
+    })
+  }
+
+  function addUserToEvent(){
+    //must first add the entry, then set to member.
+    var uid = document.getElementById('UIDAddEvent1').value;
+    var eventID = document.getElementById('EventIDAddEvent1').value;
+
+    $.ajax({
+      type: "POST",
+      url: "requests/addUserMemberToEvent.php",
+      data: {
+        'json': JSON.stringify({"UID":uid, "eventID":eventID})
+      },
+      success: function(response){
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
+      }
+    })
+  }
+
+  function addUserToGroup(){
+    //must first add the entry, then set to member
+    var uid = document.getElementById('UIDAddGroup1').value;
+    var groupID = document.getElementById('GroupIDAddGroup1').value;
+
+    $.ajax({
+      type: "POST",
+      url: "requests/addUserMemberToGroup.php",
+      data: {
+        'json': JSON.stringify({"UID":uid, "groupID":groupID})
+      },
+      success: function(response){
+        response= $.parseJSON(response);
+        if(response['response']!=1){
+          window.alert(response['response']);
+        } else{
+          window.alert("Success!");
+          location.reload();
+        }
+      }
+    })
+  }
+
+  function extendEventOneYear(){
+    var eventID = document.getElementById('EventIDExtendOneYear').value;
+
+    $.ajax({
+      type: "POST",
+      url: "requests/extendOneYear.php",
+      data: {
+        'json': JSON.stringify({"eventID":eventID})
       },
       success: function(response){
         response= $.parseJSON(response);

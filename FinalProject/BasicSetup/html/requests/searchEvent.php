@@ -1,4 +1,5 @@
 <?php
+  //Alexandre Therrien
   session_start();
   require "../../database_layer_get.php";
 

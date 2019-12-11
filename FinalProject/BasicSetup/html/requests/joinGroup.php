@@ -1,5 +1,5 @@
 <?php
-
+  //Alexandre Therrien
   require "../../database_layer.php";
 
   $mysqli = new mysqli("localhost", "root", "");

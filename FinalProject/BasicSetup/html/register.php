@@ -1,5 +1,5 @@
 <?php
-
+// Francois David
 session_start();
 
     // initializing variables

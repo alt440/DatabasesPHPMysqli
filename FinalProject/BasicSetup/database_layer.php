@@ -1,7 +1,9 @@
 <?php
-
+  //Alexandre Therrien
   /*
   This file applies modifications to the database.
+  Prepared statements for queries are required to protect against SQL injection.
+  Done for all queries which depend on input from user.
   */
 
   /*
@@ -13,7 +15,11 @@
   */
   function addComment($mysqli, $replyString, $replyStringCID, $username){
     //search for the content made with timestamp timestampCID
-    $result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE replyString='".$replyStringCID."';");
+    $stmt = $mysqli->prepare("SELECT CID, PermissionType, GroupID FROM Content WHERE replyString=? ;");
+    $stmt->bind_param('s', $replyStringCID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE replyString='".$replyStringCID."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addComment: There is no such content which has this string as content: '.$replyStringCID;
@@ -22,7 +28,11 @@
     $first_row = mysqli_fetch_row($result);
 
     //get user and see if exists
-    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
 
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'addComment: There is no such user that has this username: '.$username;
@@ -45,9 +55,18 @@
       }
     }
     $timestamp = time();
-    $mysqli->query("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (".$first_row[0].",'".$replyString."',".$timestamp.");");
+
+    $stmt = $mysqli->prepare("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES(?,?,?) ;");
+    $stmt->bind_param('isi', $first_row[0], $replyString, $timestamp);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (".$first_row[0].",'".$replyString."',".$timestamp.");");
     //find CoID of just added entity
-    $result3 = $mysqli->query("SELECT CoID FROM Comment WHERE TimeStamp=".$timestamp.";");
+    $stmt = $mysqli->prepare("SELECT CoID FROM Comment WHERE TimeStamp=? ;");
+    $stmt->bind_param('i', $timestamp);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT CoID FROM Comment WHERE TimeStamp=".$timestamp.";");
     $first_row_3 = mysqli_fetch_row($result3);
     $mysqli->query("INSERT INTO Post_Comment (CoID, UID) VALUES (".$first_row_3[0].",".$first_row_2[0].");");
     return 'addComment: '.$mysqli->error;
@@ -63,7 +82,11 @@
   */
   function addCommentCID($mysqli, $replyString, $CID, $username){
     //search for the content made with timestamp timestampCID
-    $result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE CID='".$CID."';");
+    $stmt = $mysqli->prepare("SELECT CID,PermissionType,GroupID FROM Content WHERE CID=? ;");
+    $stmt->bind_param('i', $CID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT CID,PermissionType,GroupID FROM Content WHERE CID='".$CID."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addComment: There is no such content which has this CID: '.$CID;
@@ -72,7 +95,11 @@
     $first_row = mysqli_fetch_row($result);
 
     //get user and see if exists
-    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
 
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'addComment: There is no such user that has this username: '.$username;
@@ -95,7 +122,12 @@
       }
     }
     $timestamp = time();
-    $mysqli->query("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (".$first_row[0].",'".$replyString."',".$timestamp.");");
+
+    $stmt = $mysqli->prepare("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (?,?,?) ;");
+    $stmt->bind_param('isi', $first_row[0], $replyString, $timestamp);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Comment (CID, replyString, TimeStamp) VALUES (".$first_row[0].",'".$replyString."',".$timestamp.");");
     //find CoID of just added entity
     $result3 = $mysqli->query("SELECT CoID FROM Comment WHERE TimeStamp=".$timestamp.";");
     $first_row_3 = mysqli_fetch_row($result3);
@@ -120,7 +152,11 @@
   function addContent($mysqli, $permissionType, $replyImage, $replyString,
     $eventTitle, $groupName, $username){
     //find event related
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'addContent: Could not find any Event with the name '.$eventTitle."<br>";
@@ -132,7 +168,11 @@
     $result2 = 0;
     $first_row_2 = [FALSE];
     if($groupName!=''){
-      $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+      $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+      $stmt->bind_param('s', $groupName);
+      $stmt->execute();
+      $result2 = $stmt->get_result();
+      //$result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
 
       if(is_bool($result2) || mysqli_num_rows($result2) == 0){
         return 'addContent: Could not find any Group with the name '.$groupName."<br>";
@@ -142,7 +182,11 @@
     }
 
     //find the user that posted this content
-    $result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
 
     if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 'addContent: Could not find any user with username '.$username."<br>";
@@ -160,18 +204,38 @@
     //add to content
     if(is_bool($first_row_2[0])){
       if($replyImage==''){
-        $mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyString) VALUES (".$first_row[0].",".$permissionType.",".$timestamp.",'".$replyString."');");
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyString) VALUES (?,?,?,?) ;");
+        $stmt->bind_param('iiis', $first_row[0], $permissionType, $timestamp, $replyString);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyString) VALUES (".$first_row[0].",".$permissionType.",".$timestamp.",'".$replyString."');");
       } else{
         //not working
-        $mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$first_row[0].",".$permissionType.",".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
+        $replyImageContent = file_get_contents($replyImage);
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (?,?,?,?,?) ;");
+        $stmt->bind_param('iiibs', $first_row[0], $permissionType, $timestamp, $replyImageContent, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$first_row[0].",".$permissionType.",".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
       }
 
     } else{
       if($replyImage==''){
-        $mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (".$first_row[0].",".$first_row_2[0].",0,".$timestamp.",'".$replyString."');");
+        $permissionType = 0;
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (?,?,?,?,?) ;");
+        $stmt->bind_param('iiiis', $first_row[0], $first_row_2[0], $permissionType, $timestamp, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (".$first_row[0].",".$first_row_2[0].",0,".$timestamp.",'".$replyString."');");
       } else{
         //not working
-        $mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$first_row[0].",".$first_row_2[0].",0,".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
+        $permissionType = 0;
+        $replyImageContent = file_get_contents($replyImage);
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (?,?,?,?,?,?) ;");
+        $stmt->bind_param('iiiibs', $first_row[0], $first_row_2[0], $permissionType, $timestamp, $replyImageContent, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$first_row[0].",".$first_row_2[0].",0,".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
       }
 
     }
@@ -201,9 +265,12 @@
   */
   function addContentWithIDs($mysqli, $permissionType, $replyImage, $replyString,
     $eventID, $groupID, $username){
-
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
     //find the user that posted this content
-    $result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    //$result3 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
 
     if(is_bool($result3) || mysqli_num_rows($result3) == 0){
       return 'addContent: Could not find any user with username '.$username."<br>";
@@ -220,18 +287,38 @@
     //add to content
     if($groupID==''){
       if($replyImage==''){
-        $mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyString) VALUES (".$eventID.",".$permissionType.",".$timestamp.",'".$replyString."');");
+        $stmt = $mysqli->prepare("INSERT INTO Content(EventID, PermissionType, TimeStamp, replyString) VALUES (?,?,?,?) ;");
+        $stmt->bind_param('iiis', $eventID, $permissionType, $timestamp, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyString) VALUES (".$eventID.",".$permissionType.",".$timestamp.",'".$replyString."');");
       } else{
         //not working
-        $mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$eventID.",".$permissionType.",".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
+        $replyImageContent = file_get_contents($replyImage);
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (?,?,?,?,?) ;");
+        $stmt->bind_param('iiibs', $eventID, $permissionType, $timestamp, $replyImageContent, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$eventID.",".$permissionType.",".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
       }
 
     } else{
       if($replyImage==''){
-        $mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (".$eventID.",".$groupID.",0,".$timestamp.",'".$replyString."');");
+        $permissionType = 0;
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (?,?,?,?,?) ;");
+        $stmt->bind_param('iiiis', $eventID, $groupID, $permissionType, $timestamp, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyString) VALUES (".$eventID.",".$groupID.",0,".$timestamp.",'".$replyString."');");
       } else{
         //not working
-        $mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$eventID.",".$groupID.",0,".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
+        $permissionType = 0;
+        $replyImageContent = file_get_contents($replyImage);
+        $stmt = $mysqli->prepare("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (?,?,?,?,?,?) ;");
+        $stmt->bind_param('iiiibs', $eventID, $groupID, $permissionType, $timestamp, $replyImageContent, $replyString);
+        $stmt->execute();
+        //$result = $stmt->get_result();
+        //$mysqli->query("INSERT INTO Content (EventID, GroupID, PermissionType, TimeStamp, replyImage, replyString) VALUES (".$eventID.",".$groupID.",0,".$timestamp.",".file_get_contents($replyImage).",'".$replyString."');");
       }
 
     }
@@ -257,7 +344,11 @@
   */
   function sendEmail($mysqli, $sourceUsername, $targetUsername, $titleEmail, $replyString){
     //find source user and target user
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$sourceUsername."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $sourceUsername);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$sourceUsername."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'sendEmail: Source username does not exist';
@@ -265,7 +356,11 @@
 
     $first_row = mysqli_fetch_row($result);
 
-    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$targetUsername."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $targetUsername);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$targetUsername."';");
 
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'sendEmail: Target username does not exist';
@@ -276,7 +371,11 @@
     $timestamp = time();
 
     //now add to email list
-    $mysqli->query("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (".$timestamp.",".$first_row[0].",".$first_row_2[0].",'".$titleEmail."','".$replyString."');");
+    $stmt = $mysqli->prepare("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (?,?,?,?,?) ;");
+    $stmt->bind_param('iiiss', $timestamp, $first_row[0], $first_row_2[0], $titleEmail, $replyString);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (".$timestamp.",".$first_row[0].",".$first_row_2[0].",'".$titleEmail."','".$replyString."');");
     return 'sendEmail: '.$mysqli->error;
   }
 
@@ -292,7 +391,11 @@
     $timestamp = time();
 
     //now add to email list
-    $mysqli->query("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (".$timestamp.",".$sourceID.",".$targetID.",'".$titleEmail."','".$replyString."');");
+    $stmt = $mysqli->prepare("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (?,?,?,?,?) ;");
+    $stmt->bind_param('iiiss', $timestamp, $sourceID, $targetID, $titleEmail, $replyString);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Emails (TimeStamp, SourceUser, TargetUser, TitleEmail, Content) VALUES (".$timestamp.",".$sourceID.",".$targetID.",'".$titleEmail."','".$replyString."');");
     return 'sendEmail: '.$mysqli->error;
   }
 
@@ -325,19 +428,31 @@
     }
 
     //make sure the creator actually exists, and make him the admin of the event.
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $usernameCreator);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createEvent: The username provided does not correspond to any user';
     }
 
     $first_row = mysqli_fetch_row($result);
-
-    $mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType, TemplateSelection) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."',".$templateSelection.");");
+    $a = 1;
+    $stmt = $mysqli->prepare("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType, TemplateSelection) VALUES (?,?,?,?,?,?) ;");
+    $stmt->bind_param("issssi", $a, $date, $title, $expiryDate, $eventType, $templateSelection);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Event_ (Status, Date, Title, ExpiryDate, EventType, TemplateSelection) values (1,'".$date."','".$title."','".$expiryDate."','".$eventType."',".$templateSelection.");");
     $error = $mysqli->error;
 
     //get the event id just created
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Date='".$date."' AND Title='".$title."';");
+    $stmt = $mysqli->prepare("SELECT EventID From Event_ WHERE Date=? AND Title=? ;");
+    $stmt->bind_param('ss', $date, $title);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Date='".$date."' AND Title='".$title."';");
     $first_row_2 = mysqli_fetch_row($result2);
 
     //no need to verify if insertion worked; I just added the event
@@ -356,7 +471,11 @@
   $isProfitable: If this type of event is profitable. 0 for no, 1 for yes (int)
   */
   function addEventType($mysqli, $eventType, $isProfitable){
-    $mysqli->query("INSERT INTO Event_Type values ('".$eventType."',".$isProfitable.");");
+    $stmt = $mysqli->prepare("INSERT INTO Event_Type VALUES (?,?) ;");
+    $stmt->bind_param('si', $eventType, $isProfitable);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Event_Type values ('".$eventType."',".$isProfitable.");");
     return 'addEventType: '.$mysqli->error;
   }
 
@@ -369,7 +488,11 @@
   */
   function createGroup($mysqli, $eventTitle, $groupName, $usernameCreator){
     //first search for event
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createGroup: Event with title '.$eventTitle.' does not exist';
@@ -378,7 +501,11 @@
     $first_row = mysqli_fetch_row($result);
 
     //then search for user creator. Need to verify the user is already a member of the event!
-    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $usernameCreator);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
 
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'createGroup: User with username '.$usernameCreator.' does not exist';
@@ -396,11 +523,20 @@
     $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
     //then add group with privacy 0 (group is not private, so showing)
-    $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',0);");
+    $privacy = 0;
+    $stmt = $mysqli->prepare("INSERT INTO Group_ (MainEventID, GroupName, Privacy) VALUES (?,?,?)");
+    $stmt->bind_param('isi', intval($first_row[0]), $groupName, $privacy);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',0);");
     $error=$mysqli->error;
 
     //find our new group ID
-    $result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     $first_row_3 = mysqli_fetch_row($result3);
 
     //then add user as admin of group. hasSeenLastMessage=0 means he has seen the last message of the group (since there is nothing...).
@@ -418,7 +554,11 @@
   */
   function createGroupPrivate($mysqli, $eventTitle, $groupName, $usernameCreator){
     //first search for event
-    $result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
 
     if(is_bool($result) || mysqli_num_rows($result) == 0){
       return 'createGroup: Event with title '.$eventTitle.' does not exist';
@@ -427,7 +567,11 @@
     $first_row = mysqli_fetch_row($result);
 
     //then search for user creator. Need to verify the user is already a member of the event!
-    $result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $usernameCreator);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$usernameCreator."';");
 
     if(is_bool($result2) || mysqli_num_rows($result2) == 0){
       return 'createGroup: User with username '.$usernameCreator.' does not exist';
@@ -445,11 +589,20 @@
     $first_row_3 = mysqli_fetch_row($findUserInEvent);
 
     //then add group with privacy 1 (group is private, so not showing)
-    $mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',1);");
+    $privacy = 1;
+    $stmt = $mysqli->prepare("INSERT INTO Group_ (MainEventID, GroupName, Privacy) VALUES (?,?,?) ;");
+    $stmt->bind_param('isi', intval($first_row[0]), $groupName, $privacy);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Group_ (MainEventID, GroupName, Privacy) values (".intval($first_row[0]).",'".$groupName."',1);");
     $error=$mysqli->error;
 
     //find our new group ID
-    $result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     $first_row_3 = mysqli_fetch_row($result3);
 
     //then add user as admin of group. hasSeenLastMessage=0 means he has seen the last message of the group (since there is nothing...).
@@ -466,10 +619,18 @@
   */
   function addUserToEvent($mysqli, $username, $eventTitle){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
     //find event with that title
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     $first_row_2 = mysqli_fetch_row($result2);
     //now create the entry. set user with status 'pending'
     $mysqli->query("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage) values (".intval($first_row_2[0]).",".intval($first_row[0]).",'pending',0);");
@@ -485,13 +646,27 @@
   */
   function addUserToEventWithCode($mysqli, $username, $eventTitle, $oneTimeCode){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
     //find event with that title
-    $result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     $first_row_2 = mysqli_fetch_row($result2);
     //now create the entry. set user with status 'pending'
-    $mysqli->query("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".intval($first_row_2[0]).",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
+    $statusRequest = 'pending';
+    $hasSeenLastMessage = 0;
+    $stmt = $mysqli->prepare("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) VALUES (?,?,?,?,?) ;");
+    $stmt->bind_param('iisii', $first_row_2[0], $first_row[0], $statusRequest, $hasSeenLastMessage, $oneTimeCode);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Is_Member_Event (EventID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".intval($first_row_2[0]).",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
     return 'addUserToEvent: '.$mysqli->error;
   }
 
@@ -504,10 +679,18 @@
   */
   function addUserToGroup($mysqli, $username, $groupName, $eventTitle){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
 
-    $result3 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
+    $stmt = $mysqli->prepare("SELECT EventID FROM Event_ WHERE Title=? ;");
+    $stmt->bind_param('s', $eventTitle);
+    $stmt->execute();
+    $result3 = $stmt->get_result();
+    //$result3 = $mysqli->query("SELECT EventID FROM Event_ WHERE Title='".$eventTitle."';");
     $first_row_3 = mysqli_fetch_row($result3);
 
     //because only a user in the event can create a group...
@@ -520,7 +703,11 @@
     $first_row_2 = mysqli_fetch_row($findUserInEvent);
 
     //find event with that title
-    $result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
+    $stmt = $mysqli->prepare("SELECT GroupID FROM Group_ WHERE GroupName=? ;");
+    $stmt->bind_param('s', $groupName);
+    $stmt->execute();
+    $result2 = $stmt->get_result();
+    //$result2 = $mysqli->query("SELECT GroupID FROM Group_ WHERE GroupName='".$groupName."';");
     $first_row_2 = mysqli_fetch_row($result2);
     //now create the entry. set user with status 'pending'
     $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage) values (".intval($first_row_2[0]).",".intval($first_row[0]).",'pending',0);");
@@ -537,11 +724,19 @@
   */
   function addUserToGroupWithCode($mysqli, $username, $groupID, $eventID, $oneTimeCode){
     //find member with that username
-    $result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
+    $stmt = $mysqli->prepare("SELECT UID FROM User_ WHERE Username=? ;");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    //$result = $mysqli->query("SELECT UID FROM User_ WHERE Username='".$username."';");
     $first_row = mysqli_fetch_row($result);
 
     //because only a user in the event can create a group...
-    $findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$eventID." AND UID=".$first_row[0].";");
+    $stmt = $mysqli->prepare("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=? AND UID=? ;");
+    $stmt->bind_param('ii', $eventID, $first_row[0]);
+    $stmt->execute();
+    $findUserInEvent = $stmt->get_result();
+    //$findUserInEvent = $mysqli->query("SELECT UID, requestStatus FROM Is_Member_Event WHERE EventID=".$eventID." AND UID=".$first_row[0].";");
 
     if(is_bool($findUserInEvent) || mysqli_num_rows($findUserInEvent) == 0){
       return 'addUserToGroup: User with username '.$username.' cannot join a group because he has sent a demand to join the event that has not been answered or is simply not part of the group.';
@@ -550,7 +745,13 @@
     $first_row_2 = mysqli_fetch_row($findUserInEvent);
 
     //now create the entry. set user with status 'pending'
-    $mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".$groupID.",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
+    $statusRequest = 'pending';
+    $hasSeenLastMessage = 0;
+    $stmt = $mysqli->prepare("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) VALUES (?,?,?,?,?) ;");
+    $stmt->bind_param('iisii', $groupID, $first_row[0], $statusRequest, $hasSeenLastMessage, $oneTimeCode);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Is_Member_Group (GroupID, UID, requestStatus, hasSeenLastMessage, OneTimeCode) values (".$groupID.",".intval($first_row[0]).",'pending',0,".$oneTimeCode.");");
     return 'addUserToGroup: '.$mysqli->error;
   }
 
@@ -571,7 +772,11 @@
         return 'addRates: Was this event type added to the event types table?';
       }
 
-    $mysqli->query("INSERT INTO Rates (NumberEvents, EventType, StorageGB, BandwidthGB, Price, OverflowFeeBandwidth, OverflowFeeStorage) values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.",".$overflowFeeBandwidth.",".$overflowFeeStorage.");");
+    $stmt = $mysqli->prepare("INSERT INTO Rates (NumberEvents, EventType, StorageGB, BandwidthGB, Price, OverflowFeeBandwidth, OverflowFeeStorage) VALUES (?,?,?,?,?,?,?) ;");
+    $stmt->bind_param('isiiddd', $numberEvents, $eventType, $storageGB, $bandwidthGB, $price, $overflowFeeStorage, $overflowFeeBandwidth);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO Rates (NumberEvents, EventType, StorageGB, BandwidthGB, Price, OverflowFeeBandwidth, OverflowFeeStorage) values (".$numberEvents.",'".$eventType."',".$storageGB.",".$bandwidthGB.",".$price.",".$overflowFeeBandwidth.",".$overflowFeeStorage.");");
     return $mysqli->error;
   }
 
@@ -600,7 +805,11 @@
     }
 
     $password = password_hash($password, PASSWORD_BCRYPT);
-    $mysqli->query("INSERT INTO User_ (Username, Password, Email, Name, DateOfBirth, PrivilegeLevel) values ('".$username."','".$password."','".$email."','".$name."','".$dateofbirth."',".$privilegelevel.");");
+    $stmt = $mysqli->prepare("INSERT INTO User_ (Username, Password, Email, Name, DateOfBirth, PrivilegeLevel) VALUES (?,?,?,?,?,?) ;");
+    $stmt->bind_param('sssssi', $username, $password, $email, $name, $dateofbirth, $privilegelevel);
+    $stmt->execute();
+    //$result = $stmt->get_result();
+    //$mysqli->query("INSERT INTO User_ (Username, Password, Email, Name, DateOfBirth, PrivilegeLevel) values ('".$username."','".$password."','".$email."','".$name."','".$dateofbirth."',".$privilegelevel.");");
     return 'addUser: '.$mysqli->error;
   }
 

@@ -1,4 +1,5 @@
 <?php
+  //Alexandre Therrien
   session_start();
   //this adds a comment to the list of comments for a post
   require "../../database_layer_get.php";

@@ -1,3 +1,41 @@
+COMP 353 - F / FALL 2019 Dr. Desai
+
+PROJECT 1
+
+MEMBERS:
+
+    Mair ELBAZ, 40004558
+    Daniel VIGNY-PAU, 40034769
+    Francois DAVID, 40046319
+    Alexandre THERRIEN, 40057134, CRSMGR: al_therr
+    Charles-Antoine GUITE, 40063098
+
+# Test Users to be Used for Testing the System
+UserID and Password
+Admin: username: rrr & password: rrr
+Controller: username: controller & password: controller
+Regular users: username: aaa & password: aaa (blank user, has just been created), username: username1 & password: password1, username: username2 & password: password2
+
+# Get Started
+Go to https://urc353.encs.concordia.ca/index.html to get started. The log in screen will be there waiting for your credientials.
+
+# Setting it up on your own PC
+To run the project:
+
+    Install and open XAMPP and start both Apache and MySQL
+    Make sure your credentials to phpmyadmin are username:'root' and password:'' or blank
+    Create a schema called comp353_final_project
+    Place all the project files in C:\xampp\htdocs
+    Open your browser and in the search bar type localhost/ and include the file path of the .php file you want to run (note: htdocs is seen as the root here, so only include files and folders after, it is not necessary to write C:/xampp/htdocs...)
+    First thing you will want to do is run createTablesRevised.php located in localhost/path-to-this-project/createTablesRevised.php
+    Once your tables are created, run the script insertIntoTables.php to populate the tables located in localhost/path-to-this-project/insertIntoTables.php
+    Now that this is done, you can use the credentials: (the administrator username and password will be) ‘systemAdmin’ and ‘systemAdmin’, or (the controller username and password will be) ‘alexandre’ and ‘alexandre’, or (a regular user username and password would be) ‘username1’ and ‘password1’
+    Type localhost/path-to-this-project/html/index.html to get started.
+    Now, if you go to localhost/phpmyadmin, you will see a new database called comp353 with the different tables required for the assignment and the information these tables contain.
+
+# What was modified since the demo
+Passwords are now encrypted, admin can now add/remove users, input validation done massively.
+
 # How to setup your environment
 Use the script 'createTablesRevised.php' to create all the different tables 
 required by the project.
@@ -23,16 +61,9 @@ The 'requests' folder contains as well different implementations on how I manipu
 DB. These files are because of the fact that to communicate with the backend, I am required
 to make AJAX calls.
 
-**Note that the test cases do not cover the case where nothing was covered from the DB. In that case, the results will return false. You have to verify that there is something returned from each queries you receive back.**
-
 # database_layer.php limitations
 Uploading images does not currently work. If someone has time, the method
 addContent would need to be modified to be able to work with images.
-
-Also, the addComment method tries to find its Content ID (CID) using its reply
-string. This approach is limited, because two contents' replyString could be 
-the same. I have not thought enough about it enough to give the best solution. 
-know what is the best method to get the CID.
 
 # Updated ER
 I have included the file FinalER.drawio, which is the final ER diagram I came
@@ -40,25 +71,4 @@ up with to design the whole database.
 
 You can go on draw.io and upload this file to see the FinalER.
 
-# Missing functionalities back end
-- Cannot reply with images
-- Limiting functionality to the comment (compares content's string to know CID, weak way of doing it)
-- Admin should be able to assign an event manager to an event
-- Extend time period event (extra charge)
-- Table for overflowing over bandwidth/ storage limits
-- ~~Delete the event after has been archived for 7 years~~
-- ~~General deletion methods (for admin: delete groups, remove members from event,...) (for event manager: remove members from event) (delete user)~~
-- Debit details/ address/ phone number info for event manager
-- ~~Get events of a user/ Get groups of a user~~
-- Edit (~~user details~~, group, event)
-- Add debit info to an event manager
-
-# Missing functionalities front end
-- See the pending requests to join group/~~event~~ and be able to accept members
-- The whole group page (Charles Antoine started it, in folder Group): Invite members to group, remove members from group, reply with images
-- The admin functionalities to be the supreme leader (accept event demands, select event admins, remove people from all groups/ all events,...)
-- Scheduling an event date
-- The controller functionalities to be the finance guy
-- ~~Sending the one time code to invite new users to the group~~
-- The 'hasSeenLastMessage' functionality
 

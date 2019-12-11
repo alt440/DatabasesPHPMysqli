@@ -1,4 +1,5 @@
 <?php
+// Alexandre Therrien, Francois David
 session_start();
 
 // initializing variables

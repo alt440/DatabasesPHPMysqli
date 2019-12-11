@@ -1,7 +1,3 @@
-<!--
-  authors: Alexandre Therrien, Daniel Vigny-Pau
--->
-
 <?php
   session_start();
   require "../database_layer_get.php";
@@ -25,7 +21,9 @@
     $_SESSION['searchUser']='';
   }
 ?>
-
+<!--
+  authors: Alexandre Therrien, Daniel Vigny-Pau
+-->
 <html>
 <head>
   <meta charset="utf-8">
@@ -34,7 +32,7 @@
   <script src="../js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-  <div class="smallBox">
+  <div class="bigBox">
   <h2>Edit group/event details</h2>
   <br/>
   <table class="centeredRow" id="userMemberships">
@@ -54,14 +52,14 @@
           ?>
           <tr>
             <td>Event <b><?php echo $row[1];?></b>: </td>
-            <td><input type="button" class="newSmallButton" value="DELETE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
+            <td><input type="button" class="newSmallDeleteButton" value="DELETE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEvent('<?php echo $username?>', this)"></td>
           </tr>
           <?php
         } else{
         ?>
         <tr>
           <td>Event <b><?php echo $row[1];?></b>: </td>
-          <td><input type="button" class="newSmallButton" value="LEAVE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
+          <td><input type="button" class="newSmallDeleteButton" value="LEAVE EVENT" id="dropEvent<?php echo $row[0];?>" onclick="dropEventMembership('<?php echo $username?>', this)"></td>
         </tr>
         <?php
         }
@@ -86,14 +84,14 @@
             ?>
             <tr>
               <td>Group <b><?php echo $row[1]?></b>: </td>
-              <td><input type="button" class="newSmallButton" value="DELETE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
+              <td><input type="button" class="newSmallDeleteButton" value="DELETE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroup('<?php echo $username?>', this)"></td>
             </tr>
             <?php
           } else{
           ?>
           <tr>
             <td>Group <b><?php echo $row[1]?></b>: </td>
-            <td><input type="button" class="newSmallButton" value="LEAVE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
+            <td><input type="button" class="newSmallDeleteButton" value="LEAVE GROUP" id="dropGroup<?php echo $row[0];?>" onclick="dropGroupMembership('<?php echo $username?>', this)"></td>
           </tr>
           <?php
           }
@@ -103,16 +101,53 @@
 
     <br/><br/>
     <p class="subtitle">ADD AN EVENT</p>
+    <p class="subtitle">CURRENT RATES</p>
+    <table id="showRatesTable">
+      <tr>
+        <th>Rates ID</th>
+        <th>Number Events</th>
+        <th>Event Type</th>
+        <th>Storage GB</th>
+        <th>Bandwidth GB</th>
+        <th>Price</th>
+        <th>Bandwidth Overflow Fee</th>
+        <th>Storage Overflow Fee</th>
+      </tr>
+      <?php
+      $getRates = getRates($mysqli);
+      if(!(is_bool($getRates)||mysqli_num_rows($getRates)==0)){
+        while($row = mysqli_fetch_row($getRates)){
+          ?>
+          <tr>
+            <?php
+            for($i=0;$i<sizeof($row);$i++){
+              ?>
+              <td><?php echo $row[$i];?></td>
+              <?php
+            }
+            ?>
+          </tr>
+          <?php
+        }
+      }
+      ?>
+    </table>
+    <br/><br/>
     <table class="centeredRow" id="addEventTable">
+      <tr>
+        <td><p class="subtitle">EVENT INFORMATION</p></td>
+      </tr>
     <tr>
-      <td><p class="sub">Event Name</p></td>
+
+
+        <form action="payment.php" method="POST">
+          <td><p class="sub">Event Name</p></td>
     </tr>
     <tr>
-        <td><input type="text" class="newText" id="addEventTxt" placeholder="Event Name...">
-
-        <form>
+        <td>
+                <input type="text" name="eventTitle" class="newText" id="addEventTxt" placeholder="Event Name" required>
             <p class="sub">Event Type</p>
-            <select id="eventTypesSelection">
+            <select id="eventTypesSelection" name="eventType" >
               <?php
                 $eventTypes = getEventTypes($mysqli);
 
@@ -123,10 +158,23 @@
                 }
                 ?>
             </select>
+            <p class="sub">Event Template</p>
+                <input type="text" class="newText" name="eventTemplate" id="addEventTemplate" placeholder="Template Selection (1 or 2)" required>
+
+            <p class="sub">Date fo the Event:</p>
+            <input class="newText" name="dateOfEvent"  required type="date" >
+
+            <p class="sub">Archived Date fo the Event:</p>
+            <input class="newText" name="archivedDateOfEvent" type="date" required>
+
+            <p class="sub">Rates Selection:</p>
+            <input class="newText" name="rateID" type="text" placeholder="Rate ID Selection" required>
+
+          <br><input type="submit" class="centeredButton" value="ADD AN EVENT" id="addEvent" ></td>
+
+
           </form>
-          <p class="sub">Event Template</p>
-          <input type="text" class="newText" id="addEventTemplate" placeholder="Template Selection (1 or 2)">
-          <br><input type="button" class="centeredButton" value="ADD AN EVENT" id="addEvent" onclick="addEvent('<?php echo $username;?>')"></td>
+
       </tr>
     </table>
 
