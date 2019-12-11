@@ -107,8 +107,8 @@
   	<div id="footer">
       <div id="optionsBar">
         <?php if(strcmp($groupAdmin,$username)==0){?>
-      	  <button id="OptionsButton" type="button" onclick="seeOptions()">Options</button>
-		      <button id="MembersButton" type="button" onclick="seeMembers('<?php echo $currentGroup?>')">Members</button>
+      	  <button id="OptionsButton" type="button" class="newShortButton" onclick="seeOptions()">OPTIONS</button>
+		      <button id="MembersButton" type="button" class="newShortButton" onclick="seeMembers('<?php echo $currentGroup?>')">MEMBERS</button>
         <?php }?>
       </div>
         <textarea id = "TextArea"
@@ -116,8 +116,8 @@
                   cols = "80"></textarea>
 
        <div>
-      	  <input id="SendButton"  type="button" class="newSmallButton" value="SEND" onclick="sendMessageConvo('<?php echo $currentEvent?>','<?php echo $currentGroup;?>','<?php echo $username?>')">
-		      <input id="FilesButton" type="button" class="newSmallButton"  value="FILES">
+      	  <input id="SendButton"  type="button" class="newShortButton" value="SEND" onclick="sendMessageConvo('<?php echo $currentEvent?>','<?php echo $currentGroup;?>','<?php echo $username?>')">
+		      <input id="FilesButton" type="button" class="newShortButton"  value="FILES">
       </div>
   	</div>
   </div>
@@ -125,16 +125,16 @@
 
 <!-- this is the members popup -->
 <div id="seeMembersPopup" class="membersPopup">
-
-  <label id="titleSeeMembersPopup" class="membersPopup">Members Of Group</label>
-  <input type="button" value="Exit" onclick="closeMemberPopup()">
+<input type="button" class="newShortButton" value="EXIT" onclick="closeMemberPopup()">
+<br/><br/>
+  <label id="titleSeeMembersPopup"><b>Members Of Group</b></label>
   <div id="table-scroll" class="membersPopup">
     <div id="tableSeeMembersDivPopup" class="membersPopup">
-      <div id="headers">
+      <!-- <div id="headers">
         <div id="headerUsername">Username</div>
         <div id="headerStatus">Status</div>
         <div id="headerEmpty"></div>
-      </div>
+      </div> -->
     <?php
       if(is_bool($groupMembers)){
         ?>
@@ -146,39 +146,43 @@
           <div class="rowsMembers">
             <div class="innerTableMembersUsername" id="username<?php echo $row[0];?>"><?php echo getUsername($mysqli, $row[0]);?></div>
             <div class="innerTableMembersStatus" id="status<?php echo $row[0];?>"><?php echo $row[1];?></div>
-            <div class="innerTableMembersButtons" id="buttons<?php echo $row[0];?>"><input type="button" value="Send Message" id="sendMessage<?php echo $row[0];?>" onclick="sendMessage(this,'<?php echo $username;?>','<?php echo $eventTitle;?>')"><input type="button" value="View Home Page" id="viewHomePage<?php echo $row[0];?>" onclick="showHome(this)"></div>
+            <div class="innerTableMembersButtons" id="buttons<?php echo $row[0];?>"><input type="button" class="newShortButton" value="SEND MESSAGE" id="sendMessage<?php echo $row[0];?>" onclick="sendMessage(this,'<?php echo $username;?>','<?php echo $eventTitle;?>')"><input type="button" class="newShortButton" value="VIEW HOMEPAGE" id="viewHomePage<?php echo $row[0];?>" onclick="showHome(this)"></div>
           </div>
+          <br/>
           <?php
         }
       }
     ?>
   </div>
   </div>
-
+<br/>
   <!-- div to add members / remove members -->
   <div id="requestAddNewMemberGroup" class="membersPopup">
-    <label id="titleRequestAddNewMember">Add New User</label><br>
+    <label id="titleRequestAddNewMember"><b>Add New User</b></label><br>
     <label id="addNewMember1">SCC ID: </label><input type="text" placeholder="Enter User's ID " id="addUserID"><br>
     <label id="addNewMember2">Email: </label><input type="text" placeholder="Enter User's Email Address" id="addUserEmail"><br>
     <label id="addNewMember3">Date of Birth: </label><input type="text" placeholder="Enter User's Date of Birth" id="addUserDOB"><br>
     <label id="addNewMember4">Name: </label><input type="text" placeholder="Enter User's Name" id="addUserName"><br>
-    <input type="button" value="Submit" id="submitAddUser" onclick="sendRequestToJoinGroup('<?php echo $currentEvent;?>', '<?php echo $currentGroup;?>')">
+    <input type="button" class="newShortButton" value="SUBMIT" id="submitAddUser" onclick="sendRequestToJoinGroup('<?php echo $currentEvent;?>', '<?php echo $currentGroup;?>')">
   </div>
 
+  <br/>
+
   <div id="requestRemoveMemberGroup" class="membersPopup">
-    <label id="titleRequestRemoveMember">Remove Member</label><br>
+    <label id="titleRequestRemoveMember"><b>Remove Member</b></label><br>
     <label id="removeNewMember1">SCC ID: </label><input type="text" placeholder="Enter User's ID " id="removeUserID"><br>
     <label id="removeNewMember2">Email: </label><input type="text" placeholder="Enter User's Email Address" id="removeUserEmail"><br>
     <label id="removeNewMember3">Date of Birth: </label><input type="text" placeholder="Enter User's Date of Birth" id="removeUserDOB"><br>
     <label id="removeNewMember4">Name: </label><input type="text" placeholder="Enter User's Name" id="removeUserName"><br>
-    <input type="button" value="Submit" id="submitRemoveUser" onclick="removeUserFromGroup('<?php echo $currentGroup;?>')">
+    <input type="button" class="newShortButton" value="SUBMIT" id="submitRemoveUser" onclick="removeUserFromGroup('<?php echo $currentGroup;?>')">
   </div>
 </div>
 
 <div id="groupOptions">
-  <input type="button" value="Exit" onclick="closeOptionsPopup()">
-  <label id="changeGroupName">Change Group Name</label><br>
-  <label id="newNameGroup">New name: </label><input type="text" id="newNameGroupText" placeholder="Enter new group name"><input type="button" value="Submit" id="confirmNameGroupChange" onclick="changeGroupName('<?php echo $currentGroup;?>')"><br>
+<input type="button" class="newShortButton" value="EXIT" onclick="closeOptionsPopup()">
+      <br/><br/>
+  <label id="changeGroupName"><b>Change Group Name</b></label><br>
+  <label id="newNameGroup">New name: </label><input type="text" id="newNameGroupText" placeholder="Enter new group name"><input type="button" value="SUBMIT" class="newShortButton" id="confirmNameGroupChange" onclick="changeGroupName('<?php echo $currentGroup;?>')"><br>
   <!--<label id="requestGroupUpgrade">Make Group Public</label><br>
   <input type="button" value="Make Group Public" id="makeGroupPublic" onclick="makeGroupPublic('<?php //echo $currentGroup;?>')">-->
   <label id="showPendingUsers">Pending Users</label><br>
@@ -193,7 +197,7 @@
             ?>
             <div class="rowPending">
               <div class="innerTablePendingUsername" id="username<?php echo $row[0]?>"><?php echo getUsername($mysqli, $row[0]);?></div>
-              <div class="innerTablePendingButton" id="divButtonPending<?php echo $row[0]?>"><input type="button" id="buttonPending<?php echo $row[0]?>" value="Accept as Member" onclick="makeBecomeMember(this,'<?php echo $currentGroup;?>')"></div>
+              <div class="innerTablePendingButton" id="divButtonPending<?php echo $row[0]?>"><input type="button" id="buttonPending<?php echo $row[0]?>" class="newShortButton" value="ACCEPT AS MEMBER" onclick="makeBecomeMember(this,'<?php echo $currentGroup;?>')"></div>
             </div>
             <?php
           }
